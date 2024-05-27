@@ -87,9 +87,6 @@ class SokobanApp:
             self.update()
             
 
-
-
-
 if __name__ == "__main__":
     grid_path = Path(__file__).resolve().parent / "grid" / "grid.txt"
     app = SokobanApp(grid_path)
