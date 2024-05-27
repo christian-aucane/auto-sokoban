@@ -145,14 +145,13 @@ class Grid:
     def __init__(self, txt_path):
         with open(txt_path, "r") as f:
             self.content = f.readlines()
-        self._grid = []
-
-        self.boxes = []
-        self.player = None
-
         self.load()
 
     def load(self):
+        self._grid = []
+        self.boxes = []
+        self.player = None
+
         # TODO : ajouter vérifiction sur la forme de la matrice
         for y, row in enumerate(self.content):
             row = row.strip()
@@ -173,8 +172,6 @@ class Grid:
         self._height = len(self._grid)
 
     def reset(self):
-        self.boxes = []
-        self.player = None
         self.load()
 
     @property
