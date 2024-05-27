@@ -22,6 +22,7 @@ class SokobanApp:
             "empty_cell": self.load_img(IMAGES_DIR / "empty_cell.png"),
             "box": self.load_img(IMAGES_DIR / "box.png"),
             "goal": self.load_img(IMAGES_DIR / "goal.png"),
+            "box_on_goal": self.load_img(IMAGES_DIR / "box_on_goal.png"),
             "player_up": self.load_img(IMAGES_DIR / "player_up.png"),
             "player_down": self.load_img(IMAGES_DIR / "player_down.png"),
             "player_left": self.load_img(IMAGES_DIR / "player_left.png"),
@@ -52,7 +53,10 @@ class SokobanApp:
                     self.draw_cell(x, y, "goal")
         
         for box in self.grid.boxes:
-            self.draw_cell(box.x, box.y, "box")
+            if box.is_on_goal:
+                self.draw_cell(box.x, box.y, "box_on_goal")
+            else:
+                self.draw_cell(box.x, box.y, "box")
         
         if self.grid.player is not None:
             if self.grid.player.orientation == UP:
@@ -85,7 +89,7 @@ class SokobanApp:
                     self.handle_keydown(event.key)
 
             self.update()
-            
+
 
 if __name__ == "__main__":
     grid_path = Path(__file__).resolve().parent / "grid" / "grid.txt"
