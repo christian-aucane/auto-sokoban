@@ -29,7 +29,6 @@ class SokobanApp:
             "player_right": self.load_img(IMAGES_DIR / "player_right.png"),
         }
 
-
     def load_img(self, path):
         return pygame.transform.scale(pygame.image.load(path), (self.cell_width, self.cell_height))
 
