@@ -49,7 +49,21 @@ class Entity:
 
 
 class Box(Entity):
-    pass
+    @property
+    def is_up_available(self):
+        return super().is_up_available and self.grid.get_box(self.x, self.y - 1) is None
+
+    @property
+    def is_down_available(self):
+        return super().is_down_available and self.grid.get_box(self.x, self.y + 1) is None
+
+    @property
+    def is_left_available(self):
+        return super().is_left_available and self.grid.get_box(self.x - 1, self.y) is None
+
+    @property
+    def is_right_available(self):
+        return super().is_right_available and self.grid.get_box(self.x + 1, self.y) is None
     
 
 class Player(Entity):
