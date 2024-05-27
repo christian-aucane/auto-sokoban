@@ -43,13 +43,12 @@ def generate_grid(width, height, num_boxes):
 
 
 width = 10
-height = 8
-num_boxes = 5
+height = 10
 
 
 def print_grid(grid):
     for row in grid:
         print(''.join(row))
 
-print_grid(generate_grid(width, height, num_boxes))
+print_grid(generate_grid(width, height, num_boxes=0))
 
