@@ -1,5 +1,4 @@
 import random
-from icecream import ic
 
 
 def generate_grid(width, height, num_boxes):
