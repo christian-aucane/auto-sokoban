@@ -154,11 +154,10 @@ class Grid:
             row = row.strip()
             new_row = []
             for x, cell in enumerate(row):
-                if cell == "3":
+                if cell == "3":  # box
                     self.boxes.append(Box(self, x, y))
                     cell = 0
-                    # TODO : ajouter vérification si box est au bord
-                if cell == "4": # player
+                if cell == "4":  # player
                     if self.player is not None:
                         raise ValueError("Multiple players")
                     self.player = Player(self, x, y)

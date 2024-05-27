@@ -1,10 +1,9 @@
 from pathlib import Path
 import sys
 import pygame
+
 from build_game import Grid
-
 from constants import WIDTH, HEIGHT, WHITE, UP, DOWN, LEFT, RIGHT, IMAGES_DIR
-
 
 
 class SokobanApp:
@@ -16,6 +15,7 @@ class SokobanApp:
         self.grid = Grid(grid_path)
         self.cell_width = WIDTH // self.grid.width
         self.cell_height = HEIGHT // self.grid.height
+        # TODO : Adapted la taille de la fenetre plutot que d'adapter la taille des cellules ??
 
         self.images = {
             "wall": self.load_img(IMAGES_DIR / "wall.png"),
