@@ -1,13 +1,5 @@
-# Entities
-EMPTY_CELL = 0
-WALL = 1
-GOAL = 2
+from constants import EMPTY_CELL, WALL, GOAL, UP, DOWN, LEFT, RIGHT
 
-# Player orientation
-UP = 0
-DOWN = 1
-LEFT = 2
-RIGHT = 3
 
 class Entity:
     def __init__(self, grid, x, y):
@@ -57,8 +49,25 @@ class Entity:
 
 
 class Box(Entity):
-    pass
+    @property
+    def is_up_available(self):
+        return super().is_up_available and self.grid.get_box(self.x, self.y - 1) is None
+
+    @property
+    def is_down_available(self):
+        return super().is_down_available and self.grid.get_box(self.x, self.y + 1) is None
+
+    @property
+    def is_left_available(self):
+        return super().is_left_available and self.grid.get_box(self.x - 1, self.y) is None
+
+    @property
+    def is_right_available(self):
+        return super().is_right_available and self.grid.get_box(self.x + 1, self.y) is None
     
+    @property
+    def is_on_goal(self):
+        return self.grid.is_goal(self.x, self.y)
 
 class Player(Entity):
     def __init__(self, grid, x, y):
@@ -130,25 +139,28 @@ class Player(Entity):
                 super().right()
                 self.orientation = RIGHT
                 return True
-    
+
+ 
 class Grid:
     def __init__(self, txt_path):
         with open(txt_path, "r") as f:
-            content = f.readlines()
-        self._grid = []
+            self.content = f.readlines()
+        self.load()
 
+    def load(self):
+        self._grid = []
         self.boxes = []
         self.player = None
+
         # TODO : ajouter vérifiction sur la forme de la matrice
-        for y, row in enumerate(content):
+        for y, row in enumerate(self.content):
             row = row.strip()
             new_row = []
             for x, cell in enumerate(row):
-                if cell == "3":
+                if cell == "3":  # box
                     self.boxes.append(Box(self, x, y))
                     cell = 0
-                    # TODO : ajouter vérification si box est au bord
-                if cell == "4": # player
+                if cell == "4":  # player
                     if self.player is not None:
                         raise ValueError("Multiple players")
                     self.player = Player(self, x, y)
@@ -158,6 +170,9 @@ class Grid:
 
         self._width = len(self._grid[0])
         self._height = len(self._grid)
+
+    def reset(self):
+        self.load()
 
     @property
     def width(self):
@@ -177,7 +192,10 @@ class Grid:
 
     def cell(self, x, y):
         return self._grid[y][x]
-        
+    
+    def is_empty(self, x, y):
+        return self.cell(x, y) == EMPTY_CELL
+
     def is_wall(self, x, y):
         return self.cell(x, y) == WALL
     
