@@ -144,13 +144,17 @@ class Player(Entity):
 class Grid:
     def __init__(self, txt_path):
         with open(txt_path, "r") as f:
-            content = f.readlines()
+            self.content = f.readlines()
         self._grid = []
 
         self.boxes = []
         self.player = None
+
+        self.load()
+
+    def load(self):
         # TODO : ajouter vérifiction sur la forme de la matrice
-        for y, row in enumerate(content):
+        for y, row in enumerate(self.content):
             row = row.strip()
             new_row = []
             for x, cell in enumerate(row):
@@ -167,6 +171,11 @@ class Grid:
 
         self._width = len(self._grid[0])
         self._height = len(self._grid)
+
+    def reset(self):
+        self.boxes = []
+        self.player = None
+        self.load()
 
     @property
     def width(self):

@@ -80,6 +80,9 @@ class SokobanApp:
         elif key == pygame.K_RIGHT:
             self.grid.player.right()
 
+        elif key == pygame.K_BACKSPACE:
+            self.grid.reset()
+
     def run(self):
         while self.running:
             for event in pygame.event.get():
