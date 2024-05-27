@@ -1,13 +1,5 @@
-# Entities
-EMPTY_CELL = 0
-WALL = 1
-GOAL = 2
+from constants import EMPTY_CELL, WALL, GOAL, UP, DOWN, LEFT, RIGHT
 
-# Player orientation
-UP = 0
-DOWN = 1
-LEFT = 2
-RIGHT = 3
 
 class Entity:
     def __init__(self, grid, x, y):
@@ -130,7 +122,8 @@ class Player(Entity):
                 super().right()
                 self.orientation = RIGHT
                 return True
-    
+
+ 
 class Grid:
     def __init__(self, txt_path):
         with open(txt_path, "r") as f:
@@ -177,7 +170,10 @@ class Grid:
 
     def cell(self, x, y):
         return self._grid[y][x]
-        
+    
+    def is_empty(self, x, y):
+        return self.cell(x, y) == EMPTY_CELL
+
     def is_wall(self, x, y):
         return self.cell(x, y) == WALL
     
