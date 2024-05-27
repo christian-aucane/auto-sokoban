@@ -65,6 +65,9 @@ class Box(Entity):
     def is_right_available(self):
         return super().is_right_available and self.grid.get_box(self.x + 1, self.y) is None
     
+    @property
+    def is_on_goal(self):
+        return self.grid.is_goal(self.x, self.y)
 
 class Player(Entity):
     def __init__(self, grid, x, y):
