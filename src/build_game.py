@@ -1,5 +1,5 @@
 from copy import deepcopy
-from constants import EMPTY_CELL, WALL, GOAL, UP, DOWN, LEFT, RIGHT
+from constants import EMPTY_CELL, LEVELS_DIR, WALL, GOAL, UP, DOWN, LEFT, RIGHT
 
 
 class Entity:
@@ -188,6 +188,9 @@ class Grid:
         self.backup_saved = False
 
         self.load()
+
+    def copy(self):
+        return deepcopy(self)
         
     def save_backup(self):
         # TODO : Ajouter des methodes copy aux objets
@@ -244,6 +247,10 @@ class Grid:
     def height(self, value):
         raise ValueError("Cannot change height")
 
+    @property
+    def is_solved(self):
+        return all(box.is_on_goal for box in self.boxes)
+    
     def cell(self, x, y):
         return self._grid[y][x]
     
@@ -263,9 +270,17 @@ class Grid:
         return None
     
     def print(self):
-        print(*self._grid, sep="\n")
+        grid = deepcopy(self._grid)
+        grid[self.player.y][self.player.x] = "P"
+        for box in self.boxes:
+            if box.is_on_goal:
+                grid[box.y][box.x] = "G"
+            else:
+                grid[box.y][box.x] = "B"
+        for row in grid:
+            print(*row, sep=" ")
 
 
 if __name__ == "__main__":
-    grid = Grid("src/grid/grid1.txt")
+    grid = Grid(LEVELS_DIR / "grid.txt")
     grid.print()
