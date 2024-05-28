@@ -6,6 +6,7 @@ EMPTY_CELL = 0
 WALL = 1
 GOAL = 2
 BOX = 3
+PLAYER = 4
 
 # Player orientation
 UP = 0
