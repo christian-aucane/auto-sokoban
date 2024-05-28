@@ -300,6 +300,8 @@ class SokobanApp:
         if event.type == pygame.QUIT:
             self.quit()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+            # TODO : Mettre en pause
+            # TODO : Utiliser un bouton plutot qu'une touche du clavier
             self.music_muted = not self.music_muted
             if self.current_music is not None:
                 if self.music_muted:
