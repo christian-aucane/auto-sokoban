@@ -29,5 +29,8 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
 # Paths
-IMAGES_DIR = Path(__file__).parent / "images"
+ASSETS_DIR = Path(__file__).parent / "assets"
+IMAGES_DIR = ASSETS_DIR / "images"
+MUSIC_DIR = ASSETS_DIR / "music"
+SOUND_EFFECTS_DIR = ASSETS_DIR / "sound_effects"
 LEVELS_DIR = Path(__file__).parent / "levels"

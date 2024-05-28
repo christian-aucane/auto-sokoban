@@ -1,9 +1,10 @@
 from pathlib import Path
 import sys
 import pygame
+from pygame import mixer
 
-from build_game import Grid
-from constants import LEVEL_MENU_HEIGHT, LEVELS_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, YELLOW, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE
+from build_game import Grid, Player
+from constants import LEVEL_MENU_HEIGHT, LEVELS_DIR, MUSIC_DIR, SOUND_EFFECTS_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, YELLOW, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE
 
 
 class Button:
@@ -100,7 +101,7 @@ class SokobanApp:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Sokoban")
         self.running = True
-        self.page = HOME
+        self.page = None
         self.current_level = 0
         # TODO : Centrer les boutons
         self.home_screen_buttons = [
@@ -117,6 +118,24 @@ class SokobanApp:
             Button(screen=self.screen, x=3 * level_buttons_width, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Quit", bg_color=RED, text_color=BLACK),
         ]
 
+        # Initialiser le module mixer et charger la musique
+        mixer.init()
+        self.musics = {
+            "home": mixer.Sound(MUSIC_DIR / "home.mp3"),
+            "game": mixer.Sound(MUSIC_DIR / "game.mp3"),
+        }
+        self.current_music = None
+        self.music_muted = False
+
+        self.sound_effects = {
+            "walk": mixer.Sound(SOUND_EFFECTS_DIR / "walk.mp3"),
+            "wrong_move": mixer.Sound(SOUND_EFFECTS_DIR / "wrong_move.mp3"),
+            "box_move": mixer.Sound(SOUND_EFFECTS_DIR / "box_move.mp3"),
+            "box_on_goal": mixer.Sound(SOUND_EFFECTS_DIR / "box_on_goal.mp3"),
+        }
+
+        self.load_home()
+
     # LEVEL
     def load_img(self, path):
         return pygame.transform.scale(pygame.image.load(path), (self.cell_width, self.cell_height))
@@ -127,6 +146,7 @@ class SokobanApp:
     def load_level(self, level_index):
         self.current_level = level_index
         self.page = LEVEL
+        self.play_music("game")
         # TODO : Créer plusieurs niveaux
         grid_path = Path(__file__).parent / "levels" / f"level{level_index}.txt"
         # TODO : enlever la ligne suivante (provisoire)
@@ -181,15 +201,28 @@ class SokobanApp:
 
     def handle_level_event(self, event):
         if event.type == pygame.KEYDOWN:
-
+            movement = None
             if event.key == pygame.K_UP:
-                self.grid.player.up()
+                movement = self.grid.player.up()
             elif event.key == pygame.K_DOWN:
-                self.grid.player.down()
+                movement = self.grid.player.down()
             elif event.key == pygame.K_LEFT:
-                self.grid.player.left()
+                movement = self.grid.player.left()
             elif event.key == pygame.K_RIGHT:
-                self.grid.player.right()
+                movement = self.grid.player.right()
+            
+            if movement == Player.PLAYER_MOVED:
+                self.play_sound_effect("walk")
+            elif movement == Player.BOX_MOVED:
+                self.play_sound_effect("walk")
+                self.play_sound_effect("box_move")
+            elif movement == Player.BOX_ON_GOAL:
+                self.play_sound_effect("walk")
+                self.play_sound_effect("box_move")
+                self.play_sound_effect("box_on_goal")
+            elif movement == Player.PLAYER_NOT_MOVED:
+                self.play_sound_effect("wrong_move")
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             for button in self.level_buttons:
                 if button.is_clicked(event.pos):
@@ -206,6 +239,7 @@ class SokobanApp:
     # HOME
     def load_home(self):
         self.page = HOME
+        self.play_music("home")
 
     def show_home(self):
         # TODO : Ajouter un fond d'ecran
@@ -244,9 +278,37 @@ class SokobanApp:
         ...
 
     # MAIN
+    def play_music(self, music):
+        if self.current_music is not None:
+            self.current_music.stop()
+        if self.music_muted:
+            return
+        # TODO : Utiliser try except
+        music = self.musics.get(music)
+        if music is None:
+            raise ValueError(f"Music '{music}' not found")
+        music.play(-1)
+        self.current_music = music
+
+    def play_sound_effect(self, sound_effect):
+        sound_effect = self.sound_effects.get(sound_effect)
+        if sound_effect is None:
+            raise ValueError(f"Sound effect '{sound_effect}' not found")
+        sound_effect.play()
+
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             self.quit()
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+            # TODO : Mettre en pause
+            # TODO : Utiliser un bouton plutot qu'une touche du clavier
+            self.music_muted = not self.music_muted
+            if self.current_music is not None:
+                if self.music_muted:
+                    self.current_music.stop()
+                else:
+                    self.current_music.play(-1)
+
         elif self.page == HOME:
             self.handle_home_event(event)
         elif self.page == CREATE:
