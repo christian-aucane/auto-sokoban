@@ -74,24 +74,29 @@ class Player(Entity):
     PLAYER_NOT_MOVED = 0
     PLAYER_MOVED = 1
     BOX_MOVED = 2
+    BOX_ON_GOAL = 3
 
     def __init__(self, grid, x, y, orientation=UP):
         super().__init__(grid, x, y)
         self.orientation = orientation
 
     def up(self):
-        self.grid.save_backup()
         if self.is_up_available:
             box = self.grid.get_box(self.x, self.y - 1)
             if box is not None:
                 if box.is_up_available:
+                    self.grid.save_backup()
                     box.up()
                     super().up()
                     self.orientation = UP
-                    return self.BOX_MOVED
+                    if box.is_on_goal:
+                        return self.BOX_ON_GOAL
+                    else:
+                        return self.BOX_MOVED
                 else:
                     return self.PLAYER_NOT_MOVED
             else:
+                self.grid.save_backup()
                 super().up()
                 self.orientation = UP
                 return self.PLAYER_MOVED
@@ -107,7 +112,10 @@ class Player(Entity):
                     box.down()
                     super().down()
                     self.orientation = DOWN
-                    return self.BOX_MOVED
+                    if box.is_on_goal:
+                        return self.BOX_ON_GOAL
+                    else:
+                        return self.BOX_MOVED
                 else:
                     return self.PLAYER_NOT_MOVED
             else:
@@ -128,7 +136,10 @@ class Player(Entity):
                     box.left()
                     super().left()
                     self.orientation = LEFT
-                    return self.BOX_MOVED
+                    if box.is_on_goal:
+                        return self.BOX_ON_GOAL
+                    else:
+                        return self.BOX_MOVED
                 else:
                     return self.PLAYER_NOT_MOVED
             else:
@@ -149,7 +160,10 @@ class Player(Entity):
                     super().right()
 
                     self.orientation = RIGHT
-                    return self.BOX_MOVED
+                    if box.is_on_goal:
+                        return self.BOX_ON_GOAL
+                    else:
+                        return self.BOX_MOVED
                 else:
                     return self.PLAYER_NOT_MOVED
             else:
