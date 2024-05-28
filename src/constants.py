@@ -31,3 +31,4 @@ BLUE = (0, 0, 255)
 # Paths
 IMAGES_DIR = Path(__file__).parent / "images"
 LEVELS_DIR = Path(__file__).parent / "levels"
+CUSTOM_LEVEL_DIR = Path(__file__).parent / "custom_levels"
