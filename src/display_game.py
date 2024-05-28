@@ -133,6 +133,7 @@ class SokobanApp:
             "box_move": mixer.Sound(SOUND_EFFECTS_DIR / "box_move.mp3"),
             "box_on_goal": mixer.Sound(SOUND_EFFECTS_DIR / "box_on_goal.mp3"),
         }
+        self.sound_effects_muted = False
 
         self.load_home()
 
@@ -291,6 +292,8 @@ class SokobanApp:
         self.current_music = music
 
     def play_sound_effect(self, sound_effect):
+        if self.sound_effects_muted:
+            return
         sound_effect = self.sound_effects.get(sound_effect)
         if sound_effect is None:
             raise ValueError(f"Sound effect '{sound_effect}' not found")
@@ -299,15 +302,19 @@ class SokobanApp:
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             self.quit()
+            
+        # TODO : Utiliser un bouton plutot qu'une touche du clavier, ou un menu settings ?
         if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
             # TODO : Mettre en pause
-            # TODO : Utiliser un bouton plutot qu'une touche du clavier
             self.music_muted = not self.music_muted
             if self.current_music is not None:
                 if self.music_muted:
                     self.current_music.stop()
                 else:
                     self.current_music.play(-1)
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_l:
+            self.sound_effects_muted = not self.sound_effects_muted
+
 
         elif self.page == HOME:
             self.handle_home_event(event)
