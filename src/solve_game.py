@@ -5,6 +5,7 @@ from constants import LEVELS_DIR, UP, DOWN, LEFT, RIGHT
 
 
 class Solver:
+    # Breadth-First Search
     def __init__(self, grid):
         self.original_grid = grid
         self.grid = grid.copy()
@@ -71,6 +72,14 @@ class Solver:
             self.grid.player.right()
         return self.get_state()
     
+    def apply_next_move(self):
+        next_move = self.get_next_move()
+        if next_move is not None:
+            next_state = self.apply_move(self.get_state(), next_move)
+            self.set_state(next_state)
+            return True
+        return False
+    
 
 if __name__ == "__main__":
     grid = Grid(LEVELS_DIR / "grid.txt")
@@ -82,19 +91,11 @@ if __name__ == "__main__":
         exit()
     print("SOLUTION", solver.solution)
     while True:
-        next_move = solver.get_next_move()
-        if next_move is not None:
-            print(f"Next move: {next_move}")
-            # Appliquer le mouvement à la grille en utilisant apply_move()
-            next_state = solver.apply_move(solver.get_state(), next_move)
-            solver.set_state(next_state)
-
+        if solver.apply_next_move():
+            print("MOVING")
             # Afficher la grille mise à jour (vous pouvez ajouter cette fonction à votre classe SokobanApp)
             grid.print()
 
         elif grid.is_solved:
             print("SOLUTION FOUND")
-            break
-        else:
-            print("SOLUTION NOT FOUND")
             break
