@@ -71,6 +71,10 @@ class Box(Entity):
         return self.grid.is_goal(self.x, self.y)
 
 class Player(Entity):
+    PLAYER_NOT_MOVED = 0
+    PLAYER_MOVED = 1
+    BOX_MOVED = 2
+
     def __init__(self, grid, x, y, orientation=UP):
         super().__init__(grid, x, y)
         self.orientation = orientation
@@ -84,15 +88,15 @@ class Player(Entity):
                     box.up()
                     super().up()
                     self.orientation = UP
-                    return True
+                    return self.BOX_MOVED
                 else:
-                    return False
+                    return self.PLAYER_NOT_MOVED
             else:
                 super().up()
                 self.orientation = UP
-                return True
+                return self.PLAYER_MOVED
         else:
-            return False
+            return self.PLAYER_NOT_MOVED
 
     def down(self):
         if self.is_down_available:
@@ -103,14 +107,16 @@ class Player(Entity):
                     box.down()
                     super().down()
                     self.orientation = DOWN
-                    return True
+                    return self.BOX_MOVED
                 else:
-                    return False
+                    return self.PLAYER_NOT_MOVED
             else:
                 self.grid.save_backup()
                 super().down()
                 self.orientation = DOWN
-                return True
+                return self.PLAYER_MOVED
+        else:
+            return self.PLAYER_NOT_MOVED
             
     def left(self):
         if self.is_left_available:
@@ -122,14 +128,16 @@ class Player(Entity):
                     box.left()
                     super().left()
                     self.orientation = LEFT
-                    return True
+                    return self.BOX_MOVED
                 else:
-                    return False
+                    return self.PLAYER_NOT_MOVED
             else:
                 self.grid.save_backup()
                 super().left()
                 self.orientation = LEFT
-                return True
+                return self.PLAYER_MOVED
+        else:
+            return self.PLAYER_NOT_MOVED
             
     def right(self):
         if self.is_right_available:
@@ -141,14 +149,16 @@ class Player(Entity):
                     super().right()
 
                     self.orientation = RIGHT
-                    return True
+                    return self.BOX_MOVED
                 else:
-                    return False
+                    return self.PLAYER_NOT_MOVED
             else:
                 self.grid.save_backup()
                 super().right()
                 self.orientation = RIGHT
-                return True
+                return self.PLAYER_MOVED
+        else:
+            return self.PLAYER_NOT_MOVED
 
 
 class Grid:
