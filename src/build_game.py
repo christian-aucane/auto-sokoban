@@ -140,7 +140,7 @@ class Player(Entity):
                 self.orientation = RIGHT
                 return True
 
- 
+
 class Grid:
     def __init__(self, txt_path):
         with open(txt_path, "r") as f:
@@ -210,7 +210,7 @@ class Grid:
     
     def print(self):
         print(*self._grid, sep="\n")
-            
+
 
 if __name__ == "__main__":
     grid = Grid("src/grid/grid1.txt")
