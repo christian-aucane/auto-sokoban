@@ -45,4 +45,17 @@ class Create:
         self.set_cell(x, y, BOX)
         return True
     
-    
+    def remove_player(self):
+        for i, row in enumerate(self._grid):
+            for j, cell in enumerate(row):
+                if cell == PLAYER:
+                    self.set_cell(j, i, EMPTY_CELL)
+                    return True
+        return False
+
+    def put_player(self, x, y):
+        if self.is_border(x, y):
+            return False
+        self.remove_player()
+        self.set_cell(x, y, PLAYER)
+        return True
