@@ -1,4 +1,4 @@
-from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER
+from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER, CUSTOM_LEVEL_DIR
 
 
 class Create:
@@ -59,3 +59,12 @@ class Create:
         self.remove_player()
         self.set_cell(x, y, PLAYER)
         return True
+    
+    def sauvegarder_niveau(self, nom_fichier):
+        with open(nom_fichier, 'w') as f:
+            for ligne in self._grid:
+                f.write(''.join(str(element) for element in ligne) + '\n')
+
+g = Create(10,10)
+CUSTOM_LEVEL_DIR.mkdir(exist_ok=True, parents=True)
+g.sauvegarder_niveau(CUSTOM_LEVEL_DIR / "level1.txt")
