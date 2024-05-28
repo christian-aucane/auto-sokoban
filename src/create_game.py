@@ -29,4 +29,8 @@ class Create:
         self.set_cell(x, y, EMPTY_CELL)
         return True
 
+    def put_wall(self, x, y):
+        self.set_cell(x, y, WALL)
+        return True
+
     
