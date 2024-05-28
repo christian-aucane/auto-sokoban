@@ -33,4 +33,16 @@ class Create:
         self.set_cell(x, y, WALL)
         return True
 
+    def put_goal(self, x, y):
+        if self.is_border(x, y):
+            return False
+        self.set_cell(x, y, GOAL)
+        return True
+
+    def put_box(self, x, y):
+        if self.is_border(x, y):
+            return False
+        self.set_cell(x, y, BOX)
+        return True
+    
     
