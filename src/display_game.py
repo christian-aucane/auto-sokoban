@@ -1,9 +1,10 @@
 from pathlib import Path
 import sys
 import pygame
+from pygame import mixer
 
 from build_game import Grid
-from constants import LEVEL_MENU_HEIGHT, LEVELS_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, YELLOW, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE
+from constants import LEVEL_MENU_HEIGHT, LEVELS_DIR, MUSIC_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, YELLOW, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE
 
 
 class Button:
@@ -100,7 +101,7 @@ class SokobanApp:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Sokoban")
         self.running = True
-        self.page = HOME
+        self.page = None
         self.current_level = 0
         # TODO : Centrer les boutons
         self.home_screen_buttons = [
@@ -117,6 +118,14 @@ class SokobanApp:
             Button(screen=self.screen, x=3 * level_buttons_width, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Quit", bg_color=RED, text_color=BLACK),
         ]
 
+        # Initialiser le module mixer et charger la musique
+        mixer.init()
+        self.home_music = mixer.Sound(MUSIC_DIR / "home.mp3")
+        self.game_music = mixer.Sound(MUSIC_DIR / "game.mp3")
+        self.current_music = None
+
+        self.load_home()
+
     # LEVEL
     def load_img(self, path):
         return pygame.transform.scale(pygame.image.load(path), (self.cell_width, self.cell_height))
@@ -127,6 +136,7 @@ class SokobanApp:
     def load_level(self, level_index):
         self.current_level = level_index
         self.page = LEVEL
+        self.play_music(self.game_music)
         # TODO : Créer plusieurs niveaux
         grid_path = Path(__file__).parent / "levels" / f"level{level_index}.txt"
         # TODO : enlever la ligne suivante (provisoire)
@@ -206,6 +216,7 @@ class SokobanApp:
     # HOME
     def load_home(self):
         self.page = HOME
+        self.play_music(self.home_music)
 
     def show_home(self):
         # TODO : Ajouter un fond d'ecran
@@ -244,6 +255,17 @@ class SokobanApp:
         ...
 
     # MAIN
+    def play_music(self, music):
+        if self.current_music is not None:
+            self.current_music.stop()
+        music.play(-1)
+        self.current_music = music
+
+    def stop_music(self):
+        if self.current_music is not None:
+            self.current_music.stop()
+            self.current_music = None
+
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             self.quit()
