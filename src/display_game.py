@@ -30,7 +30,8 @@ class Button:
     Methods:
         draw(): Draw the button on the screen.
         is_clicked(pos): Check if the button is clicked given a mouse position.
-        set_color(color): Change the button color.
+        set_bg_color(color): Change the button color.
+        set_text_color(color): Change the button text color.
     """
     def __init__(self, screen, x, y, width, height, text, bg_color, text_color):
         """
@@ -108,6 +109,7 @@ class SokobanApp:
             Button(screen=self.screen, x=50, y=300, width=200, height=50, text="Quit", bg_color=RED, text_color=BLACK),
         ]
 
+    # LEVEL
     def load_level(self, level_index):
         # TODO : Créer plusieurs niveaux
         grid_path = Path(__file__).parent / "levels" / f"level{level_index}.txt"
@@ -132,11 +134,6 @@ class SokobanApp:
 
     def load_img(self, path):
         return pygame.transform.scale(pygame.image.load(path), (self.cell_width, self.cell_height))
-
-    def quit(self):
-        self.running = False
-        pygame.quit()
-        sys.exit()
 
     def draw_cell(self, x, y, img_name):
         self.screen.blit(self.images[img_name], (x * self.cell_width, y * self.cell_height))
@@ -168,27 +165,6 @@ class SokobanApp:
             elif self.grid.player.orientation == RIGHT:
                 self.draw_cell(self.grid.player.x, self.grid.player.y, "player_right")
 
-    def show_home(self):
-        # TODO : Ajouter un fond d'ecran
-        # TODO : Ajouter un texte
-        self.screen.fill(WHITE)
-
-        for button in self.home_screen_buttons:
-            button.draw()
-
-    def show_create(self):
-        ...
-
-    def handle_home_screen_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for button in self.home_screen_buttons:
-                if button.is_clicked(event.pos):
-                    if button.text == "Play":
-                        self.home_screen = False
-                        self.load_level(self.current_level)
-                    elif button.text == "Quit":
-                        self.quit()
-    
     def handle_level_event(self, event):
         if event.type == pygame.KEYDOWN:
 
@@ -204,14 +180,44 @@ class SokobanApp:
             elif event.key == pygame.K_BACKSPACE:
                 self.grid.reset()
 
+    # HOME
+    def show_home(self):
+        # TODO : Ajouter un fond d'ecran
+        # TODO : Ajouter un texte
+        self.screen.fill(WHITE)
+
+        for button in self.home_screen_buttons:
+            button.draw()
+    
+    def handle_home_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for button in self.home_screen_buttons:
+                if button.is_clicked(event.pos):
+                    if button.text == "Play":
+                        self.page = LEVEL
+                        self.load_level(self.current_level)
+                    elif button.text == "Create":
+                        self.page = CREATE
+                        self.load_create()
+                    elif button.text == "Quit":
+                        self.quit()
+
+    # CREATE
+    def load_create(self):
+        ...
+
+    def show_create(self):
+        ...
+
     def handle_create_event(self, event):
         ...
 
+    # MAIN
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             self.quit()
         elif self.page == HOME:
-            self.handle_home_screen_event(event)
+            self.handle_home_event(event)
         elif self.page == CREATE:
             self.handle_create_event(event)
         elif self.page == LEVEL:
@@ -224,13 +230,17 @@ class SokobanApp:
 
             if self.page == HOME:
                 self.show_home()
-            elif self.page = CREATE:
+            elif self.page == CREATE:
                 self.show_create()
             elif self.page == LEVEL:
                 self.show_level()
             
-            
             pygame.display.flip()
+
+    def quit(self):
+        self.running = False
+        pygame.quit()
+        sys.exit()
 
 
 if __name__ == "__main__":
