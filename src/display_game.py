@@ -108,6 +108,13 @@ class SokobanApp:
             Button(screen=self.screen, x=50, y=200, width=200, height=50, text="Create", bg_color=BLUE, text_color=BLACK),
             Button(screen=self.screen, x=50, y=300, width=200, height=50, text="Quit", bg_color=RED, text_color=BLACK),
         ]
+        self.create_button = [
+            Button(screen=self.screen, x=50, y=100, width=200, height=50, text="empty_cell", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=50, y=200, width=200, height=50, text="wall", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=50, y=300, width=200, height=50, text="box", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=50, y=400, width=200, height=50, text="goal", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=50, y=500, width=200, height=50, text="player", bg_color=GREEN, text_color=BLACK),
+        ]   
 
     # LEVEL
     def load_level(self, level_index):
@@ -203,7 +210,8 @@ class SokobanApp:
                         self.quit()
 
     # CREATE
-    def load_create(self):
+    # TODO : enlever valeur par default
+    def load_create(self, width=10, height=10):
         ...
 
     def show_create(self):
