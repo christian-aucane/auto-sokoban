@@ -1,4 +1,4 @@
-from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER, CUSTOM_LEVEL_DIR
+from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER, CUSTOM_LEVELS_DIR
 
 
 class Create:
@@ -66,5 +66,5 @@ class Create:
                 f.write(''.join(str(element) for element in ligne) + '\n')
 
 g = Create(10,10)
-CUSTOM_LEVEL_DIR.mkdir(exist_ok=True, parents=True)
-g.sauvegarder_niveau(CUSTOM_LEVEL_DIR / "level1.txt")
+CUSTOM_LEVELS_DIR.mkdir(exist_ok=True, parents=True)
+g.sauvegarder_niveau(CUSTOM_LEVELS_DIR / "level1.txt")
