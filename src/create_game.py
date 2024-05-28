@@ -23,4 +23,10 @@ class Create:
     def is_border(self, x, y):
         return all([x != 0, y != 0, x != self.width - 1, y != self.height - 1])
 
+    def put_empty_cell(self, x, y):
+        if self.cell(x, y) == WALL and self.is_border(x, y):
+            return False
+        self.set_cell(x, y, EMPTY_CELL)
+        return True
+
     
