@@ -329,6 +329,7 @@ class Player(Entity):
 
 
 class Grid:
+    # TODO : add docstrings
     def __init__(self, txt_path):
         with open(txt_path, "r") as f:
             self.content = f.readlines()
