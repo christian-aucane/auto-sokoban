@@ -123,17 +123,17 @@ class SokobanApp:
         # Initialiser le module mixer et charger la musique
         mixer.init()
         self.musics = {
-            "home": mixer.Sound(MUSIC_DIR / "home.mp3"),
-            "game": mixer.Sound(MUSIC_DIR / "game.mp3"),
+            "home": self.load_music("home.mp3"),
+            "game": self.load_music("game.mp3"),
         }
         self.current_music = None
         self.music_muted = False
 
         self.sound_effects = {
-            "walk": mixer.Sound(SOUND_EFFECTS_DIR / "walk.mp3"),
-            "wrong_move": mixer.Sound(SOUND_EFFECTS_DIR / "wrong_move.mp3"),
-            "box_move": mixer.Sound(SOUND_EFFECTS_DIR / "box_move.mp3"),
-            "box_on_goal": mixer.Sound(SOUND_EFFECTS_DIR / "box_on_goal.mp3"),
+            "walk": self.load_sound_effect("walk.mp3"),
+            "wrong_move": self.load_sound_effect("wrong_move.mp3"),
+            "box_move": self.load_sound_effect("box_move.mp3"),
+            "box_on_goal": self.load_sound_effect("box_on_goal.mp3"),
         }
         self.sound_effects_muted = False
 
@@ -142,10 +142,19 @@ class SokobanApp:
         self.solver = None
         self.solve_active = False
 
-    # LEVEL
-    def load_img(self, path):
-        return pygame.transform.scale(pygame.image.load(path), (self.cell_width, self.cell_height))
+    # LOAD FILES
+    @staticmethod
+    def load_sound_effect(filename):
+        return mixer.Sound(SOUND_EFFECTS_DIR / filename)
 
+    @staticmethod
+    def load_music(filename):
+        return mixer.Sound(MUSIC_DIR / filename)
+
+    def load_img(self, filename):
+        return pygame.transform.scale(pygame.image.load(IMAGES_DIR / filename), (self.cell_width, self.cell_height))
+    
+    # LEVEL
     def draw_cell(self, x, y, img_name):
         self.screen.blit(self.images[img_name], (x * self.cell_width, y * self.cell_height))
 
@@ -164,15 +173,15 @@ class SokobanApp:
         # TODO : Adapted la taille de la fenetre plutot que d'adapter la taille des cellules ??
 
         self.images = {
-            "wall": self.load_img(IMAGES_DIR / "wall.png"),
-            "empty_cell": self.load_img(IMAGES_DIR / "empty_cell.png"),
-            "box": self.load_img(IMAGES_DIR / "box.png"),
-            "goal": self.load_img(IMAGES_DIR / "goal.png"),
-            "box_on_goal": self.load_img(IMAGES_DIR / "box_on_goal.png"),
-            "player_up": self.load_img(IMAGES_DIR / "player_up.png"),
-            "player_down": self.load_img(IMAGES_DIR / "player_down.png"),
-            "player_left": self.load_img(IMAGES_DIR / "player_left.png"),
-            "player_right": self.load_img(IMAGES_DIR / "player_right.png"),
+            "wall": self.load_img("wall.png"),
+            "empty_cell": self.load_img("empty_cell.png"),
+            "box": self.load_img("box.png"),
+            "goal": self.load_img("goal.png"),
+            "box_on_goal": self.load_img("box_on_goal.png"),
+            "player_up": self.load_img("player_up.png"),
+            "player_down": self.load_img("player_down.png"),
+            "player_left": self.load_img("player_left.png"),
+            "player_right": self.load_img("player_right.png"),
         }
 
     def show_level(self):

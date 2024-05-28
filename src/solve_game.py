@@ -5,13 +5,43 @@ from constants import LEVELS_DIR, UP, DOWN, LEFT, RIGHT
 
 
 class Solver:
+    # TODO : PUBLIC METHODS : solve, apply_next_move
+    """
+    Solve the game
+    
+    Attributes:
+        grid: Grid object
+        original_grid: Grid object
+        solution: list of moves
+
+    Methods:
+        solve(self) : Solve the game
+        get_state(self) : Get the current state of the grid
+        set_state(self, state) : Set the state of the grid
+        get_next_move(self) : Get the next move from the solution
+        apply_move(self, state, move) : Apply the move to the grid
+        apply_next_move(self) : Apply the next move from the solution
+        possible_moves(self) : Get the possible moves from the grid
+    """
     # Breadth-First Search
     def __init__(self, grid):
+        """
+        Initialize the solver with the initial grid
+
+        Args:
+            grid: Grid object
+        """
         self.original_grid = grid
         self.grid = grid.copy()
         self.solution = []
 
     def solve(self):
+        """
+        Solve the game and return True if a solution is found, False otherwise
+
+        Returns:
+            bool: True if a solution is found, False otherwise
+        """
         initial_state = self.get_state()
         queue = deque([(initial_state, [])])
         visited = set()
@@ -35,22 +65,46 @@ class Solver:
         return False
 
     def get_next_move(self):
+        """
+        Get the next move from the solution
+        
+        Returns:
+            tuple: next move
+        """
         if self.solution:
             return self.solution.pop(0)
         return None
 
     def get_state(self):
+        """
+        Get the current state of the grid
+        
+        Returns:
+            tuple: current state
+        """
         boxes = tuple((box.x, box.y) for box in self.grid.boxes)
         player = (self.grid.player.x, self.grid.player.y)
         return (player, boxes)
 
     def set_state(self, state):
+        """
+        Set the state of the grid
+        
+        Args:
+            state: state to set
+        """
         player, boxes = state
         self.grid.player.x, self.grid.player.y = player
         for i, (x, y) in enumerate(boxes):
             self.grid.boxes[i].x, self.grid.boxes[i].y = x, y
 
     def possible_moves(self):
+        """
+        Get the possible moves from the grid
+        
+        Returns:
+            list: list of possible moves
+        """
         moves = []
         directions = [(UP, self.grid.player.up), (DOWN, self.grid.player.down),
                       (LEFT, self.grid.player.left), (RIGHT, self.grid.player.right)]
@@ -61,6 +115,16 @@ class Solver:
         return moves
 
     def apply_move(self, state, move):
+        """
+        Apply the move to the grid
+
+        Args:
+            state: state to apply the move
+            move: move to apply
+
+        Returns:
+            tuple: new state
+        """
         self.set_state(state)
         if move == UP:
             self.grid.player.up()
@@ -73,6 +137,12 @@ class Solver:
         return self.get_state()
     
     def apply_next_move(self):
+        """
+        Apply the next move from the solution
+
+        Returns:
+            bool: True if the move was applied, False otherwise
+        """
         next_move = self.get_next_move()
         if next_move is not None:
             next_state = self.apply_move(self.get_state(), next_move)
