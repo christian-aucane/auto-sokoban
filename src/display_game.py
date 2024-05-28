@@ -3,8 +3,8 @@ import sys
 import pygame
 
 from build_game import Grid
-from constants import LEVEL_MENU_HEIGHT, LEVELS_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, YELLOW, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE
-
+from constants import LEVEL_MENU_HEIGHT, LEVELS_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, YELLOW, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE, PLAYERS, RANKING
+from Database.database import *
 
 class Button:
     """
@@ -93,6 +93,26 @@ class Button:
         """
         self.text_color = color
 
+class TextInput:
+    def __init__(self, screen, x, y, width, height, text_color, bg_color):
+        self.screen = screen
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text_color = text_color
+        self.bg_color = bg_color
+        self.text = ""
+
+    def draw(self):
+        pygame.draw.rect(self.screen, self.bg_color, self.rect)
+        font = pygame.font.SysFont("", 30)
+        text_surface = font.render(self.text, True, self.text_color)
+        self.screen.blit(text_surface, (self.rect.x + 10, self.rect.y + 10))
+
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
+                self.text = self.text[:-1]
+            else:
+                self.text += event.unicode
 
 class SokobanApp:
     def __init__(self, grid_path):
@@ -102,11 +122,14 @@ class SokobanApp:
         self.running = True
         self.page = HOME
         self.current_level = 0
+        self.player_name_input = TextInput(screen=self.screen, x=50, y=400, width=200, height=50, text_color=BLACK, bg_color=WHITE)
         # TODO : Centrer les boutons
         self.home_screen_buttons = [
             Button(screen=self.screen, x=50, y=100, width=200, height=50, text="Play", bg_color=GREEN, text_color=BLACK),
             Button(screen=self.screen, x=50, y=200, width=200, height=50, text="Create", bg_color=BLUE, text_color=BLACK),
             Button(screen=self.screen, x=50, y=300, width=200, height=50, text="Quit", bg_color=RED, text_color=BLACK),
+            Button(screen=self.screen, x=50, y=400, width=200, height=50, text="Players", bg_color=BLUE, text_color=BLACK),
+            Button(screen=self.screen, x=50, y=500, width=200, height=50, text="Ranking", bg_color=YELLOW, text_color=BLACK),
         ]
         level_buttons_width = WIDTH // 4
         # TODO : centrer les boutons
@@ -116,6 +139,7 @@ class SokobanApp:
             Button(screen=self.screen, x=2 * level_buttons_width, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Reset", bg_color=BLUE, text_color=BLACK),
             Button(screen=self.screen, x=3 * level_buttons_width, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Quit", bg_color=RED, text_color=BLACK),
         ]
+        self.back_button = Button(screen=self.screen, x=50, y=50, width=100, height=30, text="Back", bg_color=RED, text_color=BLACK)
 
     # LEVEL
     def load_img(self, path):
@@ -225,7 +249,70 @@ class SokobanApp:
                         self.load_create()
                     elif button.text == "Quit":
                         self.quit()
+                    elif button.text == "Players":
+                        self.load_players()
+                    elif button.text == "Ranking":
+                        self.load_ranking()
+    # PLAYERS
+    def load_players(self):
+        self.page = PLAYERS
+        self.player_name_input = ""
 
+    def show_players(self):
+        self.screen.fill(WHITE)
+        players = get_all_players()
+        for i, player in enumerate(players):
+            text_surface = pygame.font.SysFont("", 30).render(f"{player['name']}", True, BLACK)
+            self.screen.blit(text_surface, (50, 100 + i * 50))
+            # Ajouté un bouton "Supprimer" à côté de chaque joueur
+            delete_button = Button(screen=self.screen, x=300, y=100 + i * 50, width=100, height=30, text="Delete", bg_color=RED, text_color=BLACK)
+            delete_button.draw()
+        # Ajouté un champ de texte et un bouton "Ajouter" pour ajouter de nouveaux joueurs
+        text_surface = pygame.font.SysFont("", 30).render(self.player_name_input, True, BLACK)
+        self.screen.blit(text_surface, (50, 100 + len(players) * 50))
+        add_button = Button(screen=self.screen, x=300, y=100 + len(players) * 50, width=100, height=30, text="Add", bg_color=GREEN, text_color=BLACK)
+        add_button.draw()
+        self.back_button.draw()
+        
+
+    def handle_players_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
+                self.player_name_input = self.player_name_input[:-1]
+            else:
+                self.player_name_input += event.unicode
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            players = get_all_players()
+            for i, player in enumerate(players):
+                delete_button = Button(screen=self.screen, x=300, y=100 + i * 50, width=100, height=30, text="Delete", bg_color=RED, text_color=BLACK)
+                if delete_button.is_clicked(event.pos):
+                    delete_player_by_name(player['name'])
+            add_button = Button(screen=self.screen, x=300, y=100 + len(players) * 50, width=100, height=30, text="Add", bg_color=GREEN, text_color=BLACK)
+            if add_button.is_clicked(event.pos):
+                add_player(len(players) + 1, self.player_name_input)
+                self.player_name_input = ""
+            if self.back_button.is_clicked(event.pos):
+                self.load_home()
+
+    # RANKING
+    def load_ranking(self):
+        self.page = RANKING
+
+    def show_ranking(self):
+        self.screen.fill(WHITE)
+        players = get_all_players()
+        for i, player in enumerate(players):
+            text_surface = pygame.font.SysFont("", 20).render(
+                f"Name: {player['name']}, Successes: {player['successes']}, Last grid time: {player['last grid time']}, Last grid moves: {player['last grid moves']}", 
+                True, BLACK)
+            self.screen.blit(text_surface, (50, 100 + i * 50))
+        self.back_button.draw()
+
+    def handle_ranking_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.back_button.is_clicked(event.pos):
+                self.load_home()
+                        
     # CREATE
     def load_create(self):
         ...
@@ -253,6 +340,10 @@ class SokobanApp:
             self.handle_create_event(event)
         elif self.page == LEVEL:
             self.handle_level_event(event)
+        elif self.page == PLAYERS:
+            self.handle_players_event(event)
+        elif self.page == RANKING:
+            self.handle_ranking_event(event)
 
     def run(self):
         while self.running:
@@ -265,6 +356,10 @@ class SokobanApp:
                 self.show_create()
             elif self.page == LEVEL:
                 self.show_level()
+            elif self.page == PLAYERS:
+                self.show_players()
+            elif self.page == RANKING:
+                self.show_ranking()
             
             pygame.display.flip()
 
