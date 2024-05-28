@@ -5,6 +5,24 @@ from constants import LEVELS_DIR, UP, DOWN, LEFT, RIGHT
 
 
 class Solver:
+    # TODO : PUBLIC METHODS : solve, apply_next_move
+    """
+    Solve the game
+    
+    Attributes:
+        grid: Grid object
+        original_grid: Grid object
+        solution: list of moves
+
+    Methods:
+        solve(self) : Solve the game
+        get_state(self) : Get the current state of the grid
+        set_state(self, state) : Set the state of the grid
+        get_next_move(self) : Get the next move from the solution
+        apply_move(self, state, move) : Apply the move to the grid
+        apply_next_move(self) : Apply the next move from the solution
+        possible_moves(self) : Get the possible moves from the grid
+    """
     # Breadth-First Search
     def __init__(self, grid):
         """
