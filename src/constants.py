@@ -5,6 +5,8 @@ from pathlib import Path
 EMPTY_CELL = 0
 WALL = 1
 GOAL = 2
+BOX = 3
+PLAYER = 4
 
 # Player orientation
 UP = 0
@@ -34,3 +36,4 @@ IMAGES_DIR = ASSETS_DIR / "images"
 MUSIC_DIR = ASSETS_DIR / "music"
 SOUND_EFFECTS_DIR = ASSETS_DIR / "sound_effects"
 LEVELS_DIR = Path(__file__).parent / "levels"
+CUSTOM_LEVEL_DIR = Path(__file__).parent / "custom_levels"
