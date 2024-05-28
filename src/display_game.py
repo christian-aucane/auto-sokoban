@@ -3,7 +3,7 @@ import sys
 import pygame
 
 from build_game import Grid
-from constants import LEVELS_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE
+from constants import LEVEL_MENU_HEIGHT, LEVELS_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, YELLOW, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE
 
 
 class Button:
@@ -108,9 +108,25 @@ class SokobanApp:
             Button(screen=self.screen, x=50, y=200, width=200, height=50, text="Create", bg_color=BLUE, text_color=BLACK),
             Button(screen=self.screen, x=50, y=300, width=200, height=50, text="Quit", bg_color=RED, text_color=BLACK),
         ]
+        level_buttons_width = WIDTH // 4
+        # TODO : centrer les boutons
+        self.level_buttons = [
+            Button(screen=self.screen, x=0, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Solve", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=level_buttons_width, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Cancel", bg_color=YELLOW, text_color=BLACK),
+            Button(screen=self.screen, x=2 * level_buttons_width, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Reset", bg_color=BLUE, text_color=BLACK),
+            Button(screen=self.screen, x=3 * level_buttons_width, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Quit", bg_color=RED, text_color=BLACK),
+        ]
 
     # LEVEL
+    def load_img(self, path):
+        return pygame.transform.scale(pygame.image.load(path), (self.cell_width, self.cell_height))
+
+    def draw_cell(self, x, y, img_name):
+        self.screen.blit(self.images[img_name], (x * self.cell_width, y * self.cell_height))
+
     def load_level(self, level_index):
+        self.current_level = level_index
+        self.page = LEVEL
         # TODO : Créer plusieurs niveaux
         grid_path = Path(__file__).parent / "levels" / f"level{level_index}.txt"
         # TODO : enlever la ligne suivante (provisoire)
@@ -118,6 +134,7 @@ class SokobanApp:
         self.grid = Grid(grid_path)
         self.cell_width = WIDTH // self.grid.width
         self.cell_height = HEIGHT // self.grid.height
+        pygame.display.set_mode((WIDTH, HEIGHT + LEVEL_MENU_HEIGHT))
         # TODO : Adapted la taille de la fenetre plutot que d'adapter la taille des cellules ??
 
         self.images = {
@@ -131,12 +148,6 @@ class SokobanApp:
             "player_left": self.load_img(IMAGES_DIR / "player_left.png"),
             "player_right": self.load_img(IMAGES_DIR / "player_right.png"),
         }
-
-    def load_img(self, path):
-        return pygame.transform.scale(pygame.image.load(path), (self.cell_width, self.cell_height))
-
-    def draw_cell(self, x, y, img_name):
-        self.screen.blit(self.images[img_name], (x * self.cell_width, y * self.cell_height))
 
     def show_level(self):
         self.screen.fill(WHITE)
@@ -165,6 +176,9 @@ class SokobanApp:
             elif self.grid.player.orientation == RIGHT:
                 self.draw_cell(self.grid.player.x, self.grid.player.y, "player_right")
 
+        for button in self.level_buttons:
+            button.draw()
+
     def handle_level_event(self, event):
         if event.type == pygame.KEYDOWN:
 
@@ -176,11 +190,23 @@ class SokobanApp:
                 self.grid.player.left()
             elif event.key == pygame.K_RIGHT:
                 self.grid.player.right()
-
-            elif event.key == pygame.K_BACKSPACE:
-                self.grid.reset()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            for button in self.level_buttons:
+                if button.is_clicked(event.pos):
+                    print(button.text)
+                    if button.text == "Solve":
+                        self.load_solve()
+                    if button.text == "Cancel":
+                        self.grid.cancel()
+                    elif button.text == "Reset":
+                        self.grid.reset()
+                    elif button.text == "Quit":
+                        self.load_home()
 
     # HOME
+    def load_home(self):
+        self.page = HOME
+
     def show_home(self):
         # TODO : Ajouter un fond d'ecran
         # TODO : Ajouter un texte
@@ -194,10 +220,8 @@ class SokobanApp:
             for button in self.home_screen_buttons:
                 if button.is_clicked(event.pos):
                     if button.text == "Play":
-                        self.page = LEVEL
                         self.load_level(self.current_level)
                     elif button.text == "Create":
-                        self.page = CREATE
                         self.load_create()
                     elif button.text == "Quit":
                         self.quit()
@@ -211,6 +235,14 @@ class SokobanApp:
 
     def handle_create_event(self, event):
         ...
+
+    # SOLVE
+    def load_solve(self):
+        print("SOLVE")
+
+    def show_solve(self):
+        ...
+
 
     # MAIN
     def handle_event(self, event):
