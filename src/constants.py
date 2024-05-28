@@ -20,6 +20,7 @@ LEVEL = 1
 CREATE = 2
 
 WIDTH, HEIGHT = 600, 600
+LEVEL_MENU_HEIGHT = 100
 
 # Colors
 WHITE = (255, 255, 255)
@@ -27,8 +28,12 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
 
 # Paths
-IMAGES_DIR = Path(__file__).parent / "images"
+ASSETS_DIR = Path(__file__).parent / "assets"
+IMAGES_DIR = ASSETS_DIR / "images"
+MUSIC_DIR = ASSETS_DIR / "music"
+SOUND_EFFECTS_DIR = ASSETS_DIR / "sound_effects"
 LEVELS_DIR = Path(__file__).parent / "levels"
 CUSTOM_LEVEL_DIR = Path(__file__).parent / "custom_levels"
