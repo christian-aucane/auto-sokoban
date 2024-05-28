@@ -1,10 +1,12 @@
 from pathlib import Path
 import sys
+import time
 import pygame
 from pygame import mixer
 
 from build_game import Grid, Player
 from constants import LEVEL_MENU_HEIGHT, LEVELS_DIR, MUSIC_DIR, SOUND_EFFECTS_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, YELLOW, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE
+from solve_game import Solver
 
 
 class Button:
@@ -136,6 +138,9 @@ class SokobanApp:
         self.sound_effects_muted = False
 
         self.load_home()
+
+        self.solver = None
+        self.solve_active = False
 
     # LEVEL
     def load_img(self, path):
@@ -273,10 +278,10 @@ class SokobanApp:
 
     # SOLVE
     def load_solve(self):
-        print("SOLVE")
-
-    def show_solve(self):
-        ...
+        self.solver = Solver(self.grid)
+        is_solvable = self.solver.solve()
+        if is_solvable:
+            self.solve_active = True
 
     # MAIN
     def play_music(self, music):
@@ -333,7 +338,12 @@ class SokobanApp:
             elif self.page == CREATE:
                 self.show_create()
             elif self.page == LEVEL:
-                self.show_level()
+                if self.solve_active:
+                    self.solver.apply_next_move()
+                    self.show_level()
+                    time.sleep(0.2)
+                else:
+                    self.show_level()
             
             pygame.display.flip()
 
