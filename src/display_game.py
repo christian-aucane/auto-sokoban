@@ -243,7 +243,6 @@ class SokobanApp:
     def show_solve(self):
         ...
 
-
     # MAIN
     def handle_event(self, event):
         if event.type == pygame.QUIT:
