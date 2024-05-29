@@ -328,7 +328,7 @@ class Player(Entity):
             return self.PLAYER_NOT_MOVED
 
 
-class Grid:
+class Level:
     # TODO : add docstrings
     def __init__(self, txt_path):
         with open(txt_path, "r") as f:
