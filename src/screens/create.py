@@ -37,8 +37,8 @@ class CreateScreen(BaseScreen):
             self.draw_create()
 
     def draw_create(self):
-        for y in self.creator.height:
-            for x in self.creator.width:
+        for y in range(self.creator.height):
+            for x in range(self.creator.width):
                 if self.creator.is_empty(x, y):
                     self.draw_cell(x, y, "empty_cell")
                 elif self.creator.is_wall(x, y):
@@ -49,8 +49,6 @@ class CreateScreen(BaseScreen):
                     self.draw_cell(x, y, "goal")
                 elif self.creator.is_player(x, y):
                     self.draw_cell(x, y, "player")
-                
-
 
     def load_creator(self, width, height):
         self.current_screen = "create"
@@ -65,13 +63,13 @@ class CreateScreen(BaseScreen):
             "goal": self.load_img("goal.png"),
             "player": self.load_img("player_down.png"),
         }
-    
+
     def load_img(self, filename):
         return pygame.transform.scale(pygame.image.load(IMAGES_DIR / filename), (self.cell_width, self.cell_height))
-    
-    def draw_cell(self, x, y, img_name):
-        self.screen.blit(self.images[img_name], (x * self.cell_width, y * self.cell_height))
 
+    def draw_cell(self, x, y, img_name):
+        self.screen.blit(self.images[img_name],
+                         (x * self.cell_width, y * self.cell_height))
 
     def handle_event(self, event):
         if self.current_screen == "main":
