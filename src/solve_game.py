@@ -1,6 +1,6 @@
 from collections import deque
 
-from build_game import Grid, Player
+from build_game import Level, Player
 from constants import LEVELS_DIR, UP, DOWN, LEFT, RIGHT
 
 
@@ -10,29 +10,29 @@ class Solver:
     Solve the game
     
     Attributes:
-        grid: Grid object
-        original_grid: Grid object
+        level: Grid object
+        original_level: Grid object
         solution: list of moves
 
     Methods:
         solve(self) : Solve the game
-        get_state(self) : Get the current state of the grid
-        set_state(self, state) : Set the state of the grid
+        get_state(self) : Get the current state of the level
+        set_state(self, state) : Set the state of the level
         get_next_move(self) : Get the next move from the solution
-        apply_move(self, state, move) : Apply the move to the grid
+        apply_move(self, state, move) : Apply the move to the level
         apply_next_move(self) : Apply the next move from the solution
-        possible_moves(self) : Get the possible moves from the grid
+        possible_moves(self) : Get the possible moves from the level
     """
     # Breadth-First Search
-    def __init__(self, grid):
+    def __init__(self, level):
         """
-        Initialize the solver with the initial grid
+        Initialize the solver with the initial level
 
         Args:
-            grid: Grid object
+            level: Grid object
         """
-        self.original_grid = grid
-        self.grid = grid.copy()
+        self.original_level = level
+        self.level = level.copy()
         self.solution = []
 
     def solve(self):
@@ -50,9 +50,9 @@ class Solver:
         while queue:
             current_state, path = queue.popleft()
             self.set_state(current_state)
-            if self.grid.is_solved:
+            if self.level.is_solved:
                 self.solution = path
-                self.grid = self.original_grid  # Restore the original grid
+                self.level = self.original_level  # Restore the original level
                 return True
 
             for move in self.possible_moves():
@@ -77,46 +77,46 @@ class Solver:
 
     def get_state(self):
         """
-        Get the current state of the grid
+        Get the current state of the level
         
         Returns:
             tuple: current state
         """
-        boxes = tuple((box.x, box.y) for box in self.grid.boxes)
-        player = (self.grid.player.x, self.grid.player.y)
+        boxes = tuple((box.x, box.y) for box in self.level.boxes)
+        player = (self.level.player.x, self.level.player.y)
         return (player, boxes)
 
     def set_state(self, state):
         """
-        Set the state of the grid
+        Set the state of the level
         
         Args:
             state: state to set
         """
         player, boxes = state
-        self.grid.player.x, self.grid.player.y = player
+        self.level.player.x, self.level.player.y = player
         for i, (x, y) in enumerate(boxes):
-            self.grid.boxes[i].x, self.grid.boxes[i].y = x, y
+            self.level.boxes[i].x, self.level.boxes[i].y = x, y
 
     def possible_moves(self):
         """
-        Get the possible moves from the grid
+        Get the possible moves from the level
         
         Returns:
             list: list of possible moves
         """
         moves = []
-        directions = [(UP, self.grid.player.up), (DOWN, self.grid.player.down),
-                      (LEFT, self.grid.player.left), (RIGHT, self.grid.player.right)]
+        directions = [(UP, self.level.player.up), (DOWN, self.level.player.down),
+                      (LEFT, self.level.player.left), (RIGHT, self.level.player.right)]
         for direction, move in directions:
             if move() != Player.PLAYER_NOT_MOVED:
                 moves.append(direction)
-                self.grid.cancel()  # Revert move to check other directions
+                self.level.cancel()  # Revert move to check other directions
         return moves
 
     def apply_move(self, state, move):
         """
-        Apply the move to the grid
+        Apply the move to the level
 
         Args:
             state: state to apply the move
@@ -127,13 +127,13 @@ class Solver:
         """
         self.set_state(state)
         if move == UP:
-            self.grid.player.up()
+            self.level.player.up()
         elif move == DOWN:
-            self.grid.player.down()
+            self.level.player.down()
         elif move == LEFT:
-            self.grid.player.left()
+            self.level.player.left()
         elif move == RIGHT:
-            self.grid.player.right()
+            self.level.player.right()
         return self.get_state()
     
     def apply_next_move(self):
@@ -152,8 +152,8 @@ class Solver:
     
 
 if __name__ == "__main__":
-    grid = Grid(LEVELS_DIR / "grid.txt")
-    solver = Solver(grid)
+    level = Level(LEVELS_DIR / "grid.txt")
+    solver = Solver(level)
     is_solved = solver.solve()
     print("IS SOLVED", is_solved)
     if not is_solved:
@@ -163,8 +163,8 @@ if __name__ == "__main__":
     while True:
         if solver.apply_next_move():
             print("MOVING")
-            grid.print()
+            level.print()
 
-        elif grid.is_solved:
+        elif level.is_solved:
             print("SOLUTION FOUND")
             break
