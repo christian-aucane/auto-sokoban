@@ -20,7 +20,6 @@ class BaseScreen:
         self.music.stop()
 
     def load(self):
-        print("load")
         self.play_music()
     
     def quit(self):
