@@ -48,6 +48,9 @@ class Create:
     def is_empty(self, x, y):
         return self.cell(x, y) == EMPTY_CELL
 
+    def is_wall(self, x, y):
+        return self.cell(x, y) == WALL
+    
     
     
     def remove_player(self):
