@@ -45,6 +45,11 @@ class Create:
         self.set_cell(x, y, BOX)
         return True
     
+    def is_empty(self, x, y):
+        return self.cell(x, y) == EMPTY_CELL
+
+    
+    
     def remove_player(self):
         for i, row in enumerate(self._grid):
             for j, cell in enumerate(row):
