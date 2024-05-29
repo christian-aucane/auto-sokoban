@@ -22,6 +22,23 @@ class CreateScreen(BaseScreen):
             Button(screen=self.screen, x=buttons_x, y=HEIGHT - 50, width=200,
                    height=50, text="Quit", bg_color=RED, text_color=BLACK),
         ]
+        create_button_width = WIDTH // 7
+        self.create_buttons = [
+            Button(screen=self.screen, x=0, y=GRID_HEIGHT, width=create_button_width,
+                   height=50, text="empty", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=create_button_width, y=GRID_HEIGHT, width=create_button_width,
+                   height=50, text="wall", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=2*create_button_width, y=GRID_HEIGHT, width=create_button_width,
+                   height=50, text="box", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=3*create_button_width, y=GRID_HEIGHT, width=create_button_width,
+                   height=50, text="goal", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=4*create_button_width, y=GRID_HEIGHT, width=create_button_width,
+                   height=50, text="player", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=5*create_button_width, y=GRID_HEIGHT, width=create_button_width,
+                   height=50, text="save", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=6*create_button_width, y=GRID_HEIGHT, width=create_button_width,
+                   height=50, text="quit", bg_color=GREEN, text_color=BLACK),
+        ]
         self.current_screen = "main"
         self.creator = None
         self.cell_width = 0
@@ -49,6 +66,9 @@ class CreateScreen(BaseScreen):
                     self.draw_cell(x, y, "goal")
                 elif self.creator.is_player(x, y):
                     self.draw_cell(x, y, "player")
+        
+        for button in self.create_buttons:
+            button.draw()
 
     def load_creator(self, width, height):
         self.current_screen = "create"
