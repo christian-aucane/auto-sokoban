@@ -7,7 +7,7 @@ if [ -d "venv" ]; then
         # Activate virtual environment for Windows
         source venv/Scripts/activate
         # Run the application with python
-        python src/app.py
+        python src/main.py
     else
         # Activate virtual environment for Unix-based systems (Linux, macOS)
         source venv/bin/activate
