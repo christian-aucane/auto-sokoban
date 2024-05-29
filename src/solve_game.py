@@ -52,7 +52,7 @@ class Solver:
             self.set_state(current_state)
             if self.grid.is_solved:
                 self.solution = path
-                self.grid = self.original_grid
+                self.grid = self.original_grid  # Restore the original grid
                 return True
 
             for move in self.possible_moves():
@@ -163,7 +163,6 @@ if __name__ == "__main__":
     while True:
         if solver.apply_next_move():
             print("MOVING")
-            # Afficher la grille mise à jour (vous pouvez ajouter cette fonction à votre classe SokobanApp)
             grid.print()
 
         elif grid.is_solved:
