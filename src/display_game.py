@@ -4,9 +4,12 @@ import pygame
 from pygame import mixer
 
 
+
 from constants import WHITE, WIDTH, HEIGHT
 from screens.game import GameScreen
+
 from screens.menu import MenuScreen
+from screens.create import CreateScreen
 
 
 class SokobanApp:
@@ -21,7 +24,11 @@ class SokobanApp:
         self.running = True
 
         self.menu = MenuScreen(self, self.screen)
+
         self.game = GameScreen(self, self.screen)
+
+        self.create = CreateScreen(self, self.screen)
+
 
         self.current_screen = self.menu
         self.current_screen.load()
@@ -33,7 +40,7 @@ class SokobanApp:
                     self.quit()
                 else:
                     self.current_screen.handle_event(event)
-                    
+
             self.screen.fill(WHITE)
             self.current_screen.update()
             pygame.display.flip()
@@ -46,7 +53,7 @@ class SokobanApp:
         elif screen_name == "game":
             self.current_screen = self.game
         elif screen_name == "create":
-            print("CREATE")
+            self.current_screen = self.create
         self.current_screen.load()
 
     def quit(self):

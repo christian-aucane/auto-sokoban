@@ -45,6 +45,21 @@ class Create:
         self.set_cell(x, y, BOX)
         return True
     
+    def is_empty(self, x, y):
+        return self.cell(x, y) == EMPTY_CELL
+
+    def is_wall(self, x, y):
+        return self.cell(x, y) == WALL
+    
+    def is_goal(self, x, y):
+        return self.cell(x, y) == GOAL
+    
+    def is_box(self, x, y):
+        return self.cell(x, y) == BOX
+    
+    def is_player(self, x, y):
+        return self.cell(x, y) == PLAYER
+    
     def remove_player(self):
         for i, row in enumerate(self._grid):
             for j, cell in enumerate(row):
