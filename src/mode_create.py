@@ -57,7 +57,8 @@ class Create:
     def is_box(self, x, y):
         return self.cell(x, y) == BOX
     
-    
+    def is_player(self, x, y):
+        return self.cell(x, y) == PLAYER
     
     def remove_player(self):
         for i, row in enumerate(self._grid):
