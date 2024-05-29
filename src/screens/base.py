@@ -24,3 +24,10 @@ class BaseScreen:
     
     def quit(self):
         self.stop_music()
+
+    def update(self):
+        raise NotImplementedError("Subclass must implement abstract method")
+    
+    def handle_event(self, event):
+        raise NotImplementedError("Subclass must implement abstract method")
+    
