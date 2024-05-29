@@ -51,6 +51,9 @@ class Create:
     def is_wall(self, x, y):
         return self.cell(x, y) == WALL
     
+    def is_goal(self, x, y):
+        return self.cell(x, y) == GOAL
+    
     
     
     def remove_player(self):
