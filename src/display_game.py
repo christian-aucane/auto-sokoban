@@ -1,6 +1,11 @@
 from pathlib import Path
 import sys
 import pygame
+from pygame import mixer
+
+
+from constants import WIDTH, HEIGHT
+from screens.menu import MenuScreen
 
 from build_game import Grid
 from constants import LEVEL_MENU_HEIGHT, LEVELS_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, YELLOW, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE, PLAYERS, RANKING
@@ -115,11 +120,20 @@ class TextInput:
                 self.text += event.unicode
 
 class SokobanApp:
-    def __init__(self, grid_path):
+    def __init__(self):
         pygame.init()
+        mixer.init()
+
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.clock = pygame.time.Clock()
+
         pygame.display.set_caption("Sokoban")
         self.running = True
+
+        self.menu = MenuScreen(self, self.screen)
+
+        self.current_screen = self.menu
+        self.current_screen.load()
         self.page = HOME
         self.current_level = 0
         self.player_name_input = TextInput(screen=self.screen, x=50, y=400, width=200, height=50, text_color=BLACK, bg_color=WHITE)
@@ -348,7 +362,13 @@ class SokobanApp:
     def run(self):
         while self.running:
             for event in pygame.event.get():
-                self.handle_event(event)
+                if event.type == pygame.QUIT:
+                    self.quit()
+                else:
+                    self.current_screen.handle_event(event)
+
+            self.current_screen.update()
+            self.handle_event(event)
 
             if self.page == HOME:
                 self.show_home()
@@ -362,14 +382,24 @@ class SokobanApp:
                 self.show_ranking()
             
             pygame.display.flip()
+            self.clock.tick(60)  # 60FPS
+
+    def switch_screen(self, screen_name):
+        self.current_screen.quit()
+        if screen_name == "menu":
+            self.current_screen = self.menu
+        elif screen_name == "game":
+            print("GAME")
+        elif screen_name == "create":
+            print("CREATE")
+        self.current_screen.load()
 
     def quit(self):
         self.running = False
         pygame.quit()
         sys.exit()
 
-
 if __name__ == "__main__":
     grid_path = Path(__file__).resolve().parent / "grid" / "grid.txt"
-    app = SokobanApp(grid_path)
+    app = SokobanApp()
     app.run()

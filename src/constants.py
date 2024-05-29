@@ -5,6 +5,8 @@ from pathlib import Path
 EMPTY_CELL = 0
 WALL = 1
 GOAL = 2
+BOX = 3
+PLAYER = 4
 
 # Player orientation
 UP = 0
@@ -19,8 +21,10 @@ CREATE = 2
 PLAYERS = 3
 RANKING = 4
 
-WIDTH, HEIGHT = 600, 600
+# Sizes
+GRID_WIDTH, GRID_HEIGHT = 600, 600
 LEVEL_MENU_HEIGHT = 100
+WIDTH, HEIGHT = GRID_WIDTH, GRID_HEIGHT + LEVEL_MENU_HEIGHT
 
 # Colors
 WHITE = (255, 255, 255)
@@ -31,5 +35,10 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
 # Paths
-IMAGES_DIR = Path(__file__).parent / "images"
-LEVELS_DIR = Path(__file__).parent / "levels"
+SOURCES_DIR = Path(__file__).parent
+ASSETS_DIR = SOURCES_DIR / "assets"
+IMAGES_DIR = ASSETS_DIR / "images"
+MUSIC_DIR = ASSETS_DIR / "music"
+SOUND_EFFECTS_DIR = ASSETS_DIR / "sound_effects"
+LEVELS_DIR = SOURCES_DIR / "levels"
+CUSTOM_LEVELS_DIR = SOURCES_DIR / "custom_levels"
