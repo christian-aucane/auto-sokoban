@@ -1,379 +1,57 @@
 from pathlib import Path
 import sys
-import time
 import pygame
 from pygame import mixer
 
-from build_game import Grid, Player
-from constants import LEVEL_MENU_HEIGHT, LEVELS_DIR, MUSIC_DIR, SOUND_EFFECTS_DIR, WIDTH, HEIGHT, WHITE, GREEN, RED, BLACK, BLUE, YELLOW, UP, DOWN, LEFT, RIGHT, IMAGES_DIR, HOME, LEVEL, CREATE
-from solve_game import Solver
 
-
-class Button:
-    """
-    Button class for creating interactive buttons on a Pygame screen.
-
-    Args:
-        screen (pygame.Surface): The screen to draw the button on.
-        x (int): The x coordinate of the button.
-        y (int): The y coordinate of the button.
-        width (int): The width of the button.
-        height (int): The height of the button.
-        text (str): The text displayed on the button.
-        bg_color (tuple): The color of the button.
-        text_color (tuple): The color of the text.
-
-    Attributes:
-        rect (pygame.Rect): The rectangle representing the button.
-        text (str): The text displayed on the button.
-        bg_color (tuple): The color of the button.
-        text_color (tuple): The color of the text.
-        screen (pygame.Surface): The screen to draw the button on.
-
-    Methods:
-        draw(): Draw the button on the screen.
-        is_clicked(pos): Check if the button is clicked given a mouse position.
-        set_bg_color(color): Change the button color.
-        set_text_color(color): Change the button text color.
-    """
-    def __init__(self, screen, x, y, width, height, text, bg_color, text_color):
-        """
-        Initialize the button
-
-        Args:
-            screen (pygame.Surface): the screen to draw on
-            x (int): x coordinate of the button
-            y (int): y coordinate of the button
-            width (int): width of the button
-            height (int): height of the button
-            text (str): text of the button
-            bg_color (tuple): color of the button
-            text_color (tuple): color of the text
-        """
-        self.rect = pygame.Rect(x, y, width, height)
-        self.text = text
-        self.bg_color = bg_color
-        self.text_color = text_color
-        self.screen = screen
-
-    def draw(self):
-        """
-        Draw the button on the screen
-        """
-        pygame.draw.rect(self.screen, self.bg_color, self.rect)
-        font = pygame.font.SysFont("", 30)
-        text_surface = font.render(self.text, True, self.text_color)
-        text_rect = text_surface.get_rect(center=self.rect.center)
-        self.screen.blit(text_surface, text_rect)
-
-    def is_clicked(self, pos):
-        """
-        Check if the button is clicked given a mouse position
-
-        Args:
-            pos (tuple): the position of the mouse
-
-        Returns:
-            bool: True if the button is clicked, False otherwise
-        """
-        return self.rect.collidepoint(pos)
-
-    def set_bg_color(self, color):
-        """
-        Change the button color
-
-        Args:
-            color (tuple): the new color
-        """
-        self.bg_color = color
-
-    def set_text_color(self, color):
-        """
-        Change the button text color
-
-        Args:
-            color (tuple): the new color
-        """
-        self.text_color = color
+from constants import WIDTH, HEIGHT
+from screens.menu import MenuScreen
 
 
 class SokobanApp:
-    def __init__(self, grid_path):
+    def __init__(self):
         pygame.init()
+        mixer.init()
+
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.clock = pygame.time.Clock()
+
         pygame.display.set_caption("Sokoban")
         self.running = True
-        self.page = None
-        self.current_level = 0
-        # TODO : Centrer les boutons
-        self.home_screen_buttons = [
-            Button(screen=self.screen, x=50, y=100, width=200, height=50, text="Play", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=50, y=200, width=200, height=50, text="Create", bg_color=BLUE, text_color=BLACK),
-            Button(screen=self.screen, x=50, y=300, width=200, height=50, text="Quit", bg_color=RED, text_color=BLACK),
-        ]
 
-        self.create_button = [
-            Button(screen=self.screen, x=50, y=100, width=200, height=50, text="empty_cell", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=50, y=200, width=200, height=50, text="wall", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=50, y=300, width=200, height=50, text="box", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=50, y=400, width=200, height=50, text="goal", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=50, y=500, width=200, height=50, text="player", bg_color=GREEN, text_color=BLACK),
-        ]   
+        self.menu = MenuScreen(self, self.screen)
 
-        level_buttons_width = WIDTH // 4
-        # TODO : centrer les boutons
-        self.level_buttons = [
-            Button(screen=self.screen, x=0, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Solve", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=level_buttons_width, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Cancel", bg_color=YELLOW, text_color=BLACK),
-            Button(screen=self.screen, x=2 * level_buttons_width, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Reset", bg_color=BLUE, text_color=BLACK),
-            Button(screen=self.screen, x=3 * level_buttons_width, y=HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Quit", bg_color=RED, text_color=BLACK),
-        ]
-
-        # Initialiser le module mixer et charger la musique
-        mixer.init()
-        self.musics = {
-            "home": self.load_music("home.mp3"),
-            "game": self.load_music("game.mp3"),
-        }
-        self.current_music = None
-        self.music_muted = False
-
-        self.sound_effects = {
-            "walk": self.load_sound_effect("walk.mp3"),
-            "wrong_move": self.load_sound_effect("wrong_move.mp3"),
-            "box_move": self.load_sound_effect("box_move.mp3"),
-            "box_on_goal": self.load_sound_effect("box_on_goal.mp3"),
-        }
-        self.sound_effects_muted = False
-
-        self.load_home()
-
-        self.solver = None
-        self.solve_active = False
-
-    # LOAD FILES
-    @staticmethod
-    def load_sound_effect(filename):
-        return mixer.Sound(SOUND_EFFECTS_DIR / filename)
-
-
-    @staticmethod
-    def load_music(filename):
-        return mixer.Sound(MUSIC_DIR / filename)
-
-    def load_img(self, filename):
-        return pygame.transform.scale(pygame.image.load(IMAGES_DIR / filename), (self.cell_width, self.cell_height))
-    
-    # LEVEL
-    def draw_cell(self, x, y, img_name):
-        self.screen.blit(self.images[img_name], (x * self.cell_width, y * self.cell_height))
-
-    def load_level(self, level_index):
-        self.current_level = level_index
-        self.page = LEVEL
-        self.play_music("game")
-        # TODO : Créer plusieurs niveaux
-        grid_path = Path(__file__).parent / "levels" / f"level{level_index}.txt"
-        # TODO : enlever la ligne suivante (provisoire)
-        grid_path = LEVELS_DIR / f"grid.txt"
-        self.grid = Grid(grid_path)
-        self.cell_width = WIDTH // self.grid.width
-        self.cell_height = HEIGHT // self.grid.height
-        pygame.display.set_mode((WIDTH, HEIGHT + LEVEL_MENU_HEIGHT))
-        # TODO : Adapted la taille de la fenetre plutot que d'adapter la taille des cellules ??
-
-        self.images = {
-            "wall": self.load_img("wall.png"),
-            "empty_cell": self.load_img("empty_cell.png"),
-            "box": self.load_img("box.png"),
-            "goal": self.load_img("goal.png"),
-            "box_on_goal": self.load_img("box_on_goal.png"),
-            "player_up": self.load_img("player_up.png"),
-            "player_down": self.load_img("player_down.png"),
-            "player_left": self.load_img("player_left.png"),
-            "player_right": self.load_img("player_right.png"),
-        }
-
-    def show_level(self):
-        self.screen.fill(WHITE)
-        for y in range(self.grid.height):
-            for x in range(self.grid.width):
-                if self.grid.is_empty(x, y):
-                    self.draw_cell(x, y, "empty_cell")
-                elif self.grid.is_wall(x, y):
-                    self.draw_cell(x, y, "wall")
-                elif self.grid.is_goal(x, y):
-                    self.draw_cell(x, y, "goal")
-        
-        for box in self.grid.boxes:
-            if box.is_on_goal:
-                self.draw_cell(box.x, box.y, "box_on_goal")
-            else:
-                self.draw_cell(box.x, box.y, "box")
-        
-        if self.grid.player is not None:
-            if self.grid.player.orientation == UP:
-                self.draw_cell(self.grid.player.x, self.grid.player.y, "player_up")
-            elif self.grid.player.orientation == DOWN:
-                self.draw_cell(self.grid.player.x, self.grid.player.y, "player_down")
-            elif self.grid.player.orientation == LEFT:
-                self.draw_cell(self.grid.player.x, self.grid.player.y, "player_left")
-            elif self.grid.player.orientation == RIGHT:
-                self.draw_cell(self.grid.player.x, self.grid.player.y, "player_right")
-
-        for button in self.level_buttons:
-            button.draw()
-
-    def handle_level_event(self, event):
-        if event.type == pygame.KEYDOWN:
-            movement = None
-            if event.key == pygame.K_UP:
-                movement = self.grid.player.up()
-            elif event.key == pygame.K_DOWN:
-                movement = self.grid.player.down()
-            elif event.key == pygame.K_LEFT:
-                movement = self.grid.player.left()
-            elif event.key == pygame.K_RIGHT:
-                movement = self.grid.player.right()
-            
-            if movement == Player.PLAYER_MOVED:
-                self.play_sound_effect("walk")
-            elif movement == Player.BOX_MOVED:
-                self.play_sound_effect("walk")
-                self.play_sound_effect("box_move")
-            elif movement == Player.BOX_ON_GOAL:
-                self.play_sound_effect("walk")
-                self.play_sound_effect("box_move")
-                self.play_sound_effect("box_on_goal")
-            elif movement == Player.PLAYER_NOT_MOVED:
-                self.play_sound_effect("wrong_move")
-
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            for button in self.level_buttons:
-                if button.is_clicked(event.pos):
-                    print(button.text)
-                    if button.text == "Solve":
-                        self.load_solve()
-                    if button.text == "Cancel":
-                        self.grid.cancel()
-                    elif button.text == "Reset":
-                        self.grid.reset()
-                    elif button.text == "Quit":
-                        self.load_home()
-
-    # HOME
-    def load_home(self):
-        self.page = HOME
-        self.play_music("home")
-
-    def show_home(self):
-        # TODO : Ajouter un fond d'ecran
-        # TODO : Ajouter un texte
-        self.screen.fill(WHITE)
-
-        for button in self.home_screen_buttons:
-            button.draw()
-    
-    def handle_home_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for button in self.home_screen_buttons:
-                if button.is_clicked(event.pos):
-                    if button.text == "Play":
-                        self.load_level(self.current_level)
-                    elif button.text == "Create":
-                        self.load_create()
-                    elif button.text == "Quit":
-                        self.quit()
-
-    # CREATE
-    # TODO : enlever valeur par default
-    def load_create(self, width=10, height=10):
-        ...
-
-    def show_create(self):
-        ...
-
-    def handle_create_event(self, event):
-        ...
-
-    # SOLVE
-    def load_solve(self):
-        self.solver = Solver(self.grid)
-        is_solvable = self.solver.solve()
-        if is_solvable:
-            self.solve_active = True
-
-    # MAIN
-    def play_music(self, music):
-        if self.current_music is not None:
-            self.current_music.stop()
-        if self.music_muted:
-            return
-        # TODO : Utiliser try except
-        music = self.musics.get(music)
-        if music is None:
-            raise ValueError(f"Music '{music}' not found")
-        music.play(-1)
-        self.current_music = music
-
-    def play_sound_effect(self, sound_effect):
-        if self.sound_effects_muted:
-            return
-        sound_effect = self.sound_effects.get(sound_effect)
-        if sound_effect is None:
-            raise ValueError(f"Sound effect '{sound_effect}' not found")
-        sound_effect.play()
-
-    def handle_event(self, event):
-        if event.type == pygame.QUIT:
-            self.quit()
-            
-        # TODO : Utiliser un bouton plutot qu'une touche du clavier, ou un menu settings ?
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
-            # TODO : Mettre en pause
-            self.music_muted = not self.music_muted
-            if self.current_music is not None:
-                if self.music_muted:
-                    self.current_music.stop()
-                else:
-                    self.current_music.play(-1)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_l:
-            self.sound_effects_muted = not self.sound_effects_muted
-
-
-        elif self.page == HOME:
-            self.handle_home_event(event)
-        elif self.page == CREATE:
-            self.handle_create_event(event)
-        elif self.page == LEVEL:
-            self.handle_level_event(event)
+        self.current_screen = self.menu
+        self.current_screen.load()
 
     def run(self):
         while self.running:
             for event in pygame.event.get():
-                self.handle_event(event)
-
-            if self.page == HOME:
-                self.show_home()
-            elif self.page == CREATE:
-                self.show_create()
-            elif self.page == LEVEL:
-                if self.solve_active:
-                    self.solver.apply_next_move()
-                    self.show_level()
-                    time.sleep(0.2)
+                if event.type == pygame.QUIT:
+                    self.quit()
                 else:
-                    self.show_level()
-            
+                    self.current_screen.handle_event(event)
+
+            self.current_screen.update()
             pygame.display.flip()
+            self.clock.tick(60)  # 60FPS
+
+    def switch_screen(self, screen_name):
+        self.current_screen.quit()
+        if screen_name == "menu":
+            self.current_screen = self.menu
+        elif screen_name == "game":
+            print("GAME")
+        elif screen_name == "create":
+            print("CREATE")
+        self.current_screen.load()
 
     def quit(self):
         self.running = False
         pygame.quit()
         sys.exit()
 
-
 if __name__ == "__main__":
     grid_path = Path(__file__).resolve().parent / "grid" / "grid.txt"
-    app = SokobanApp(grid_path)
+    app = SokobanApp()
     app.run()
