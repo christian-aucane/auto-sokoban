@@ -2,8 +2,8 @@ import pygame
 
 from screens.base import BaseScreen
 from widgets import Button
-from constants import WIDTH, GREEN, YELLOW, BLUE, RED, BLACK
-
+from constants import WIDTH, GREEN, YELLOW, BLUE, RED, BLACK, HEIGHT, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR
+from mode_create import Create
 
 
 class CreateScreen(BaseScreen):
@@ -13,22 +13,73 @@ class CreateScreen(BaseScreen):
         # TODO : Centrer les boutons
         buttons_x = WIDTH // 2 - 100
         self.main_buttons = [
-            Button(screen=self.screen, x=buttons_x, y=100, width=200, height=50, text="Play", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=buttons_x, y=100, width=200,
+                   height=50, text="10X10", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=buttons_x, y=200, width=200,
+                   height=50, text="15X15", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=buttons_x, y=300, width=200,
+                   height=50, text="20X20", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=buttons_x, y=HEIGHT - 50, width=200,
+                   height=50, text="Quit", bg_color=RED, text_color=BLACK),
         ]
         self.current_screen = "main"
-    
+        self.creator = None
+        self.cell_width = 0
+        self.cell_height = 0
+        self.images = []
+
     def update(self):
         if self.current_screen == "main":
-        # TODO : Ajouter une image de fond
+            # TODO : Ajouter une image de fond
             for button in self.main_buttons:
                 button.draw()
-        
+        elif self.current_screen == "create":
+            self.draw_create()
+
+    def draw_create(self):
+        for y in self.creator.height:
+            for x in self.creator.width:
+                if self.creator.is_empty(x, y):
+                    self.draw_cell(x, y, "empty_cell")
+                elif self.creator.is_wall(x, y):
+                    self.draw_cell(x, y, "wall")
+                elif self.creator.is_box(x, y):
+                    self.draw_cell(x, y, "box")
+                elif self.creator.is_goal(x, y):
+                    self.draw_cell(x, y, "goal")
+                elif self.creator.is_player(x, y):
+                    self.draw_cell(x, y, "player")
+                
+
+
+    def load_creator(self, width, height):
+        self.current_screen = "create"
+        self.creator = Create(width, height)
+        self.cell_width = GRID_WIDTH // width
+        self.cell_height = GRID_HEIGHT // height
+
+        self.images = {
+            "wall": self.load_img("wall.png"),
+            "empty_cell": self.load_img("empty_cell.png"),
+            "box": self.load_img("box.png"),
+            "goal": self.load_img("goal.png"),
+            "player": self.load_img("player_down.png"),
+        }
+    
+    def load_img(self, filename):
+        return pygame.transform.scale(pygame.image.load(IMAGES_DIR / filename), (self.cell_width, self.cell_height))
+    
+    def draw_cell(self, x, y, img_name):
+        self.screen.blit(self.images[img_name], (x * self.cell_width, y * self.cell_height))
+
+
     def handle_event(self, event):
         if self.current_screen == "main":
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.main_buttons:
                     if button.is_clicked(event.pos):
-                        if button.text == "Play":
-                            self.app.switch_screen("game")
-                        elif button.text == "Quit":
-                            self.app.quit()
+                        if button.text == "Quit":
+                            self.app.switch_screen("menu")
+                        else:
+                            width, height = map(int, button.text.split("X"))
+                            self.load_creator(width, height)
