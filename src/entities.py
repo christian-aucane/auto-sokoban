@@ -124,6 +124,24 @@ class Entity:
             return True
         return False
 
+    def move(self, direction):
+        """
+        Move the entity in the specified direction
+
+        Args :
+            direction (int) - The direction to move the entity in
+
+        Returns :
+            bool - True if the entity moved in the specified direction, False otherwise
+        """
+        if direction == UP:
+            return self.up()
+        elif direction == DOWN:
+            return self.down()
+        elif direction == LEFT:
+            return self.left()
+        elif direction == RIGHT:
+            return self.right()
 
 class Box(Entity):
     """
@@ -233,14 +251,14 @@ class Player(Entity):
         super().__init__(level, x, y)
         self.orientation = orientation
 
-    def move(self, direction, is_available, box, move_box, super_move, orientation):
+    def move(self, direction, is_available, box, move_box_available, super_move):
         if is_available:
             if box is not None:
-                if move_box():
+                if move_box_available():
                     self.level.save_backup()
                     box.move(direction)
                     super_move()
-                    self.orientation = orientation
+                    self.orientation = direction
                     if box.is_on_goal:
                         result = self.BOX_ON_GOAL
                     else:
@@ -250,7 +268,7 @@ class Player(Entity):
             else:
                 self.level.save_backup()
                 super_move()
-                self.orientation = orientation
+                self.orientation = direction
                 
                 result = self.PLAYER_MOVED
         else:
@@ -269,8 +287,7 @@ class Player(Entity):
             self.is_up_available, 
             box, 
             lambda: box.is_up_available, 
-            super().up, 
-            UP
+            super().up
         )
 
     def down(self):
@@ -280,8 +297,7 @@ class Player(Entity):
             self.is_down_available, 
             box, 
             lambda: box.is_down_available, 
-            super().down, 
-            DOWN
+            super().down
         )
 
     def left(self):
@@ -291,8 +307,7 @@ class Player(Entity):
             self.is_left_available, 
             box, 
             lambda: box.is_left_available, 
-            super().left, 
-            LEFT
+            super().left
         )
 
     def right(self):
@@ -302,6 +317,5 @@ class Player(Entity):
             self.is_right_available, 
             box, 
             lambda: box.is_right_available, 
-            super().right, 
-            RIGHT
+            super().right
         )
