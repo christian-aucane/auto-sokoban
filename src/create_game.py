@@ -1,19 +1,18 @@
+from base_grid import BaseGrid
 from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER
 
 
-class Create:
+class LevelCreator(BaseGrid):
     def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self._grid = [[EMPTY_CELL for _ in range(
+        grid = [[EMPTY_CELL for _ in range(
             width)] for _ in range(height)]
         for i in range(width):
-            self._grid[0][i] = WALL
-            self._grid[height-1][i] = WALL
+            grid[0][i] = WALL
+            grid[height-1][i] = WALL
         for i in range(height):
-            self._grid[i][0] = WALL
-            self._grid[i][width-1] = WALL
-
+            grid[i][0] = WALL
+            grid[i][width-1] = WALL
+        super().__init__(grid)
         self._current_tool = EMPTY_CELL
         
     @property
@@ -39,20 +38,11 @@ class Create:
             return self.put_player(x, y)
         return False
 
-    def set_cell(self, x, y, value):
-        print("BEFORE : ", *self._grid, sep="\n", end="\n\n")
-        self._grid[y][x] = value
-        
-        print("AFTER : ", *self._grid, sep="\n", end="\n\n")
-
-    def cell(self, x, y):
-        return self._grid[y][x]
-
     def is_border(self, x, y):
         return x == 0 or y == 0 or x == self.width - 1 or y == self.height - 1
 
     def put_empty_cell(self, x, y):
-        if self.cell(x, y) == WALL and self.is_border(x, y):
+        if self.get_cell(x, y) == WALL and self.is_border(x, y):
             return False
         self.set_cell(x, y, EMPTY_CELL)
         return True
@@ -80,21 +70,6 @@ class Create:
         self.set_cell(x, y, PLAYER)
         return True
     
-    def is_empty(self, x, y):
-        return self.cell(x, y) == EMPTY_CELL
-
-    def is_wall(self, x, y):
-        return self.cell(x, y) == WALL
-    
-    def is_goal(self, x, y):
-        return self.cell(x, y) == GOAL
-    
-    def is_box(self, x, y):
-        return self.cell(x, y) == BOX
-    
-    def is_player(self, x, y):
-        return self.cell(x, y) == PLAYER
-    
     def remove_player(self):
         for y in range(self.height):
             for x in range(self.width):
@@ -105,23 +80,5 @@ class Create:
     
     def save(self, filename):
         with open(filename, 'w') as f:
-            for row in self._grid:
+            for row in self.grid:
                 f.write(''.join(str(cell) for cell in row) + '\n')
-
-    @property
-    def counter(self):
-        # TODO : utiliser un default_dict
-        counter = {"empty": 0, "wall": 0, "goal": 0, "box": 0, "player": 0}
-        for y in range(self.height):
-            for x in range(self.width):
-                if self.is_empty(x, y):
-                    counter["empty"] += 1
-                if self.is_wall(x, y):
-                    counter["wall"] += 1
-                if self.is_goal(x, y):
-                    counter["goal"] += 1
-                if self.is_box(x, y):
-                    counter["box"] += 1
-                if self.is_player(x, y):
-                    counter["player"] += 1
-        return counter

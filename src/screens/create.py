@@ -2,8 +2,8 @@ import pygame
 
 from screens.base import BaseScreen
 from widgets import Button
-from constants import BLUE, MENU_HEIGHT, WIDTH, GREEN, RED, BLACK, HEIGHT, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR, CUSTOM_LEVELS_DIR, YELLOW
-from create_game import Create
+from constants import BLUE, MENU_HEIGHT, WIDTH, GREEN, RED, BLACK, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR, CUSTOM_LEVELS_DIR, YELLOW
+from create_game import LevelCreator
 
 
 class CreateScreen(BaseScreen):
@@ -109,7 +109,7 @@ class CreateScreen(BaseScreen):
 
     def load_creator(self, width, height):
         self.current_screen = "create"
-        self.creator = Create(width, height)
+        self.creator = LevelCreator(width, height)
         self.cell_width = GRID_WIDTH // width
         self.cell_height = GRID_HEIGHT // height
         self.change_tool("empty")
