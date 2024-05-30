@@ -21,6 +21,10 @@ class Button:
         bg_color (tuple): The color of the button.
         text_color (tuple): The color of the text.
         screen (pygame.Surface): The screen to draw the button on.
+        x (int): The x coordinate of the button.
+        y (int): The y coordinate of the button.
+        width (int): The width of the button.
+        height (int): The height of the button.
 
     Methods:
         draw(): Draw the button on the screen.
@@ -47,6 +51,10 @@ class Button:
         self.bg_color = bg_color
         self.text_color = text_color
         self.screen = screen
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
 
     def draw(self):
         """
