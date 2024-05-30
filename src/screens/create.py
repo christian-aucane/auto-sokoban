@@ -2,7 +2,7 @@ import pygame
 
 from screens.base import BaseScreen
 from widgets import Button
-from constants import WIDTH, GREEN, YELLOW, BLUE, RED, BLACK, HEIGHT, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR
+from constants import WIDTH, GREEN, RED, BLACK, HEIGHT, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR, CUSTOM_LEVELS_DIR
 from mode_create import Create
 
 
@@ -19,7 +19,7 @@ class CreateScreen(BaseScreen):
                    height=50, text="15X15", bg_color=GREEN, text_color=BLACK),
             Button(screen=self.screen, x=buttons_x, y=300, width=200,
                    height=50, text="20X20", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=buttons_x, y=HEIGHT - 50, width=200,
+            Button(screen=self.screen, x=buttons_x, y=400, width=200,
                    height=50, text="Quit", bg_color=RED, text_color=BLACK),
         ]
         create_button_width = WIDTH // 7
@@ -66,7 +66,7 @@ class CreateScreen(BaseScreen):
                     self.draw_cell(x, y, "goal")
                 elif self.creator.is_player(x, y):
                     self.draw_cell(x, y, "player")
-        
+
         for button in self.create_buttons:
             button.draw()
 
@@ -90,6 +90,16 @@ class CreateScreen(BaseScreen):
     def draw_cell(self, x, y, img_name):
         self.screen.blit(self.images[img_name],
                          (x * self.cell_width, y * self.cell_height))
+
+    def handle_create_button(self, text):
+        if text in ["empty", "wall", "box", "goal", "player"]:
+            self.current_tool = text
+        elif text == "save":
+            self.creator.sauvegarder_niveau(CUSTOM_LEVELS_DIR / "level1.txt")
+        elif text == "quit":
+            self.app.switch_screen("menu")
+
+
 
     def handle_event(self, event):
         if self.current_screen == "main":
