@@ -28,24 +28,39 @@ class BaseGrid:
     def copy(self):
         return deepcopy(self)
     
-    def cell(self, x, y):
+    def get_cell(self, x, y):
         return self._grid[y, x]
     
+    def set_cell(self, x, y, value):
+        self._grid[y, x] = value
+
     def is_empty(self, x, y):
-        return self.cell(x, y) == EMPTY_CELL
+        return self.get_cell(x, y) == EMPTY_CELL
     
     def is_wall(self, x, y):
-        return self.cell(x, y) == WALL
+        return self.get_cell(x, y) == WALL
     
     def is_goal(self, x, y):
-        return self.cell(x, y) == GOAL
+        return self.get_cell(x, y) == GOAL
     
     def is_player(self, x, y):
-        return self.cell(x, y) == PLAYER
+        return self.get_cell(x, y) == PLAYER
     
     def is_box(self, x, y):
-        return self.cell(x, y) == BOX
+        return self.get_cell(x, y) == BOX
     
+    @property
+    def counter(self):
+        # Utiliser des masques booléens et np.sum pour compter les entités
+        counter = {
+            "empty": np.sum(self._grid == EMPTY_CELL),
+            "wall": np.sum(self._grid == WALL),
+            "goal": np.sum(self._grid == GOAL),
+            "box": np.sum(self._grid == BOX),
+            "player": np.sum(self._grid == PLAYER),
+        }
+        return counter
+
     def print(self):
         grid = np.chararray((self.height, self.width))
         for y in range(self.height):

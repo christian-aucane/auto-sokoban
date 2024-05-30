@@ -76,6 +76,13 @@ class Level(BaseGrid):
                 return box
         return None
     
+    @property
+    def counter(self):
+        counter = super().counter
+        counter["boxes"] = len(self.boxes)
+        counter["player"] = 1 if self.player is not None else 0
+        counter["boxes_on_goal"] = sum(box.is_on_goal for box in self.boxes)
+    
 
 if __name__ == "__main__":
     grid = Level(LEVELS_DIR / "grid.txt")
