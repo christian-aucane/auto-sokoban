@@ -99,7 +99,21 @@ class CreateScreen(BaseScreen):
         elif text == "quit":
             self.app.switch_screen("menu")
 
-
+    def handle_grid_click(self, pos):
+            x, y = pos
+            grid_x = x // self.cell_width
+            grid_y = y // self.cell_height
+            if 0 <= grid_x < self.creator.width and 0 <= grid_y < self.creator.height:
+                if self.current_tool == "empty":
+                    self.creator.put_empty_cell(grid_x, grid_y)
+                elif self.current_tool == "wall":
+                    self.creator.put_wall(grid_x, grid_y)
+                elif self.current_tool == "box":
+                    self.creator.put_box(grid_x, grid_y)
+                elif self.current_tool == "goal":
+                    self.creator.put_goal(grid_x, grid_y)
+                elif self.current_tool == "player":
+                    self.creator.put_player(grid_x, grid_y)
 
     def handle_event(self, event):
         if self.current_screen == "main":
