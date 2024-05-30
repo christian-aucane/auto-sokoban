@@ -17,6 +17,7 @@ class Level(BaseGrid):
 
         self.backup = {"boxes": self.boxes, "player": self.player}
         self.backup_saved = False
+        self._moves_count = 0
 
     def is_player(self, x, y):
         return self.player.x == x and self.player.y == y
@@ -52,6 +53,8 @@ class Level(BaseGrid):
                     cell = 0
                 new_row.append(cell)
             grid.append(new_row)
+        
+        self._moves_count = 0
         return grid
 
     def reset(self):
@@ -63,8 +66,21 @@ class Level(BaseGrid):
         if self.backup_saved:
             self.boxes = self.backup["boxes"]
             self.player = self.backup["player"]
+            self._moves_count -= 1
+            self.backup_saved = False
             return True
         return False
+
+    def add_move(self):
+        self._moves_count += 1
+
+    @property
+    def moves_count(self):
+        return self._moves_count
+    
+    @moves_count.setter
+    def moves_count(self, value):
+        raise AttributeError("Cannot set moves_count directly")
 
     @property
     def is_solved(self):
