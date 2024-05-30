@@ -125,3 +125,9 @@ class CreateScreen(BaseScreen):
                         else:
                             width, height = map(int, button.text.split("X"))
                             self.load_creator(width, height)
+        elif self.current_screen == "create":
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        for button in self.create_buttons:
+                            if button.is_clicked(event.pos):
+                                self.handle_create_button(button.text)
+                        self.handle_grid_click(event.pos)
