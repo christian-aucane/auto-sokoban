@@ -1,4 +1,4 @@
-from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER, CUSTOM_LEVELS_DIR
+from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER
 
 
 class Create:
@@ -21,7 +21,7 @@ class Create:
         return self._grid[x][y]
 
     def is_border(self, x, y):
-        return all([x != 0, y != 0, x != self.width - 1, y != self.height - 1])
+        return x == 0 or y == 0 or x == self.width - 1 or y == self.height - 1
 
     def put_empty_cell(self, x, y):
         if self.cell(x, y) == WALL and self.is_border(x, y):
@@ -79,7 +79,3 @@ class Create:
         with open(nom_fichier, 'w') as f:
             for ligne in self._grid:
                 f.write(''.join(str(element) for element in ligne) + '\n')
-
-g = Create(10,10)
-CUSTOM_LEVELS_DIR.mkdir(exist_ok=True, parents=True)
-g.sauvegarder_niveau(CUSTOM_LEVELS_DIR / "level1.txt")

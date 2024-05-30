@@ -2,7 +2,7 @@ import pygame
 
 from screens.base import BaseScreen
 from widgets import Button
-from constants import WIDTH, GREEN, YELLOW, BLUE, RED, BLACK, HEIGHT, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR
+from constants import WIDTH, GREEN, RED, BLACK, HEIGHT, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR, CUSTOM_LEVELS_DIR
 from mode_create import Create
 
 
@@ -19,7 +19,7 @@ class CreateScreen(BaseScreen):
                    height=50, text="15X15", bg_color=GREEN, text_color=BLACK),
             Button(screen=self.screen, x=buttons_x, y=300, width=200,
                    height=50, text="20X20", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=buttons_x, y=HEIGHT - 50, width=200,
+            Button(screen=self.screen, x=buttons_x, y=400, width=200,
                    height=50, text="Quit", bg_color=RED, text_color=BLACK),
         ]
         create_button_width = WIDTH // 7
@@ -66,7 +66,7 @@ class CreateScreen(BaseScreen):
                     self.draw_cell(x, y, "goal")
                 elif self.creator.is_player(x, y):
                     self.draw_cell(x, y, "player")
-        
+
         for button in self.create_buttons:
             button.draw()
 
@@ -91,6 +91,30 @@ class CreateScreen(BaseScreen):
         self.screen.blit(self.images[img_name],
                          (x * self.cell_width, y * self.cell_height))
 
+    def handle_create_button(self, text):
+        if text in ["empty", "wall", "box", "goal", "player"]:
+            self.current_tool = text
+        elif text == "save":
+            self.creator.sauvegarder_niveau(CUSTOM_LEVELS_DIR / "level1.txt")
+        elif text == "quit":
+            self.app.switch_screen("menu")
+
+    def handle_grid_click(self, pos):
+            x, y = pos
+            grid_x = x // self.cell_width
+            grid_y = y // self.cell_height
+            if 0 <= grid_x < self.creator.width and 0 <= grid_y < self.creator.height:
+                if self.current_tool == "empty":
+                    self.creator.put_empty_cell(grid_x, grid_y)
+                elif self.current_tool == "wall":
+                    self.creator.put_wall(grid_x, grid_y)
+                elif self.current_tool == "box":
+                    self.creator.put_box(grid_x, grid_y)
+                elif self.current_tool == "goal":
+                    self.creator.put_goal(grid_x, grid_y)
+                elif self.current_tool == "player":
+                    self.creator.put_player(grid_x, grid_y)
+
     def handle_event(self, event):
         if self.current_screen == "main":
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -101,3 +125,9 @@ class CreateScreen(BaseScreen):
                         else:
                             width, height = map(int, button.text.split("X"))
                             self.load_creator(width, height)
+        elif self.current_screen == "create":
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        for button in self.create_buttons:
+                            if button.is_clicked(event.pos):
+                                self.handle_create_button(button.text)
+                        self.handle_grid_click(event.pos)
