@@ -23,14 +23,7 @@ class SokobanApp:
         pygame.display.set_caption("Sokoban")
         self.running = True
 
-        self.menu = MenuScreen(self, self.screen)
-
-        self.game = GameScreen(self, self.screen)
-
-        self.create = CreateScreen(self, self.screen)
-
-
-        self.current_screen = self.menu
+        self.current_screen = MenuScreen(self, self.screen)
         self.current_screen.load()
 
     def run(self):
@@ -49,11 +42,11 @@ class SokobanApp:
     def switch_screen(self, screen_name):
         self.current_screen.quit()
         if screen_name == "menu":
-            self.current_screen = self.menu
+            self.current_screen = MenuScreen(self, self.screen)
         elif screen_name == "game":
-            self.current_screen = self.game
+            self.current_screen = GameScreen(self, self.screen)
         elif screen_name == "create":
-            self.current_screen = self.create
+            self.current_screen = CreateScreen(self, self.screen)
         self.current_screen.load()
 
     def quit(self):

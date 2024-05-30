@@ -5,7 +5,7 @@ from build_game import Level, Player
 from screens.base import BaseScreen
 from solve_game import Solver
 from widgets import Button
-from constants import DOWN, GRID_HEIGHT, GRID_WIDTH, HEIGHT, IMAGES_DIR, LEFT, LEVEL_MENU_HEIGHT, LEVELS_DIR, RIGHT, UP, WIDTH, GREEN, YELLOW, BLUE, RED, BLACK
+from constants import DOWN, GRID_HEIGHT, GRID_WIDTH, HEIGHT, IMAGES_DIR, LEFT, MENU_HEIGHT, LEVELS_DIR, RIGHT, UP, WIDTH, GREEN, YELLOW, BLUE, RED, BLACK
 
 
 class GameScreen(BaseScreen):
@@ -27,10 +27,10 @@ class GameScreen(BaseScreen):
 
         level_buttons_width = WIDTH // 4
         self.level_buttons = [
-            Button(screen=self.screen, x=0, y=GRID_HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Solve", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Cancel", bg_color=YELLOW, text_color=BLACK),
-            Button(screen=self.screen, x=2 * level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Reset", bg_color=BLUE, text_color=BLACK),
-            Button(screen=self.screen, x=3 * level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=LEVEL_MENU_HEIGHT, text="Quit", bg_color=RED, text_color=BLACK),
+            Button(screen=self.screen, x=0, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_HEIGHT, text="Solve", bg_color=GREEN, text_color=BLACK),
+            Button(screen=self.screen, x=level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_HEIGHT, text="Cancel", bg_color=YELLOW, text_color=BLACK),
+            Button(screen=self.screen, x=2 * level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_HEIGHT, text="Reset", bg_color=BLUE, text_color=BLACK),
+            Button(screen=self.screen, x=3 * level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_HEIGHT, text="Quit", bg_color=RED, text_color=BLACK),
         ]
 
         self.level = None
@@ -129,7 +129,7 @@ class GameScreen(BaseScreen):
                         elif button.text == "Reset":
                             self.level.reset()
                         elif button.text == "Quit":
-                            self.current_screen = "main"
+                            self.app.switch_screen("menu")
 
     def load_level(self, level_path):
         self.current_screen = "level"
