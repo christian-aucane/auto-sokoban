@@ -86,6 +86,10 @@ class Level(BaseGrid):
     def is_solved(self):
         return all(box.is_on_goal for box in self.boxes)
 
+    @property
+    def boxes_on_goal(self):
+        return sum(box.is_on_goal for box in self.boxes)
+
     def get_box(self, x, y):
         for box in self.boxes:
             if box.x == x and box.y == y:
@@ -97,7 +101,8 @@ class Level(BaseGrid):
         counter = super().counter
         counter["boxes"] = len(self.boxes)
         counter["player"] = 1 if self.player is not None else 0
-        counter["boxes_on_goal"] = sum(box.is_on_goal for box in self.boxes)
+        counter["boxes_on_goal"] = self.boxes_on_goal
+        return counter
     
 
 if __name__ == "__main__":
