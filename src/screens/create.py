@@ -2,7 +2,7 @@ import pygame
 
 from screens.base import BaseScreen
 from widgets import Button
-from constants import BLUE, MENU_HEIGHT, WIDTH, GREEN, RED, BLACK, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR, CUSTOM_LEVELS_DIR, YELLOW
+from constants import BLUE, MENU_BUTTON_HEIGHT, WIDTH, GREEN, RED, BLACK, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR, CUSTOM_LEVELS_DIR, YELLOW
 from create_game import LevelCreator
 
 
@@ -23,22 +23,21 @@ class CreateScreen(BaseScreen):
                    height=50, text="Quit", bg_color=RED, text_color=BLACK),
         ]
         self.create_button_width = WIDTH // 7
-        self.create_button_height = MENU_HEIGHT // 2
         self.create_buttons = [
             Button(screen=self.screen, x=0, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=self.create_button_height, text="empty", bg_color=BLUE, text_color=BLACK),
+                   height=MENU_BUTTON_HEIGHT, text="empty", bg_color=BLUE, text_color=BLACK),
             Button(screen=self.screen, x=self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=self.create_button_height, text="wall", bg_color=BLUE, text_color=BLACK),
+                   height=MENU_BUTTON_HEIGHT, text="wall", bg_color=BLUE, text_color=BLACK),
             Button(screen=self.screen, x=2*self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=self.create_button_height, text="box", bg_color=BLUE, text_color=BLACK),
+                   height=MENU_BUTTON_HEIGHT, text="box", bg_color=BLUE, text_color=BLACK),
             Button(screen=self.screen, x=3*self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=self.create_button_height, text="goal", bg_color=BLUE, text_color=BLACK),
+                   height=MENU_BUTTON_HEIGHT, text="goal", bg_color=BLUE, text_color=BLACK),
             Button(screen=self.screen, x=4*self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=self.create_button_height, text="player", bg_color=BLUE, text_color=BLACK),
+                   height=MENU_BUTTON_HEIGHT, text="player", bg_color=BLUE, text_color=BLACK),
             Button(screen=self.screen, x=5*self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=self.create_button_height, text="save", bg_color=GREEN, text_color=BLACK),
+                   height=MENU_BUTTON_HEIGHT, text="save", bg_color=GREEN, text_color=BLACK),
             Button(screen=self.screen, x=6*self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=self.create_button_height, text="quit", bg_color=RED, text_color=BLACK),
+                   height=MENU_BUTTON_HEIGHT, text="quit", bg_color=RED, text_color=BLACK),
         ]
         self.current_screen = "main"
         self.creator = None
@@ -103,7 +102,7 @@ class CreateScreen(BaseScreen):
 
         text_surface = font.render(self.create_message, True, self.create_message_color)
         x = 6 * self.create_button_width
-        y = GRID_HEIGHT + self.create_button_height + text_surface.get_height()
+        y = GRID_HEIGHT + MENU_BUTTON_HEIGHT + text_surface.get_height()
         text_rect = text_surface.get_rect(center=(x, y))
         self.screen.blit(text_surface, text_rect)
 

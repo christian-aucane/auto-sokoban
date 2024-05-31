@@ -7,7 +7,7 @@ class Entity:
     Entity class
     
     Attributes :
-        grid (Grid object) - The grid the entity is on
+        level (Level object) - The level the entity is on
         x (int) - The x coordinate of the entity
         y (int) - The y coordinate of the entity
 
@@ -23,7 +23,7 @@ class Entity:
         left() - Move the entity left
         right() - Move the entity right
     """
-    def __init__(self, grid, x, y):
+    def __init__(self, level, x, y):
         """
         Initialize the entity
 
@@ -32,7 +32,7 @@ class Entity:
             x (int) - The x coordinate of the entity
             y (int) - The y coordinate of the entity
         """
-        self.grid = grid
+        self.level = level
         self.x = x
         self.y = y
 
@@ -44,7 +44,7 @@ class Entity:
         Returns :
             bool - True if the entity can move up, False otherwise
         """
-        return self.y > 0 and not self.grid.is_wall(self.x, self.y - 1)
+        return self.y > 0 and not self.level.is_wall(self.x, self.y - 1)
 
     @property
     def is_down_available(self):
@@ -54,7 +54,7 @@ class Entity:
         Returns :
             bool - True if the entity can move down, False otherwise
         """
-        return self.y < self.grid.height -1 and not self.grid.is_wall(self.x, self.y + 1)
+        return self.y < self.level.height -1 and not self.level.is_wall(self.x, self.y + 1)
 
     @property
     def is_left_available(self):
@@ -64,7 +64,7 @@ class Entity:
         Returns :
             bool - True if the entity can move left, False otherwise
         """
-        return self.x > 0 and not self.grid.is_wall(self.x -1, self.y)
+        return self.x > 0 and not self.level.is_wall(self.x -1, self.y)
 
     @property
     def is_right_available(self):
@@ -74,7 +74,7 @@ class Entity:
         Returns :
             bool - True if the entity can move right, False otherwise
         """
-        return self.x < self.grid.width -1 and not self.grid.is_wall(self.x + 1, self.y)
+        return self.x < self.level.width -1 and not self.level.is_wall(self.x + 1, self.y)
 
     def up(self):
         """
@@ -124,13 +124,31 @@ class Entity:
             return True
         return False
 
+    def move(self, direction):
+        """
+        Move the entity in the specified direction
+
+        Args :
+            direction (int) - The direction to move the entity in
+
+        Returns :
+            bool - True if the entity moved in the specified direction, False otherwise
+        """
+        if direction == UP:
+            return self.up()
+        elif direction == DOWN:
+            return self.down()
+        elif direction == LEFT:
+            return self.left()
+        elif direction == RIGHT:
+            return self.right()
 
 class Box(Entity):
     """
     Box class
 
     Inherited Attributes :
-        grid (Grid object) - The grid the box is on
+        level (Level object) - The level the box is on
         x (int) - The x coordinate of the box
         y (int) - The y coordinate of the box
 
@@ -158,7 +176,7 @@ class Box(Entity):
         Returns :
             bool - True if the box can move up, False otherwise
         """
-        return super().is_up_available and self.grid.get_box(self.x, self.y - 1) is None
+        return super().is_up_available and self.level.get_box(self.x, self.y - 1) is None
 
     @property
     def is_down_available(self):
@@ -168,7 +186,7 @@ class Box(Entity):
         Returns :
             bool - True if the box can move down, False otherwise
         """
-        return super().is_down_available and self.grid.get_box(self.x, self.y + 1) is None
+        return super().is_down_available and self.level.get_box(self.x, self.y + 1) is None
 
     @property
     def is_left_available(self):
@@ -178,7 +196,7 @@ class Box(Entity):
         Returns :
             bool - True if the box can move left, False otherwise
         """
-        return super().is_left_available and self.grid.get_box(self.x - 1, self.y) is None
+        return super().is_left_available and self.level.get_box(self.x - 1, self.y) is None
 
     @property
     def is_right_available(self):
@@ -188,7 +206,7 @@ class Box(Entity):
         Returns :
             bool - True if the box can move right, False otherwise
         """
-        return super().is_right_available and self.grid.get_box(self.x + 1, self.y) is None
+        return super().is_right_available and self.level.get_box(self.x + 1, self.y) is None
     
     @property
     def is_on_goal(self):
@@ -198,14 +216,14 @@ class Box(Entity):
         Returns :
             bool - True if the box is on a goal, False otherwise
         """
-        return self.grid.is_goal(self.x, self.y)
+        return self.level.is_goal(self.x, self.y)
 
 class Player(Entity):
     """
     Player class
 
     Inherited Attributes :
-        grid (Grid object) - The grid the player is on
+        level (Level object) - The level the player is on
         x (int) - The x coordinate of the player
         y (int) - The y coordinate of the player
 
@@ -229,100 +247,73 @@ class Player(Entity):
     BOX_MOVED = 2
     BOX_ON_GOAL = 3
 
-    def __init__(self, grid, x, y, orientation=UP):
-        super().__init__(grid, x, y)
+    def __init__(self, level, x, y, orientation=UP):
+        super().__init__(level, x, y)
         self.orientation = orientation
 
-    def up(self):
-        if self.is_up_available:
-            box = self.grid.get_box(self.x, self.y - 1)
+    def move(self, direction, is_available, box, move_box_available, super_move):
+        if is_available:
             if box is not None:
-                if box.is_up_available:
-                    self.grid.save_backup()
-                    box.up()
-                    super().up()
-                    self.orientation = UP
+                if move_box_available():
+                    self.level.save_backup()
+                    box.move(direction)
+                    super_move()
+                    self.orientation = direction
                     if box.is_on_goal:
-                        return self.BOX_ON_GOAL
+                        result = self.BOX_ON_GOAL
                     else:
-                        return self.BOX_MOVED
+                        result = self.BOX_MOVED
                 else:
-                    return self.PLAYER_NOT_MOVED
+                    result = self.PLAYER_NOT_MOVED
             else:
-                self.grid.save_backup()
-                super().up()
-                self.orientation = UP
-                return self.PLAYER_MOVED
+                self.level.save_backup()
+                super_move()
+                self.orientation = direction
+                
+                result = self.PLAYER_MOVED
         else:
-            return self.PLAYER_NOT_MOVED
+            result = self.PLAYER_NOT_MOVED
+        
+        if result:
+            self.level.add_move()
+        return result
+
+    def up(self):
+        box = self.level.get_box(self.x, self.y - 1)
+        return self.move(
+            UP, 
+            self.is_up_available, 
+            box, 
+            lambda: box.is_up_available, 
+            super().up
+        )
 
     def down(self):
-        if self.is_down_available:
-            box = self.grid.get_box(self.x, self.y + 1)
-            if box is not None:
-                if box.is_down_available:
-                    self.grid.save_backup()
-                    box.down()
-                    super().down()
-                    self.orientation = DOWN
-                    if box.is_on_goal:
-                        return self.BOX_ON_GOAL
-                    else:
-                        return self.BOX_MOVED
-                else:
-                    return self.PLAYER_NOT_MOVED
-            else:
-                self.grid.save_backup()
-                super().down()
-                self.orientation = DOWN
-                return self.PLAYER_MOVED
-        else:
-            return self.PLAYER_NOT_MOVED
-            
-    def left(self):
-        if self.is_left_available:
-            box = self.grid.get_box(self.x - 1, self.y)
-            if box is not None:
-                if box.is_left_available:
-                    
-                    self.grid.save_backup()
-                    box.left()
-                    super().left()
-                    self.orientation = LEFT
-                    if box.is_on_goal:
-                        return self.BOX_ON_GOAL
-                    else:
-                        return self.BOX_MOVED
-                else:
-                    return self.PLAYER_NOT_MOVED
-            else:
-                self.grid.save_backup()
-                super().left()
-                self.orientation = LEFT
-                return self.PLAYER_MOVED
-        else:
-            return self.PLAYER_NOT_MOVED
-            
-    def right(self):
-        if self.is_right_available:
-            box = self.grid.get_box(self.x + 1, self.y)
-            if box is not None:
-                if box.is_right_available:
-                    self.grid.save_backup()
-                    box.right()
-                    super().right()
+        box = self.level.get_box(self.x, self.y + 1)
+        return self.move(
+            DOWN, 
+            self.is_down_available, 
+            box, 
+            lambda: box.is_down_available, 
+            super().down
+        )
 
-                    self.orientation = RIGHT
-                    if box.is_on_goal:
-                        return self.BOX_ON_GOAL
-                    else:
-                        return self.BOX_MOVED
-                else:
-                    return self.PLAYER_NOT_MOVED
-            else:
-                self.grid.save_backup()
-                super().right()
-                self.orientation = RIGHT
-                return self.PLAYER_MOVED
-        else:
-            return self.PLAYER_NOT_MOVED
+    def left(self):
+        box = self.level.get_box(self.x - 1, self.y)
+        return self.move(
+            LEFT, 
+            self.is_left_available, 
+            box, 
+            lambda: box.is_left_available, 
+            super().left
+        )
+
+    def right(self):
+        box = self.level.get_box(self.x + 1, self.y)
+        return self.move(
+            RIGHT, 
+            self.is_right_available, 
+            box, 
+            lambda: box.is_right_available, 
+            super().right
+        )

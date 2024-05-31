@@ -52,6 +52,7 @@ class Solver:
             self.set_state(current_state)
             if self.level.is_solved:
                 self.solution = path
+                print("SOLVING MOVES : ", self.level.moves_count)
                 self.level = self.original_level  # Restore the original level
                 return True
 
