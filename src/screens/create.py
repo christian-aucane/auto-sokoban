@@ -2,7 +2,7 @@ import pygame
 
 from screens.base import BaseScreen
 from widgets import Button
-from constants import BLUE, MENU_BUTTON_HEIGHT, MENU_HEIGHT, WIDTH, GREEN, RED, BLACK, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR, CUSTOM_LEVELS_DIR, YELLOW
+from constants import BLUE, MENU_BUTTON_HEIGHT, WIDTH, GREEN, RED, BLACK, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR, CUSTOM_LEVELS_DIR, YELLOW
 from create_game import LevelCreator
 
 
