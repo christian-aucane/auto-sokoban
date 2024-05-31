@@ -276,8 +276,6 @@ class Player(Entity):
         
         if result:
             self.level.add_move()
-        
-        print("MOVES COUNT : ", self.level.moves_count)
         return result
 
     def up(self):
