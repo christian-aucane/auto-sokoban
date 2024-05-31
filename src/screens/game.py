@@ -5,7 +5,7 @@ from build_game import Level, Player
 from screens.base import BaseScreen
 from solve_game import Solver
 from widgets import Button
-from constants import DOWN, GRID_HEIGHT, GRID_WIDTH, HEIGHT, IMAGES_DIR, LEFT, MENU_BUTTON_HEIGHT, MENU_HEIGHT, LEVELS_DIR, RIGHT, UP, WIDTH, GREEN, YELLOW, BLUE, RED, BLACK
+from constants import DOWN, GRID_HEIGHT, GRID_WIDTH, HEIGHT, IMAGES_DIR, LEFT, MENU_BUTTON_HEIGHT, LEVELS_DIR, RIGHT, UP, WIDTH, GREEN, YELLOW, BLUE, RED, BLACK
 
 
 class GameScreen(BaseScreen):
@@ -115,9 +115,6 @@ class GameScreen(BaseScreen):
         message_text_rect = message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
         self.screen.blit(message_text_surface, message_text_rect)
 
-    def load_victory(self):
-        self.current_screen = "victory"
-
     def update(self):
         if self.current_screen == "main":
         # TODO : Ajouter une image de fond
@@ -217,6 +214,9 @@ class GameScreen(BaseScreen):
         else:
             self.level_message = "Impossible !"
             self.level_message_color = RED
+
+    def load_victory(self):
+        self.current_screen = "victory"
 
     def load_img(self, filename):
         return pygame.transform.scale(pygame.image.load(IMAGES_DIR / filename), (self.cell_width, self.cell_height))
