@@ -1,4 +1,3 @@
-
 from constants import DOWN, LEFT, RIGHT, UP
 
 
