@@ -1,43 +1,31 @@
 import pygame
 
-from screens.base import BaseScreen
-from widgets import Button
-from constants import BLUE, MENU_BUTTON_HEIGHT, WIDTH, GREEN, RED, BLACK, GRID_WIDTH, GRID_HEIGHT, IMAGES_DIR, CUSTOM_LEVELS_DIR, YELLOW
-from create_game import LevelCreator
+from .base import BaseScreen
+from .widgets import ImageButton
+from game.create_game import LevelCreator
+from constants import BLUE, CELLS_IMAGES_DIR, FONT_PATH, MAIN_MENU_BUTTON_PATH, MAIN_MENU_BUTTONS_HEIGHT, MAIN_MENU_BUTTONS_WIDTH, MAIN_MENU_BUTTONS_X, MENU_BUTTON_HEIGHT, MENU_BUTTON_PATH, WIDTH, BLACK, GRID_WIDTH, GRID_HEIGHT,  CUSTOM_LEVELS_DIR
 
 
 class CreateScreen(BaseScreen):
     def __init__(self, app, screen):
-        super().__init__(app, screen, "menu.mp3")
+        super().__init__(app=app, screen=screen, music="create.mp3", background_image_file="create.png")
 
         # TODO : Centrer les boutons
-        buttons_x = WIDTH // 2 - 100
         self.main_buttons = [
-            Button(screen=self.screen, x=buttons_x, y=100, width=200,
-                   height=50, text="10X10", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=buttons_x, y=200, width=200,
-                   height=50, text="15X15", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=buttons_x, y=300, width=200,
-                   height=50, text="20X20", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=buttons_x, y=400, width=200,
-                   height=50, text="Quit", bg_color=RED, text_color=BLACK),
+            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=100, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="10 X 10", background_image_file=MAIN_MENU_BUTTON_PATH, data=(10, 10)),
+            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=200, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="15 X 15", background_image_file=MAIN_MENU_BUTTON_PATH, data=(15, 15)),
+            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=300, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="20 X 20", background_image_file=MAIN_MENU_BUTTON_PATH, data=(20, 20)),
+            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=400, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Main Menu", background_image_file=MAIN_MENU_BUTTON_PATH, data="quit"),
         ]
         self.create_button_width = WIDTH // 7
         self.create_buttons = [
-            Button(screen=self.screen, x=0, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=MENU_BUTTON_HEIGHT, text="empty", bg_color=BLUE, text_color=BLACK),
-            Button(screen=self.screen, x=self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=MENU_BUTTON_HEIGHT, text="wall", bg_color=BLUE, text_color=BLACK),
-            Button(screen=self.screen, x=2*self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=MENU_BUTTON_HEIGHT, text="box", bg_color=BLUE, text_color=BLACK),
-            Button(screen=self.screen, x=3*self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=MENU_BUTTON_HEIGHT, text="goal", bg_color=BLUE, text_color=BLACK),
-            Button(screen=self.screen, x=4*self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=MENU_BUTTON_HEIGHT, text="player", bg_color=BLUE, text_color=BLACK),
-            Button(screen=self.screen, x=5*self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=MENU_BUTTON_HEIGHT, text="save", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=6*self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width,
-                   height=MENU_BUTTON_HEIGHT, text="quit", bg_color=RED, text_color=BLACK),
+            ImageButton(screen=screen, x=0, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Empty", background_image_file=MENU_BUTTON_PATH, data="empty"),
+            ImageButton(screen=screen, x=self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Wall", background_image_file=MENU_BUTTON_PATH, data="wall"),
+            ImageButton(screen=screen, x=2 * self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Box", background_image_file=MENU_BUTTON_PATH, data="box"),
+            ImageButton(screen=screen, x=3 * self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Goal", background_image_file=MENU_BUTTON_PATH, data="goal"),
+            ImageButton(screen=screen, x=4 * self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Player", background_image_file=MENU_BUTTON_PATH, data="player"),
+            ImageButton(screen=screen, x=5 * self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Save", background_image_file=MENU_BUTTON_PATH, data="save"),
+            ImageButton(screen=screen, x=6 * self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Menu", background_image_file=MENU_BUTTON_PATH, data="quit"),
         ]
         self.current_screen = "main"
         self.creator = None
@@ -49,9 +37,7 @@ class CreateScreen(BaseScreen):
 
     def update(self):
         if self.current_screen == "main":
-            # TODO : Ajouter une image de fond
-            for button in self.main_buttons:
-                button.draw()
+            self.draw_main()
         elif self.current_screen == "create":
             self.draw_create()
 
@@ -59,11 +45,10 @@ class CreateScreen(BaseScreen):
         self.creator.current_tool = tool
         for button in self.create_buttons:
             if self.is_tool_button(button):
-                if button.text == tool:
-                    button.bg_color = YELLOW
+                if button.data == tool:
+                    button.set_text_color(BLUE)
                 else:
-                    button.bg_color = BLUE
-                    button.text_color = BLACK
+                    button.set_text_color(BLACK)
 
     def draw_create(self):
         for y in range(self.creator.height):
@@ -80,7 +65,7 @@ class CreateScreen(BaseScreen):
                     self.draw_cell(x, y, "player")
 
 
-        font = pygame.font.SysFont("", 30)
+        font = pygame.font.Font(FONT_PATH, 30)
         for button in self.create_buttons:
             button.draw()
             counter = self.creator.counter
@@ -89,9 +74,9 @@ class CreateScreen(BaseScreen):
                 x = button.x
                 y = button.y + button.height
                 
-                img = pygame.transform.scale(self.images[button.text], (button.height, button.height))
+                img = pygame.transform.scale(self.images[button.data], (button.height, button.height))
                 self.screen.blit(img,(x , y))
-                count = counter[button.text]
+                count = counter[button.data]
 
                 x = x + button.height + 10
                 y = y + button.height // 2
@@ -126,23 +111,23 @@ class CreateScreen(BaseScreen):
             width = self.cell_width
         if height is None:
             height = self.cell_height
-        return pygame.transform.scale(pygame.image.load(IMAGES_DIR / filename), (width, height))
+        return pygame.transform.scale(pygame.image.load(CELLS_IMAGES_DIR / filename), (width, height))
 
     def draw_cell(self, x, y, img_name):
         self.screen.blit(self.images[img_name],
                          (x * self.cell_width, y * self.cell_height))
 
     def is_tool_button(self, button):
-        return button.text in ["empty", "wall", "box", "goal", "player"]
+        return button.data in ["empty", "wall", "box", "goal", "player"]
     
     def handle_create_button(self, button):
         if self.is_tool_button(button):
-            self.change_tool(button.text)
-        elif button.text == "save":
+            self.change_tool(button.data)
+        elif button.data == "save":
             # TODO : créer un ecran pour choisir le nom ?
             CUSTOM_LEVELS_DIR.mkdir(parents=True, exist_ok=True)
             self.creator.save(CUSTOM_LEVELS_DIR / "level1.txt")
-        elif button.text == "quit":
+        elif button.data == "quit":
             self.app.switch_screen("menu")
 
     def handle_grid_click(self, pos):
@@ -156,10 +141,10 @@ class CreateScreen(BaseScreen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.main_buttons:
                     if button.is_clicked(event.pos):
-                        if button.text == "Quit":
+                        if button.data == "quit":
                             self.app.switch_screen("menu")
                         else:
-                            width, height = map(int, button.text.split("X"))
+                            width, height = button.data
                             self.load_creator(width, height)
 
         elif self.current_screen == "create":

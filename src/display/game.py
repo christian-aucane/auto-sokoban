@@ -1,11 +1,11 @@
 import time
 import pygame
 
+from .base import BaseScreen
+from .widgets import ImageButton
 from build_game import Level, Player
-from screens.base import BaseScreen
-from solve_game import Solver
-from widgets import Button
-from constants import DOWN, GRID_HEIGHT, GRID_WIDTH, HEIGHT, IMAGES_DIR, LEFT, MENU_BUTTON_HEIGHT, LEVELS_DIR, RIGHT, UP, WIDTH, GREEN, YELLOW, BLUE, RED, BLACK
+from game.solve_game import Solver
+from constants import CELLS_IMAGES_DIR, CUSTOM_LEVELS_DIR, DOWN, FONT_PATH, GRID_HEIGHT, GRID_WIDTH, HEIGHT, LEFT, MAIN_MENU_BUTTON_PATH, MAIN_MENU_BUTTONS_HEIGHT, MAIN_MENU_BUTTONS_WIDTH, MAIN_MENU_BUTTONS_X, MENU_BUTTON_HEIGHT, LEVELS_DIR, MENU_BUTTON_PATH, RIGHT, UP, WIDTH, GREEN, RED, BLACK
 
 
 class GameScreen(BaseScreen):
@@ -16,23 +16,28 @@ class GameScreen(BaseScreen):
             "box_move": self.load_sound_effect("game/box_move.mp3"),
             "box_on_goal": self.load_sound_effect("game/box_on_goal.mp3"),
         }
-        super().__init__(app=app, screen=screen, music="game.mp3", sound_effects=sound_effects)
-        self.main_buttons = [Button(screen=self.screen, x=0, y=HEIGHT - 50, width=WIDTH, height=50, text="Quit", bg_color=RED, text_color=BLACK)]
-        self.grids_paths = []
-        for i, grid in enumerate(LEVELS_DIR.iterdir()):
-            self.main_buttons.append(Button(screen=self.screen, x=0, y=i * 50, width=WIDTH, height=50, text=str(i), bg_color=GREEN, text_color=BLACK))
-            self.grids_paths.append(grid)
+        super().__init__(app=app, screen=screen, music="game.mp3", sound_effects=sound_effects, background_image_file="game.png")
         
+        self.main_buttons = [
+            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=MAIN_MENU_BUTTONS_HEIGHT + i*2*MAIN_MENU_BUTTONS_HEIGHT, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text=path.stem.title(), background_image_file=MAIN_MENU_BUTTON_PATH, data=path)
+            for i, path in enumerate(LEVELS_DIR.iterdir())
+        ]
+        y_custom_levels_start = self.main_buttons[-1].y + MAIN_MENU_BUTTONS_HEIGHT * 2
+        self.main_buttons += [
+            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_custom_levels_start + i*2*MAIN_MENU_BUTTONS_HEIGHT, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text=path.stem.title(), background_image_file=MAIN_MENU_BUTTON_PATH, data=path)
+            for i, path in enumerate(CUSTOM_LEVELS_DIR.iterdir())
+        ]
+        y_custom_levels_start = self.main_buttons[-1].y + MAIN_MENU_BUTTONS_HEIGHT * 2
+        self.main_buttons.append(ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_custom_levels_start, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Main Menu", background_image_file=MAIN_MENU_BUTTON_PATH, data="quit"))
 
         self.current_screen = "main"
 
-
         level_buttons_width = WIDTH // 4
         self.level_buttons = [
-            Button(screen=self.screen, x=0, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_BUTTON_HEIGHT, text="Solve", bg_color=GREEN, text_color=BLACK),
-            Button(screen=self.screen, x=level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_BUTTON_HEIGHT, text="Cancel", bg_color=YELLOW, text_color=BLACK),
-            Button(screen=self.screen, x=2 * level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_BUTTON_HEIGHT, text="Reset", bg_color=BLUE, text_color=BLACK),
-            Button(screen=self.screen, x=3 * level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_BUTTON_HEIGHT, text="Quit", bg_color=RED, text_color=BLACK),
+            ImageButton(screen=screen, x=0, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_BUTTON_HEIGHT, text="Solve", background_image_file=MENU_BUTTON_PATH, data="solve"),
+            ImageButton(screen=screen, x=level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_BUTTON_HEIGHT, text="Cancel", background_image_file=MENU_BUTTON_PATH, data="cancel"),
+            ImageButton(screen=screen, x=2 * level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_BUTTON_HEIGHT, text="Reset", background_image_file=MENU_BUTTON_PATH, data="reset"),
+            ImageButton(screen=screen, x=3 * level_buttons_width, y=GRID_HEIGHT, width=level_buttons_width, height=MENU_BUTTON_HEIGHT, text="Menu", background_image_file=MENU_BUTTON_PATH, data="quit")
         ]
 
         self.level = None
@@ -45,10 +50,6 @@ class GameScreen(BaseScreen):
 
         self.level_message = ""
         self.level_message_color = BLACK
-
-    def draw_main(self):
-        for button in self.main_buttons:
-            button.draw()
 
     def draw_level(self):
         for y in range(self.level.height):
@@ -79,7 +80,7 @@ class GameScreen(BaseScreen):
         for button in self.level_buttons:
             button.draw()
 
-        font = pygame.font.SysFont("", 30)
+        font = pygame.font.Font(FONT_PATH, 30)
         
         moves_text_surface = font.render(f"Moves: {self.level.moves_count}", True, BLACK)
         moves_width = moves_text_surface.get_width()
@@ -108,7 +109,7 @@ class GameScreen(BaseScreen):
         # TODO : ajouter le temps
         # TODO : ajouter des boutons
         
-        font = pygame.font.SysFont("", 30)
+        font = pygame.font.Font(FONT_PATH, 30)
         text = f"Good job! Moves : {self.level.moves_count}"
         message_text_surface = font.render(text, True, BLACK)
         
@@ -117,7 +118,6 @@ class GameScreen(BaseScreen):
 
     def update(self):
         if self.current_screen == "main":
-        # TODO : Ajouter une image de fond
             self.draw_main()
         elif self.current_screen == "level":
             if self.level.is_solved:
@@ -134,15 +134,13 @@ class GameScreen(BaseScreen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.main_buttons:
                     if button.is_clicked(event.pos):
-                        if button.text == "Quit":
+                        if button.data == "quit":
                             self.app.switch_screen("menu")
                         else:
-                            level_path = self.grids_paths[int(button.text)]
-                            self.load_level(level_path)
+                            self.load_level(button.data)
 
         elif self.current_screen == "level":
             if event.type == pygame.KEYDOWN:
-                # TODO : déplacer dans une fonction qui gère les effets sonores
                 movement = None
                 if event.key == pygame.K_UP:
                     movement = self.level.player.up()
@@ -158,13 +156,13 @@ class GameScreen(BaseScreen):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.level_buttons:
                     if button.is_clicked(event.pos):
-                        if button.text == "Solve":
+                        if button.data == "solve":
                             self.load_solve()
-                        elif button.text == "Cancel":
+                        elif button.data == "cancel":
                             self.level.cancel()
-                        elif button.text == "Reset":
+                        elif button.data == "reset":
                             self.level.reset()
-                        elif button.text == "Quit":
+                        elif button.data == "quit":
                             self.app.switch_screen("menu")
         elif self.current_screen == "victory":
             # TODO : ajouter les evenements pour enregistrer les scores
@@ -219,7 +217,7 @@ class GameScreen(BaseScreen):
         self.current_screen = "victory"
 
     def load_img(self, filename):
-        return pygame.transform.scale(pygame.image.load(IMAGES_DIR / filename), (self.cell_width, self.cell_height))
+        return pygame.transform.scale(pygame.image.load(CELLS_IMAGES_DIR / filename), (self.cell_width, self.cell_height))
     
     def draw_cell(self, x, y, img_name):
         self.screen.blit(self.images[img_name], (x * self.cell_width, y * self.cell_height))

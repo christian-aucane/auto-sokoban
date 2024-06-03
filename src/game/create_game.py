@@ -1,4 +1,4 @@
-from base_grid import BaseGrid
+from .base_grid import BaseGrid
 from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER
 
 
