@@ -1,10 +1,10 @@
 import pygame
 
-from constants import BUTTONS_IMAGES_DIR, FONT_PATH, BLACK
+from constants import BUTTON_TEXT_COLOR, BUTTONS_IMAGES_DIR, FONT_PATH, BLACK
 
 
 class BaseButton:
-    def __init__(self, screen, x, y, width, height, text, data=None, text_color=BLACK, font_path=FONT_PATH, font_size=30):
+    def __init__(self, screen, x, y, width, height, text, data=None, text_color=BUTTON_TEXT_COLOR, font_path=FONT_PATH, font_size=30):
         self.screen = screen
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text

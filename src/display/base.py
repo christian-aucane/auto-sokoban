@@ -1,6 +1,6 @@
 import pygame
 
-from constants import BACKGROUND_IMAGES_DIR, HEIGHT, MUSIC_DIR, SOUND_EFFECTS_DIR, WIDTH
+from constants import BACKGROUND_IMAGES_DIR, BUTTON_HOVER_TEXT_COLOR, BUTTON_TEXT_COLOR, HEIGHT, MUSIC_DIR, SOUND_EFFECTS_DIR, WIDTH
 
 
 class BaseScreen:
@@ -26,6 +26,11 @@ class BaseScreen:
     def draw_main(self):
         self.draw_background_image()
         for button in self.main_buttons:
+            
+            if button.is_clicked(pygame.mouse.get_pos()):
+                button.set_text_color(BUTTON_HOVER_TEXT_COLOR)
+            else:
+                button.set_text_color(BUTTON_TEXT_COLOR)
             button.draw()
 
     def play_music(self):
