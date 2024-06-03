@@ -6,10 +6,9 @@ from pygame import mixer
 
 
 from constants import WHITE, WIDTH, HEIGHT
-from screens.game import GameScreen
-
-from screens.menu import MenuScreen
-from screens.create import CreateScreen
+from display.game import GameScreen
+from display.menu import MenuScreen
+from display.create import CreateScreen
 
 
 class SokobanApp:

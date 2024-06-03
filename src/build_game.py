@@ -1,7 +1,6 @@
-from base_grid import BaseGrid
+from game.base_grid import BaseGrid
+from game.entities import Box, Player
 from constants import BOX, LEVELS_DIR, PLAYER
-from entities import Box, Player
-
 
 class Level(BaseGrid):
     # TODO : add docstrings
