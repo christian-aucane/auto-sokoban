@@ -38,6 +38,9 @@ BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
+BUTTON_TEXT_COLOR = BLACK
+BUTTON_HOVER_TEXT_COLOR = RED
+
 # Paths
 SOURCES_DIR = Path(__file__).parent
 ASSETS_DIR = SOURCES_DIR / "assets"
