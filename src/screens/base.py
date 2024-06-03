@@ -1,14 +1,16 @@
 import pygame
 
-from constants import MUSIC_DIR, SOUND_EFFECTS_DIR
+from constants import BACKGROUND_IMAGES_DIR, HEIGHT, MUSIC_DIR, SOUND_EFFECTS_DIR, WIDTH
 
 
 class BaseScreen:
-    def __init__(self, app, screen, music, sound_effects={}):
+    def __init__(self, app, screen, music, sound_effects={}, background_image_file=""):
         self.app = app
         self.screen = screen
         self.music = self.load_music(music)
         self.sound_effects = sound_effects
+        self.background_image = pygame.transform.scale(pygame.image.load(BACKGROUND_IMAGES_DIR / background_image_file), (WIDTH, HEIGHT))
+        self.main_buttons = []
 
     @staticmethod
     def load_music(music):
@@ -18,6 +20,14 @@ class BaseScreen:
     def load_sound_effect(filename):
         return pygame.mixer.Sound(SOUND_EFFECTS_DIR / filename)
     
+    def draw_background_image(self):
+        self.screen.blit(self.background_image, (0, 0))
+
+    def draw_main(self):
+        self.draw_background_image()
+        for button in self.main_buttons:
+            button.draw()
+
     def play_music(self):
         self.music.play(-1)
 
