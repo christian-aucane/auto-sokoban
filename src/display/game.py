@@ -78,7 +78,7 @@ class GameScreen(BaseScreen):
                 self.draw_cell(self.level.player.x, self.level.player.y, "player_right")
 
         for button in self.level_buttons:
-            button.draw()
+            self.draw_button(button)
 
         font = pygame.font.Font(FONT_PATH, 30)
         
@@ -107,15 +107,10 @@ class GameScreen(BaseScreen):
 
     def draw_victory(self):
         # TODO : ajouter le temps
-        # TODO : ajouter des boutons
-        
+        # TODO : ajouter des boutons pour recommencer et quitter et enregistrer le score
         font = pygame.font.Font(FONT_PATH, 30)
-        text = f"Good job! Moves : {self.level.moves_count}"
-        message_text_surface = font.render(text, True, BLACK)
+        self.draw_text(text=f"Good job! Moves : {self.level.moves_count}", color=BLACK, font=font, center=(WIDTH // 2, HEIGHT // 2))
         
-        message_text_rect = message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-        self.screen.blit(message_text_surface, message_text_rect)
-
     def update(self):
         if self.current_screen == "main":
             self.draw_main()

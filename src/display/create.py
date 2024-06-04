@@ -79,19 +79,12 @@ class CreateScreen(BaseScreen):
     def draw_save(self):
         font = pygame.font.Font(FONT_PATH, 30)
 
-        instruction_text_surface = font.render("Enter your name : ", True, BLACK)
-        instruction_text_rect = instruction_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 100))
-        self.screen.blit(instruction_text_surface, instruction_text_rect)
+        self.draw_text(text="Enter your name : ", color=BLACK, font=font, center=(WIDTH // 2, HEIGHT // 2 - 100))
+        self.draw_text(text=self.level_name, color=BLACK, font=font, center=(WIDTH // 2, HEIGHT // 2))
+        self.draw_text(text=self.save_message, color=self.save_message_color, font=font, center=(WIDTH // 2, HEIGHT // 2 - 200))
 
-        level_name_text_surface = font.render(self.level_name, True, BLACK)
-        level_name_text_rect = level_name_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-        self.screen.blit(level_name_text_surface, level_name_text_rect)
-
-        save_message_text_surface = font.render(self.save_message, True, self.save_message_color)
-        save_message_text_rect = save_message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 200))
-        self.screen.blit(save_message_text_surface, save_message_text_rect)
         for button in self.save_buttons:
-            button.draw()
+            self.draw_button(button)
 
     def change_tool(self, tool):
         self.creator.current_tool = tool
@@ -118,7 +111,7 @@ class CreateScreen(BaseScreen):
 
         font = pygame.font.Font(FONT_PATH, 30)
         for button in self.create_buttons:
-            button.draw()
+            self.draw_button(button)
             counter = self.creator.counter
             if self.is_tool_button(button):
                 # TODO afficher une image et le compte en dessous
@@ -132,10 +125,8 @@ class CreateScreen(BaseScreen):
                 x = x + button.height + 10
                 y = y + button.height // 2
 
-                text_surface = font.render(str(count), True, BLACK)
-                text_rect = text_surface.get_rect(center=(x, y))
-                self.screen.blit(text_surface, text_rect)
-
+                self.draw_text(text=str(count), color=BLACK, font=font, center=(x, y))
+                
         text_surface = font.render(self.create_message, True, self.create_message_color)
         x = 6 * self.create_button_width
         y = GRID_HEIGHT + MENU_BUTTON_HEIGHT + text_surface.get_height()
