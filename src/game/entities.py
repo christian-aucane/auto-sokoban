@@ -141,6 +141,15 @@ class Entity:
             return self.left()
         elif direction == RIGHT:
             return self.right()
+        
+    def copy(self):
+        """
+        Copy the entity
+
+        Returns :
+            Entity object - The copy of the entity
+        """
+        return self.__class__(**self.__dict__)
 
 class Box(Entity):
     """
@@ -216,6 +225,7 @@ class Box(Entity):
             bool - True if the box is on a goal, False otherwise
         """
         return self.level.is_goal(self.x, self.y)
+
 
 class Player(Entity):
     """
@@ -316,3 +326,4 @@ class Player(Entity):
             lambda: box.is_right_available, 
             super().right
         )
+    
