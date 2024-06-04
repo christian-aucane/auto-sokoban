@@ -1,6 +1,6 @@
 import pygame
 
-from constants import BACKGROUND_IMAGES_DIR, BUTTON_HOVER_TEXT_COLOR, BUTTON_TEXT_COLOR, HEIGHT, MUSIC_DIR, SOUND_EFFECTS_DIR, WIDTH
+from constants import FONT, Sizes, Colors, Paths
 
 
 class BaseScreen:
@@ -9,16 +9,19 @@ class BaseScreen:
         self.screen = screen
         self.music = self.load_music(music)
         self.sound_effects = sound_effects
-        self.background_image = pygame.transform.scale(pygame.image.load(BACKGROUND_IMAGES_DIR / background_image_file), (WIDTH, HEIGHT))
+        self.background_image = pygame.transform.scale(
+            pygame.image.load(Paths.BACKGROUND_IMAGES / background_image_file),
+            (Sizes.WIDTH, Sizes.HEIGHT)
+        )
         self.main_buttons = []
 
     @staticmethod
     def load_music(music):
-        return pygame.mixer.Sound(MUSIC_DIR / music)
+        return pygame.mixer.Sound(Paths.MUSIC / music)
 
     @staticmethod
     def load_sound_effect(filename):
-        return pygame.mixer.Sound(SOUND_EFFECTS_DIR / filename)
+        return pygame.mixer.Sound(Paths.SOUND_EFFECTS / filename)
     
     def draw_background_image(self):
         self.screen.blit(self.background_image, (0, 0))
@@ -26,12 +29,21 @@ class BaseScreen:
     def draw_main(self):
         self.draw_background_image()
         for button in self.main_buttons:
-            
-            if button.is_clicked(pygame.mouse.get_pos()):
-                button.set_text_color(BUTTON_HOVER_TEXT_COLOR)
-            else:
-                button.set_text_color(BUTTON_TEXT_COLOR)
-            button.draw()
+            self.draw_button(button)
+
+    def draw_button(self, button, is_active=False):
+        if is_active:
+            button.set_text_color(Colors.BUTTON_ACTIVE_TEXT)
+        elif button.is_clicked(pygame.mouse.get_pos()):
+            button.set_text_color(Colors.BUTTON_HOVER_TEXT)
+        else:
+            button.set_text_color(Colors.BUTTON_TEXT)
+        button.draw()
+
+    def draw_text(self, text, color, **pos):
+        text_surface = FONT.render(text, True, color)
+        text_rect = text_surface.get_rect(**pos)
+        self.screen.blit(text_surface, text_rect)
 
     def play_music(self):
         self.music.play(-1)
@@ -56,4 +68,3 @@ class BaseScreen:
     
     def handle_event(self, event):
         raise NotImplementedError("Subclass must implement abstract method")
-    

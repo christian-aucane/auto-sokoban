@@ -1,7 +1,8 @@
 from copy import deepcopy
+
 import numpy as np
 
-from constants import BOX, EMPTY_CELL, GOAL, PLAYER, WALL
+from constants import CellsValues
 
 
 class BaseGrid:
@@ -34,28 +35,28 @@ class BaseGrid:
         self._grid[y, x] = value
 
     def is_empty(self, x, y):
-        return self.get_cell(x, y) == EMPTY_CELL
+        return self.get_cell(x, y) == CellsValues.EMPTY_CELL
     
     def is_wall(self, x, y):
-        return self.get_cell(x, y) == WALL
+        return self.get_cell(x, y) == CellsValues.WALL
     
     def is_goal(self, x, y):
-        return self.get_cell(x, y) == GOAL
+        return self.get_cell(x, y) == CellsValues.GOAL
     
     def is_player(self, x, y):
-        return self.get_cell(x, y) == PLAYER
+        return self.get_cell(x, y) == CellsValues.PLAYER
     
     def is_box(self, x, y):
-        return self.get_cell(x, y) == BOX
+        return self.get_cell(x, y) == CellsValues.BOX
     
     @property
     def counter(self):
         return {
-            "empty": np.sum(self._grid == EMPTY_CELL),
-            "wall": np.sum(self._grid == WALL),
-            "goal": np.sum(self._grid == GOAL),
-            "box": np.sum(self._grid == BOX),
-            "player": np.sum(self._grid == PLAYER),
+            "empty": np.sum(self._grid == CellsValues.EMPTY_CELL),
+            "wall": np.sum(self._grid == CellsValues.WALL),
+            "goal": np.sum(self._grid == CellsValues.GOAL),
+            "box": np.sum(self._grid == CellsValues.BOX),
+            "player": np.sum(self._grid == CellsValues.PLAYER),
         }
 
     def print(self):
@@ -72,4 +73,11 @@ class BaseGrid:
                     grid[y, x] = "P"
                 if self.is_box(x, y):
                     grid[y, x] = "B"
-        print(*[" ".join(str(cell.decode("utf-8")) for cell in row) for row in grid], sep="\n")
+        print(
+            *[
+                " ".join(
+                    str(cell.decode("utf-8")) for cell in row
+                ) for row in grid
+            ],
+            sep="\n"
+        )
