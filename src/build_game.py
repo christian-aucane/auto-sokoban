@@ -10,7 +10,6 @@ class Level(BaseGrid):
         self.boxes = []
         self.player = None
         grid = self.load(self.content)
-        
         super().__init__(grid)
 
         self.backup = {"boxes": self.boxes, "player": self.player}
@@ -20,7 +19,7 @@ class Level(BaseGrid):
     @classmethod
     def from_file(cls, txt_path):
         with open(txt_path, "r") as f:
-            content = f.readline()
+            content = f.readlines()
         return cls(content)
 
         # TODO : faire une methode pour initialiser a partir d'un fichier et dans __init__ mettre seulement la grille
@@ -29,9 +28,7 @@ class Level(BaseGrid):
         return self.player.x == x and self.player.y == y
     
     def is_box( self, x, y):
-        if self.get_box(x, y) is None:
-            return False
-        return True
+        return self.get_box(x, y) is not None
 
     def save_backup(self):
         # TODO : Ajouter des methodes copy aux objets
