@@ -1,8 +1,8 @@
 import time
-import pygame
-import os
-
 import json
+
+import pygame
+
 from .base import BaseScreen
 from .widgets import ImageButton
 from build_game import Level, Player
@@ -330,11 +330,10 @@ class GameScreen(BaseScreen):
             "solve_used": self.level.solve_used,
             "execution_time": self.level.execution_time 
         }
-
-        filename = 'scores.json'
-        if os.path.exists(filename):
+        score_file = Paths.SCORES_FILE
+        if score_file.exists():
             # Read existing file
-            with open(filename, 'r') as f:
+            with open(score_file, 'r') as f:
                 scores = json.load(f)
         else:
             scores = {}
@@ -356,7 +355,7 @@ class GameScreen(BaseScreen):
             scores[self.player_name] = [data]
 
         # Write back to file
-        with open(filename, 'w') as f:
+        with open(score_file, 'w') as f:
             json.dump(scores, f, indent=4)
 
 

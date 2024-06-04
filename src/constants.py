@@ -62,6 +62,8 @@ class Paths:
     MENU_BUTTON = BUTTONS_IMAGES / "menu.png"
     DELETE_BUTTON = BUTTONS_IMAGES / "delete.png"
 
+    SCORES_FILE = SOURCE / "scores.json"
+
 
 # Max
 MAX_CUSTOM_LEVELS = 3
