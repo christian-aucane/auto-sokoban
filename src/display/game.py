@@ -125,14 +125,29 @@ class GameScreen(BaseScreen):
         self.level_message = ""
         self.level_message_color = Colors.BLACK
 
-        self.color_inactive = pygame.Color('lightskyblue3')
-        self.color_active = pygame.Color('dodgerblue2')
-        self.color = self.color_inactive
-        self.input_box = pygame.Rect(Sizes.WIDTH // 2 - 100, Sizes.HEIGHT // 2, 200, 50)
-        self.player_name = ''
-        self.active = False
-
-
+        self.player_name = ""
+        self.victory_buttons = [
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=Sizes.HEIGHT // 2 + 100,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text="Main Menu",
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data="quit"
+            ),
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=Sizes.HEIGHT // 2 + 200,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text="Restart",
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data="restart"
+            )
+        ]
 
     def draw_level(self):
         for y in range(self.level.height):
@@ -215,49 +230,29 @@ class GameScreen(BaseScreen):
         self.screen.blit(message_text_surface, message_text_rect)
 
     def draw_victory(self):
-        # TODO : ajouter le temps
-        # TODO : ajouter des boutons pour recommencer et quitter et font  le score
         self.draw_text(
-            text=f"Good job! Moves : {self.level.moves_count}",
+            text=f"Moves : {self.level.moves_count}",
+            color=Colors.BLACK,
+            center=(100, 50)
+        )
+        self.draw_text(
+            text=f"Time : {self.level.execution_time:2f}",
+            color=Colors.BLACK,
+            center=(100, 150)
+        )
+        self.draw_text(
+            text="Add player name",
+            color=Colors.BLACK,
+            center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2 - 100)
+        )
+        self.draw_text(
+            text=self.player_name,
             color=Colors.BLACK,
             center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2)
         )
         
-
-        # Render "Moves : {self.level.moves_count}" text below "Good job!" aligned to the left
-        moves_surface = FONT.render(f"Moves : {self.level.moves_count}", True, Colors.BLACK)
-        self.screen.blit(moves_surface, (50, 100)) 
-
-        # Render "Time : {self.level.execution_time}" text below "Moves : ..." aligned to the left
-        time_surface = FONT.render(f"Time : {round(self.level.execution_time, 2)}", True, Colors.BLACK)  # Round the time to 2 decimal places
-        self.screen.blit(time_surface, (50, 150))
-
-        # Draw input box for player name
-        pygame.draw.rect(self.screen, self.color, self.input_box, 2)
-
-        # Render player name
-        txt_surface = FONT.render(self.player_name, True, self.color)
-        self.screen.blit(txt_surface, (self.input_box.x+5, self.input_box.y+5))
-        
-        # Render "Add player name" text above the input box
-        add_player_name_surface = FONT.render("Add player name", True, Colors.BLACK)
-        add_player_name_rect = add_player_name_surface.get_rect(center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2 - 70))
-        self.screen.blit(add_player_name_surface, add_player_name_rect)
-        
-        # Add "Main Menu" button
-        main_menu_button = pygame.Rect(Sizes.WIDTH // 2 - 100, Sizes.HEIGHT // 2 + 100, 200, 50)
-        pygame.draw.rect(self.screen, Colors.BLACK, main_menu_button)
-        main_menu_text = FONT.render("Main Menu", True, Colors.WHITE)
-        self.screen.blit(main_menu_text, (Sizes.WIDTH // 2, Sizes.HEIGHT // 2 + 100))
-
-        # Add "Restart" button
-        restart_button = pygame.Rect(Sizes.WIDTH // 2 - 100, Sizes.HEIGHT // 2 + 200, 200, 50)
-        pygame.draw.rect(self.screen, Colors.BLACK, restart_button)
-        restart_text = FONT.render("Restart", True, Colors.WHITE)
-        self.screen.blit(restart_text, (Sizes.WIDTH // 2, Sizes.HEIGHT // 2 + 200))
-
-        pygame.display.flip()
-
+        for button in self.victory_buttons:
+            self.draw_button(button)
 
     def update(self):
         if self.current_screen == "main":
@@ -310,22 +305,22 @@ class GameScreen(BaseScreen):
                         elif button.data == "quit":
                             self.app.switch_screen("menu")
         elif self.current_screen == "victory":
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.input_box.collidepoint(event.pos):
-                    self.active = not self.active
-                else:
-                    self.active = False
-                self.color = self.color_active if self.active else self.color_inactive
             if event.type == pygame.KEYDOWN:
-                if self.active:
-                    if event.key == pygame.K_RETURN:
-                        print(self.player_name)
-                        self.save_score()
-                        self.player_name = ''
-                    elif event.key == pygame.K_BACKSPACE:
-                        self.player_name = self.player_name[:-1]
-                    else:
-                        self.player_name += event.unicode
+                if event.key == pygame.K_RETURN:
+                    self.save_score()
+                    self.player_name = ''
+                    self.app.switch_screen("menu")
+                elif event.key == pygame.K_BACKSPACE:
+                    self.player_name = self.player_name[:-1]
+                else:
+                    self.player_name += event.unicode
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                for button in self.victory_buttons:
+                    if button.is_clicked(event.pos):
+                        if button.data == "quit":
+                            self.app.switch_screen("menu")
+                        elif button.data == "restart":
+                            self.restart()
     
     def save_score(self):
         data = {
@@ -378,8 +373,14 @@ class GameScreen(BaseScreen):
         elif movement == Player.PLAYER_NOT_MOVED:
             self.play_sound_effect("wrong_move")
 
-    def load_level(self, level_path):
+    def restart(self):
+        self.level.reset()
         self.current_screen = "level"
+
+    def load_level(self, level_path):
+        
+        self.current_screen = "level"
+        
         self.level = Level.from_file(level_path)
         self.cell_width = Sizes.GRID_WIDTH // self.level.width
         self.cell_height = Sizes.GRID_HEIGHT // self.level.height
