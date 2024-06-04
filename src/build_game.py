@@ -9,7 +9,7 @@ class Level(BaseGrid):
             
         self.boxes = []
         self.player = None
-        grid = self.load(self.content)
+        grid = self.load()
         super().__init__(grid)
 
         self.backup = {"boxes": self.boxes, "player": self.player}
@@ -21,8 +21,6 @@ class Level(BaseGrid):
         with open(txt_path, "r") as f:
             content = f.readlines()
         return cls(content)
-
-        # TODO : faire une methode pour initialiser a partir d'un fichier et dans __init__ mettre seulement la grille
 
     def is_player(self, x, y):
         return self.player.x == x and self.player.y == y
@@ -37,7 +35,6 @@ class Level(BaseGrid):
         self.backup_saved = True
 
     def load(self, content=None):
-        # TODO : ajouter vérifiction sur la forme de la matrice
         if content is None:
             content = self.content
         grid = []
@@ -63,7 +60,7 @@ class Level(BaseGrid):
     def reset(self):
         self.boxes = []
         self.player = None
-        self.grid = self.load(self.content)
+        self.grid = self.load()
 
     def cancel(self):
         if self.backup_saved:
