@@ -189,15 +189,15 @@ class GameScreen(BaseScreen):
         self.cell_height = GRID_HEIGHT // self.level.height
 
         self.images = {
-            "wall": self.load_img("wall.png"),
-            "empty_cell": self.load_img("empty_cell.png"),
-            "box": self.load_img("box.png"),
-            "goal": self.load_img("goal.png"),
-            "box_on_goal": self.load_img("box_on_goal.png"),
-            "player_up": self.load_img("player_up.png"),
-            "player_down": self.load_img("player_down.png"),
-            "player_left": self.load_img("player_left.png"),
-            "player_right": self.load_img("player_right.png"),
+            "wall": self.load_cell("wall.png"),
+            "empty_cell": self.load_cell("empty_cell.png"),
+            "box": self.load_cell("box.png"),
+            "goal": self.load_cell("goal.png"),
+            "box_on_goal": self.load_cell("box_on_goal.png"),
+            "player_up": self.load_cell("player_up.png"),
+            "player_down": self.load_cell("player_down.png"),
+            "player_left": self.load_cell("player_left.png"),
+            "player_right": self.load_cell("player_right.png"),
         }
 
     def load_solve(self):
@@ -216,7 +216,7 @@ class GameScreen(BaseScreen):
     def load_victory(self):
         self.current_screen = "victory"
 
-    def load_img(self, filename):
+    def load_cell(self, filename):
         return pygame.transform.scale(pygame.image.load(CELLS_IMAGES_DIR / filename), (self.cell_width, self.cell_height))
     
     def draw_cell(self, x, y, img_name):
