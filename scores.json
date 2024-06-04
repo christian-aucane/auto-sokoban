@@ -1,1 +1,1 @@
-{"grid_name": "grid", "moves_count": 30, "reset_count": 5, "player_name": "Alex", "solve_used": false}
+{"Alex": {"grid": {"grid_name": "grid", "moves_count": 24, "reset_count": 0, "cancel_count": 0, "solve_used": false}, "grid1": {"grid_name": "grid", "moves_count": 36, "reset_count": 1, "cancel_count": 1, "solve_used": true}}, "Jean": {"grid": {"grid_name": "grid", "moves_count": 24, "reset_count": 0, "cancel_count": 0, "solve_used": true}}}

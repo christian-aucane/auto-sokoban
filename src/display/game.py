@@ -1,5 +1,6 @@
 import time
 import pygame
+import os
 
 import json
 from .base import BaseScreen
@@ -203,11 +204,39 @@ class GameScreen(BaseScreen):
             "grid_name": self.level.name,
             "moves_count": self.level.moves_count,
             "reset_count": self.level.reset_count,
-            "player_name": self.player_name,
-            "solve_used": self.level.solve_used  # Add this line
+            "cancel_count": self.level.cancel_count,
+            "solve_used": self.level.solve_used,
         }
-        with open('scores.json', 'a') as f:
-            json.dump(data, f)
+
+        filename = 'scores.json'
+        if os.path.exists(filename):
+            # Read existing file
+            with open(filename, 'r') as f:
+                scores = json.load(f)
+        else:
+            scores = {}
+
+        # Check if player exists
+        if self.player_name in scores:
+            # Check if grid exists for player
+            if self.level.name in scores[self.player_name]:
+                # Grid exists, append a number to it
+                i = 1
+                new_grid_name = f"{self.level.name}{i}"
+                while new_grid_name in scores[self.player_name]:
+                    i += 1
+                    new_grid_name = f"{self.level.name}{i}"
+                scores[self.player_name][new_grid_name] = data
+            else:
+                # Grid does not exist, add it
+                scores[self.player_name][self.level.name] = data
+        else:
+            # Player does not exist, add player and grid
+            scores[self.player_name] = {self.level.name: data}
+
+        # Write back to file
+        with open(filename, 'w') as f:
+            json.dump(scores, f)
 
     def play_movement_sound_effect(self, movement):
         if movement == Player.PLAYER_MOVED:

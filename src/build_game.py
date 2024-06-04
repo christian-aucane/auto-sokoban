@@ -8,6 +8,7 @@ class Level(BaseGrid):
         self.content = grid_content
         self.name = name
         self.reset_count = 0
+        self.cancel_count = 0
         self.solve_used = False
             
         self.boxes = []
@@ -73,6 +74,7 @@ class Level(BaseGrid):
             self.player = self.backup["player"]
             self._moves_count -= 1
             self.backup_saved = False
+            self.cancel_count += 1  # Increment the cancel count
             return True
         return False
 
