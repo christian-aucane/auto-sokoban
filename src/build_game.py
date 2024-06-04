@@ -4,8 +4,11 @@ from constants import BOX, LEVELS_DIR, PLAYER
 
 class Level(BaseGrid):
     # TODO : add docstrings
-    def __init__(self, grid_content):
+    def __init__(self, grid_content, name=None):
         self.content = grid_content
+        self.name = name
+        self.reset_count = 0
+        self.solve_used = False
             
         self.boxes = []
         self.player = None
@@ -20,7 +23,8 @@ class Level(BaseGrid):
     def from_file(cls, txt_path):
         with open(txt_path, "r") as f:
             content = f.readlines()
-        return cls(content)
+        name = txt_path.stem  # Extract the file name without extension
+        return cls(content, name)
 
     def is_player(self, x, y):
         return self.player.x == x and self.player.y == y
@@ -61,6 +65,7 @@ class Level(BaseGrid):
         self.boxes = []
         self.player = None
         self.grid = self.load()
+        self.reset_count += 1  # Increment the reset count
 
     def cancel(self):
         if self.backup_saved:
@@ -73,6 +78,9 @@ class Level(BaseGrid):
 
     def add_move(self):
         self._moves_count += 1
+
+    def load_solve(self):
+        self.solve_used = True
 
     @property
     def moves_count(self):

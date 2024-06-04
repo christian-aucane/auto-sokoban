@@ -3,13 +3,10 @@ import sys
 import pygame
 from pygame import mixer
 
-
-
 from constants import WHITE, WIDTH, HEIGHT
 from display.game import GameScreen
 from display.menu import MenuScreen
 from display.create import CreateScreen
-
 
 class SokobanApp:
     def __init__(self):

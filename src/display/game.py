@@ -1,6 +1,7 @@
 import time
 import pygame
 
+import json
 from .base import BaseScreen
 from .widgets import ImageButton
 from build_game import Level, Player
@@ -50,6 +51,15 @@ class GameScreen(BaseScreen):
 
         self.level_message = ""
         self.level_message_color = BLACK
+
+        self.color_inactive = pygame.Color('lightskyblue3')
+        self.color_active = pygame.Color('dodgerblue2')
+        self.color = self.color_inactive
+        self.input_box = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2, 200, 50)
+        self.player_name = ''
+        self.active = False
+
+
 
     def draw_level(self):
         for y in range(self.level.height):
@@ -106,15 +116,20 @@ class GameScreen(BaseScreen):
         self.screen.blit(message_text_surface, message_text_rect)
 
     def draw_victory(self):
-        # TODO : ajouter le temps
-        # TODO : ajouter des boutons
-        
         font = pygame.font.Font(FONT_PATH, 30)
         text = f"Good job! Moves : {self.level.moves_count}"
         message_text_surface = font.render(text, True, BLACK)
         
-        message_text_rect = message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+        message_text_rect = message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
         self.screen.blit(message_text_surface, message_text_rect)
+
+        # Draw input box for player name
+        pygame.draw.rect(self.screen, self.color, self.input_box, 2)
+
+        # Render player name
+        txt_surface = font.render(self.player_name, True, self.color)
+        self.screen.blit(txt_surface, (self.input_box.x+5, self.input_box.y+5))
+        pygame.display.flip()
 
     def update(self):
         if self.current_screen == "main":
@@ -158,6 +173,7 @@ class GameScreen(BaseScreen):
                     if button.is_clicked(event.pos):
                         if button.data == "solve":
                             self.load_solve()
+                            self.level.solve_used = True
                         elif button.data == "cancel":
                             self.level.cancel()
                         elif button.data == "reset":
@@ -165,9 +181,33 @@ class GameScreen(BaseScreen):
                         elif button.data == "quit":
                             self.app.switch_screen("menu")
         elif self.current_screen == "victory":
-            # TODO : ajouter les evenements pour enregistrer les scores
-            if event.type == pygame.K_BACKSPACE:
-                self.app.switch_screen("menu")
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.input_box.collidepoint(event.pos):
+                    self.active = not self.active
+                else:
+                    self.active = False
+                self.color = self.color_active if self.active else self.color_inactive
+            if event.type == pygame.KEYDOWN:
+                if self.active:
+                    if event.key == pygame.K_RETURN:
+                        print(self.player_name)
+                        self.save_score()
+                        self.player_name = ''
+                    elif event.key == pygame.K_BACKSPACE:
+                        self.player_name = self.player_name[:-1]
+                    else:
+                        self.player_name += event.unicode
+    
+    def save_score(self):
+        data = {
+            "grid_name": self.level.name,
+            "moves_count": self.level.moves_count,
+            "reset_count": self.level.reset_count,
+            "player_name": self.player_name,
+            "solve_used": self.level.solve_used  # Add this line
+        }
+        with open('scores.json', 'a') as f:
+            json.dump(data, f)
 
     def play_movement_sound_effect(self, movement):
         if movement == Player.PLAYER_MOVED:
