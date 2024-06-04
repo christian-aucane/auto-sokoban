@@ -4,10 +4,10 @@ import sys
 import pygame
 
 from constants import Sizes, Colors
+
 from display.game import GameScreen
 from display.menu import MenuScreen
 from display.create import CreateScreen
-
 
 class SokobanApp:
     def __init__(self):

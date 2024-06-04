@@ -1,0 +1,20 @@
+{
+    "Alex": {
+        "grid": {
+            "grid_name": "grid",
+            "moves_count": 30,
+            "reset_count": 0,
+            "cancel_count": 0,
+            "solve_used": false,
+            "execution_time": 7.649134874343872
+        },
+        "grid1": {
+            "grid_name": "grid",
+            "moves_count": 34,
+            "reset_count": 0,
+            "cancel_count": 0,
+            "solve_used": false,
+            "execution_time": 9.87406063079834
+        }
+    }
+}

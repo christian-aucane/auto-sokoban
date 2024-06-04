@@ -1,6 +1,8 @@
 import time
 import pygame
+import os
 
+import json
 from .base import BaseScreen
 from .widgets import ImageButton
 from build_game import Level, Player
@@ -123,6 +125,15 @@ class GameScreen(BaseScreen):
         self.level_message = ""
         self.level_message_color = Colors.BLACK
 
+        self.color_inactive = pygame.Color('lightskyblue3')
+        self.color_active = pygame.Color('dodgerblue2')
+        self.color = self.color_inactive
+        self.input_box = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2, 200, 50)
+        self.player_name = ''
+        self.active = False
+
+
+
     def draw_level(self):
         for y in range(self.level.height):
             for x in range(self.level.width):
@@ -212,11 +223,48 @@ class GameScreen(BaseScreen):
             center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2)
         )
         
+
+        # Render "Moves : {self.level.moves_count}" text below "Good job!" aligned to the left
+        moves_surface = font.render(f"Moves : {self.level.moves_count}", True, BLACK)
+        self.screen.blit(moves_surface, (50, 100)) 
+
+        # Render "Time : {self.level.execution_time}" text below "Moves : ..." aligned to the left
+        time_surface = font.render(f"Time : {round(self.level.execution_time, 2)}", True, BLACK)  # Round the time to 2 decimal places
+        self.screen.blit(time_surface, (50, 150))
+
+        # Draw input box for player name
+        pygame.draw.rect(self.screen, self.color, self.input_box, 2)
+
+        # Render player name
+        txt_surface = font.render(self.player_name, True, self.color)
+        self.screen.blit(txt_surface, (self.input_box.x+5, self.input_box.y+5))
+        
+        # Render "Add player name" text above the input box
+        add_player_name_surface = font.render("Add player name", True, BLACK)
+        add_player_name_rect = add_player_name_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 70))
+        self.screen.blit(add_player_name_surface, add_player_name_rect)
+        
+        # Add "Main Menu" button
+        main_menu_button = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + 100, 200, 50)
+        pygame.draw.rect(self.screen, BLACK, main_menu_button)
+        main_menu_text = font.render("Main Menu", True, WHITE)
+        self.screen.blit(main_menu_text, (WIDTH // 2, HEIGHT // 2 + 100))
+
+        # Add "Restart" button
+        restart_button = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + 200, 200, 50)
+        pygame.draw.rect(self.screen, BLACK, restart_button)
+        restart_text = font.render("Restart", True, WHITE)
+        self.screen.blit(restart_text, (WIDTH // 2, HEIGHT // 2 + 200))
+
+        pygame.display.flip()
+
+
     def update(self):
         if self.current_screen == "main":
             self.draw_main()
         elif self.current_screen == "level":
             if self.level.is_solved:
+                self.level.stop_timer()
                 self.load_victory()
             if self.solve_running:
                 self.solver.apply_next_move()
@@ -254,6 +302,7 @@ class GameScreen(BaseScreen):
                     if button.is_clicked(event.pos):
                         if button.data == "solve":
                             self.load_solve()
+                            self.level.solve_used = True
                         elif button.data == "cancel":
                             self.level.cancel()
                         elif button.data == "reset":
@@ -261,9 +310,62 @@ class GameScreen(BaseScreen):
                         elif button.data == "quit":
                             self.app.switch_screen("menu")
         elif self.current_screen == "victory":
-            # TODO : ajouter les evenements pour enregistrer les scores
-            if event.type == pygame.K_BACKSPACE:
-                self.app.switch_screen("menu")
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.input_box.collidepoint(event.pos):
+                    self.active = not self.active
+                else:
+                    self.active = False
+                self.color = self.color_active if self.active else self.color_inactive
+            if event.type == pygame.KEYDOWN:
+                if self.active:
+                    if event.key == pygame.K_RETURN:
+                        print(self.player_name)
+                        self.save_score()
+                        self.player_name = ''
+                    elif event.key == pygame.K_BACKSPACE:
+                        self.player_name = self.player_name[:-1]
+                    else:
+                        self.player_name += event.unicode
+    
+    def save_score(self):
+        data = {
+            "grid_name": self.level.name,
+            "moves_count": self.level.moves_count,
+            "reset_count": self.level.reset_count,
+            "cancel_count": self.level.cancel_count,
+            "solve_used": self.level.solve_used,
+            "execution_time": self.level.execution_time 
+        }
+
+        filename = 'scores.json'
+        if os.path.exists(filename):
+            # Read existing file
+            with open(filename, 'r') as f:
+                scores = json.load(f)
+        else:
+            scores = {}
+
+        # Check if player exists
+        if self.player_name in scores:
+            # Check if grid exists for player
+            if self.level.name in scores[self.player_name]:
+                # Grid exists, append a number to it
+                i = 1
+                new_grid_name = f"{self.level.name}{i}"
+                while new_grid_name in scores[self.player_name]:
+                    i += 1
+                    new_grid_name = f"{self.level.name}{i}"
+                scores[self.player_name][new_grid_name] = data
+            else:
+                # Grid does not exist, add it
+                scores[self.player_name][self.level.name] = data
+        else:
+            # Player does not exist, add player and grid
+            scores[self.player_name] = {self.level.name: data}
+
+        # Write back to file
+        with open(filename, 'w') as f:
+            json.dump(scores, f, indent=4)
 
     def play_movement_sound_effect(self, movement):
         if movement == Player.PLAYER_MOVED:
