@@ -26,12 +26,19 @@ class BaseScreen:
     def draw_main(self):
         self.draw_background_image()
         for button in self.main_buttons:
-            
-            if button.is_clicked(pygame.mouse.get_pos()):
-                button.set_text_color(BUTTON_HOVER_TEXT_COLOR)
-            else:
-                button.set_text_color(BUTTON_TEXT_COLOR)
-            button.draw()
+            self.draw_button(button)
+
+    def draw_button(self, button):
+        if button.is_clicked(pygame.mouse.get_pos()):
+            button.set_text_color(BUTTON_HOVER_TEXT_COLOR)
+        else:
+            button.set_text_color(BUTTON_TEXT_COLOR)
+        button.draw()
+
+    def draw_text(self, text, color, font, **pos):
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect(**pos)
+        self.screen.blit(text_surface, text_rect)
 
     def play_music(self):
         self.music.play(-1)
@@ -56,4 +63,3 @@ class BaseScreen:
     
     def handle_event(self, event):
         raise NotImplementedError("Subclass must implement abstract method")
-    
