@@ -18,6 +18,7 @@ class BaseScreen:
     @staticmethod
     def load_music(music):
         return pygame.mixer.Sound(Paths.MUSIC / music)
+    
 
     @staticmethod
     def load_sound_effect(filename):
@@ -46,15 +47,18 @@ class BaseScreen:
         self.screen.blit(text_surface, text_rect)
 
     def play_music(self):
+        self.music.set_volume(0.1)
         self.music.play(-1)
 
     def stop_music(self):
         self.music.stop()
 
     def play_sound_effect(self, sound_effect):
+        #volume = 0.1
         sound_effect = self.sound_effects.get(sound_effect)
         if sound_effect is None:
             raise ValueError(f"Sound effect '{sound_effect}' not found")
+        sound_effect.set_volume(1)
         sound_effect.play()
 
     def load(self):
