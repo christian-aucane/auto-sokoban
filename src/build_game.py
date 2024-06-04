@@ -1,6 +1,7 @@
 from game.base_grid import BaseGrid
 from game.entities import Box, Player
-from constants import BOX, LEVELS_DIR, PLAYER
+from constants import CellsValues
+
 
 class Level(BaseGrid):
     # TODO : add docstrings
@@ -42,10 +43,10 @@ class Level(BaseGrid):
             new_row = []
             for x, cell in enumerate(row):
                 cell = int(cell)
-                if cell == BOX:
+                if cell == CellsValues.BOX:
                     self.boxes.append(Box(self, x, y))
                     cell = 0
-                if cell == PLAYER:
+                if cell == CellsValues.PLAYER:
                     if self.player is not None:
                         raise ValueError("Multiple players")
                     self.player = Player(self, x, y)
@@ -105,5 +106,6 @@ class Level(BaseGrid):
     
 
 if __name__ == "__main__":
-    grid = Level.from_file(LEVELS_DIR / "grid.txt")
+    from constants import Paths
+    grid = Level.from_file(Paths.LEVELS / "grid.txt")
     grid.print()

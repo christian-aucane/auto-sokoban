@@ -1,7 +1,7 @@
 from collections import deque
 
 from build_game import Level, Player
-from constants import LEVELS_DIR, UP, DOWN, LEFT, RIGHT
+from constants import Orientations, Paths
 
 
 class LevelSolver:
@@ -107,8 +107,8 @@ class LevelSolver:
             list: list of possible moves
         """
         moves = []
-        directions = [(UP, self.level.player.up), (DOWN, self.level.player.down),
-                      (LEFT, self.level.player.left), (RIGHT, self.level.player.right)]
+        directions = [(Orientations.UP, self.level.player.up), (Orientations.DOWN, self.level.player.down),
+                      (Orientations.LEFT, self.level.player.left), (Orientations.RIGHT, self.level.player.right)]
         for direction, move in directions:
             if move() != Player.PLAYER_NOT_MOVED:
                 moves.append(direction)
@@ -127,13 +127,13 @@ class LevelSolver:
             tuple: new state
         """
         self.set_state(state)
-        if move == UP:
+        if move == Orientations.UP:
             self.level.player.up()
-        elif move == DOWN:
+        elif move == Orientations.DOWN:
             self.level.player.down()
-        elif move == LEFT:
+        elif move == Orientations.LEFT:
             self.level.player.left()
-        elif move == RIGHT:
+        elif move == Orientations.RIGHT:
             self.level.player.right()
         return self.get_state()
     
@@ -153,7 +153,7 @@ class LevelSolver:
     
 
 if __name__ == "__main__":
-    level = Level.from_file(LEVELS_DIR / "grid.txt")
+    level = Level.from_file(Paths.LEVELS / "grid.txt")
     solver = LevelSolver(level)
     is_solved = solver.solve()
     print("IS SOLVED", is_solved)

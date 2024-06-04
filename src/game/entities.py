@@ -1,4 +1,4 @@
-from constants import DOWN, LEFT, RIGHT, UP
+from constants import Orientations
 
 
 class Entity:
@@ -133,13 +133,13 @@ class Entity:
         Returns :
             bool - True if the entity moved in the specified direction, False otherwise
         """
-        if direction == UP:
+        if direction == Orientations.UP:
             return self.up()
-        elif direction == DOWN:
+        elif direction == Orientations.DOWN:
             return self.down()
-        elif direction == LEFT:
+        elif direction == Orientations.LEFT:
             return self.left()
-        elif direction == RIGHT:
+        elif direction == Orientations.RIGHT:
             return self.right()
         
     def copy(self):
@@ -256,7 +256,7 @@ class Player(Entity):
     BOX_MOVED = 2
     BOX_ON_GOAL = 3
 
-    def __init__(self, level, x, y, orientation=UP):
+    def __init__(self, level, x, y, orientation=Orientations.UP):
         super().__init__(level, x, y)
         self.orientation = orientation
 
@@ -290,7 +290,7 @@ class Player(Entity):
     def up(self):
         box = self.level.get_box(self.x, self.y - 1)
         return self.move(
-            UP, 
+            Orientations.UP, 
             self.is_up_available, 
             box, 
             lambda: box.is_up_available, 
@@ -300,7 +300,7 @@ class Player(Entity):
     def down(self):
         box = self.level.get_box(self.x, self.y + 1)
         return self.move(
-            DOWN, 
+            Orientations.DOWN, 
             self.is_down_available, 
             box, 
             lambda: box.is_down_available, 
@@ -310,7 +310,7 @@ class Player(Entity):
     def left(self):
         box = self.level.get_box(self.x - 1, self.y)
         return self.move(
-            LEFT, 
+            Orientations.LEFT, 
             self.is_left_available, 
             box, 
             lambda: box.is_left_available, 
@@ -320,7 +320,7 @@ class Player(Entity):
     def right(self):
         box = self.level.get_box(self.x + 1, self.y)
         return self.move(
-            RIGHT, 
+            Orientations.RIGHT, 
             self.is_right_available, 
             box, 
             lambda: box.is_right_available, 

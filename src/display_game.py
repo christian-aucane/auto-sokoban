@@ -1,11 +1,9 @@
 from pathlib import Path
 import sys
+
 import pygame
-from pygame import mixer
 
-
-
-from constants import WHITE, WIDTH, HEIGHT
+from constants import Sizes, Colors
 from display.game import GameScreen
 from display.menu import MenuScreen
 from display.create import CreateScreen
@@ -14,9 +12,9 @@ from display.create import CreateScreen
 class SokobanApp:
     def __init__(self):
         pygame.init()
-        mixer.init()
+        pygame.mixer.init()
 
-        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.screen = pygame.display.set_mode((Sizes.WIDTH, Sizes.HEIGHT))
         self.clock = pygame.time.Clock()
 
         pygame.display.set_caption("Sokoban")
@@ -33,7 +31,7 @@ class SokobanApp:
                 else:
                     self.current_screen.handle_event(event)
 
-            self.screen.fill(WHITE)
+            self.screen.fill(Colors.WHITE)
             self.current_screen.update()
             pygame.display.flip()
             self.clock.tick(60)  # 60FPS
