@@ -29,9 +29,8 @@ class Level(BaseGrid):
         return self.get_box(x, y) is not None
 
     def save_backup(self):
-        # TODO : Ajouter des methodes copy aux objets
-        self.backup["boxes"] = [Box(self, box.x, box.y) for box in self.boxes]
-        self.backup["player"] = Player(self, self.player.x, self.player.y, self.player.orientation)
+        self.backup["boxes"] = [box.copy() for box in self.boxes]
+        self.backup["player"] = self.player.copy()
         self.backup_saved = True
 
     def load(self, content=None):
