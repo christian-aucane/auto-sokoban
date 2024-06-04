@@ -9,7 +9,10 @@ class BaseScreen:
         self.screen = screen
         self.music = self.load_music(music)
         self.sound_effects = sound_effects
-        self.background_image = pygame.transform.scale(pygame.image.load(Paths.BACKGROUND_IMAGES / background_image_file), (Sizes.WIDTH, Sizes.HEIGHT))
+        self.background_image = pygame.transform.scale(
+            pygame.image.load(Paths.BACKGROUND_IMAGES / background_image_file),
+            (Sizes.WIDTH, Sizes.HEIGHT)
+        )
         self.main_buttons = []
 
     @staticmethod

@@ -53,7 +53,8 @@ class Entity:
         Returns :
             bool - True if the entity can move down, False otherwise
         """
-        return self.y < self.level.height -1 and not self.level.is_wall(self.x, self.y + 1)
+        return self.y < self.level.height -1\
+            and not self.level.is_wall(self.x, self.y + 1)
 
     @property
     def is_left_available(self):
@@ -73,7 +74,8 @@ class Entity:
         Returns :
             bool - True if the entity can move right, False otherwise
         """
-        return self.x < self.level.width -1 and not self.level.is_wall(self.x + 1, self.y)
+        return self.x < self.level.width -1\
+            and not self.level.is_wall(self.x + 1, self.y)
 
     def up(self):
         """
@@ -184,7 +186,8 @@ class Box(Entity):
         Returns :
             bool - True if the box can move up, False otherwise
         """
-        return super().is_up_available and self.level.get_box(self.x, self.y - 1) is None
+        return super().is_up_available\
+            and self.level.get_box(self.x, self.y - 1) is None
 
     @property
     def is_down_available(self):
@@ -194,7 +197,8 @@ class Box(Entity):
         Returns :
             bool - True if the box can move down, False otherwise
         """
-        return super().is_down_available and self.level.get_box(self.x, self.y + 1) is None
+        return super().is_down_available\
+            and self.level.get_box(self.x, self.y + 1) is None
 
     @property
     def is_left_available(self):
@@ -204,7 +208,8 @@ class Box(Entity):
         Returns :
             bool - True if the box can move left, False otherwise
         """
-        return super().is_left_available and self.level.get_box(self.x - 1, self.y) is None
+        return super().is_left_available\
+            and self.level.get_box(self.x - 1, self.y) is None
 
     @property
     def is_right_available(self):
@@ -214,7 +219,8 @@ class Box(Entity):
         Returns :
             bool - True if the box can move right, False otherwise
         """
-        return super().is_right_available and self.level.get_box(self.x + 1, self.y) is None
+        return super().is_right_available\
+            and self.level.get_box(self.x + 1, self.y) is None
     
     @property
     def is_on_goal(self):
@@ -260,7 +266,12 @@ class Player(Entity):
         super().__init__(level, x, y)
         self.orientation = orientation
 
-    def move(self, direction, is_available, box, move_box_available, super_move):
+    def move(self,
+             direction,
+             is_available,
+             box,
+             move_box_available,
+             super_move):
         if is_available:
             if box is not None:
                 if move_box_available():

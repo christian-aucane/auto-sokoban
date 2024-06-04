@@ -5,7 +5,8 @@ from .base import BaseScreen
 from .widgets import ImageButton
 from build_game import Level, Player
 from game.solve_game import LevelSolver
-from constants import Orientations, Sizes, Colors, Paths, FONT, MAIN_MENU_BUTTONS_X
+from constants import Orientations, Sizes, Colors, Paths,\
+    FONT, MAIN_MENU_BUTTONS_X
 
 
 class GameScreen(BaseScreen):
@@ -16,28 +17,99 @@ class GameScreen(BaseScreen):
             "box_move": self.load_sound_effect("game/box_move.mp3"),
             "box_on_goal": self.load_sound_effect("game/box_on_goal.mp3"),
         }
-        super().__init__(app=app, screen=screen, music="game.mp3", sound_effects=sound_effects, background_image_file="game.png")
+        super().__init__(
+            app=app,
+            screen=screen,
+            music="game.mp3",
+            sound_effects=sound_effects,
+            background_image_file="game.png"
+        )
         
         self.main_buttons = [
-            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=Sizes.MAIN_MENU_BUTTONS_HEIGHT + i*2*Sizes.MAIN_MENU_BUTTONS_HEIGHT, width=Sizes.MAIN_MENU_BUTTONS_WIDTH, height=Sizes.MAIN_MENU_BUTTONS_HEIGHT, text=path.stem.title(), background_image_file=Paths.MAIN_MENU_BUTTON, data=path)
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=Sizes.MAIN_MENU_BUTTONS_HEIGHT + i*2*Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text=path.stem.title(),
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data=path
+            )
             for i, path in enumerate(Paths.LEVELS.iterdir())
         ]
         y_custom_levels_start = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTONS_HEIGHT * 2
         self.main_buttons += [
-            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_custom_levels_start + i*2*Sizes.MAIN_MENU_BUTTONS_HEIGHT, width=Sizes.MAIN_MENU_BUTTONS_WIDTH, height=Sizes.MAIN_MENU_BUTTONS_HEIGHT, text=path.stem.title(), background_image_file=Paths.MAIN_MENU_BUTTON, data=path)
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=y_custom_levels_start + i*2*Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text=path.stem.title(),
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data=path
+            )
             for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir())
         ]
         y_custom_levels_start = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTONS_HEIGHT * 2
-        self.main_buttons.append(ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_custom_levels_start, width=Sizes.MAIN_MENU_BUTTONS_WIDTH, height=Sizes.MAIN_MENU_BUTTONS_HEIGHT, text="Main Menu", background_image_file=Paths.MAIN_MENU_BUTTON, data="quit"))
+        self.main_buttons.append(
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=y_custom_levels_start,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text="Main Menu",
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data="quit"
+            )
+        )
 
         self.current_screen = "main"
 
         level_buttons_width = Sizes.WIDTH // 4
         self.level_buttons = [
-            ImageButton(screen=screen, x=0, y=Sizes.GRID_HEIGHT, width=level_buttons_width, height=Sizes.MENU_BUTTON_HEIGHT, text="Solve", background_image_file=Paths.MENU_BUTTON, data="solve"),
-            ImageButton(screen=screen, x=level_buttons_width, y=Sizes.GRID_HEIGHT, width=level_buttons_width, height=Sizes.MENU_BUTTON_HEIGHT, text="Cancel", background_image_file=Paths.MENU_BUTTON, data="cancel"),
-            ImageButton(screen=screen, x=2 * level_buttons_width, y=Sizes.GRID_HEIGHT, width=level_buttons_width, height=Sizes.MENU_BUTTON_HEIGHT, text="Reset", background_image_file=Paths.MENU_BUTTON, data="reset"),
-            ImageButton(screen=screen, x=3 * level_buttons_width, y=Sizes.GRID_HEIGHT, width=level_buttons_width, height=Sizes.MENU_BUTTON_HEIGHT, text="Menu", background_image_file=Paths.MENU_BUTTON, data="quit")
+            ImageButton(
+                screen=screen,
+                x=0,
+                y=Sizes.GRID_HEIGHT,
+                width=level_buttons_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Solve",
+                background_image_file=Paths.MENU_BUTTON,
+                data="solve"
+            ),
+            ImageButton(
+                screen=screen,
+                x=level_buttons_width,
+                y=Sizes.GRID_HEIGHT,
+                width=level_buttons_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Cancel",
+                background_image_file=Paths.MENU_BUTTON,
+                data="cancel"
+            ),
+            ImageButton(
+                screen=screen,
+                x=2 * level_buttons_width,
+                y=Sizes.GRID_HEIGHT,
+                width=level_buttons_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Reset",
+                background_image_file=Paths.MENU_BUTTON,
+                data="reset"
+            ),
+            ImageButton(
+                screen=screen,
+                x=3 * level_buttons_width,
+                y=Sizes.GRID_HEIGHT,
+                width=level_buttons_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Menu",
+                background_image_file=Paths.MENU_BUTTON,
+                data="quit"
+            )
         ]
 
         self.level = None
@@ -69,18 +141,38 @@ class GameScreen(BaseScreen):
         
         if self.level.player is not None:
             if self.level.player.orientation == Orientations.UP:
-                self.draw_cell(self.level.player.x, self.level.player.y, "player_up")
+                self.draw_cell(
+                    self.level.player.x,
+                    self.level.player.y,
+                    "player_up"
+                )
             elif self.level.player.orientation == Orientations.DOWN:
-                self.draw_cell(self.level.player.x, self.level.player.y, "player_down")
+                self.draw_cell(
+                    self.level.player.x,
+                    self.level.player.y,
+                    "player_down"
+                )
             elif self.level.player.orientation == Orientations.LEFT:
-                self.draw_cell(self.level.player.x, self.level.player.y, "player_left")
+                self.draw_cell(
+                    self.level.player.x,
+                    self.level.player.y,
+                    "player_left"
+                )
             elif self.level.player.orientation == Orientations.RIGHT:
-                self.draw_cell(self.level.player.x, self.level.player.y, "player_right")
+                self.draw_cell(
+                    self.level.player.x,
+                    self.level.player.y,
+                    "player_right"
+                )
 
         for button in self.level_buttons:
             self.draw_button(button)
         
-        moves_text_surface = FONT.render(f"Moves: {self.level.moves_count}", True, Colors.BLACK)
+        moves_text_surface = FONT.render(
+            f"Moves: {self.level.moves_count}",
+            True,
+            Colors.BLACK
+        )
         moves_width = moves_text_surface.get_width()
         x_moves = moves_width
         y = Sizes.GRID_HEIGHT + Sizes.MENU_BUTTON_HEIGHT + moves_text_surface.get_height()
@@ -91,13 +183,21 @@ class GameScreen(BaseScreen):
 
         boxes_on_goal = counter.get("boxes_on_goal")
         boxes = counter.get("boxes")
-        boxes_text_surface = FONT.render(f"Boxes on goal: {boxes_on_goal} / {boxes}", True, Colors.BLACK)
+        boxes_text_surface = FONT.render(
+            f"Boxes on goal: {boxes_on_goal} / {boxes}",
+            True,
+            Colors.BLACK
+        )
         boxes_width = boxes_text_surface.get_width()
         x_boxes = x_moves + boxes_width
         boxes_text_rect = boxes_text_surface.get_rect(center=(x_boxes, y))
         self.screen.blit(boxes_text_surface, boxes_text_rect)
 
-        message_text_surface = FONT.render(self.level_message, True, self.level_message_color)
+        message_text_surface = FONT.render(
+            self.level_message,
+            True,
+            self.level_message_color
+        )
         message_width = message_text_surface.get_width()
         x_message = moves_width + boxes_width + message_width *2
         message_text_rect = message_text_surface.get_rect(center=(x_message, y))
@@ -106,7 +206,11 @@ class GameScreen(BaseScreen):
     def draw_victory(self):
         # TODO : ajouter le temps
         # TODO : ajouter des boutons pour recommencer et quitter et font  le score
-        self.draw_text(text=f"Good job! Moves : {self.level.moves_count}", color=Colors.BLACK, center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2))
+        self.draw_text(
+            text=f"Good job! Moves : {self.level.moves_count}",
+            color=Colors.BLACK,
+            center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2)
+        )
         
     def update(self):
         if self.current_screen == "main":
@@ -209,7 +313,13 @@ class GameScreen(BaseScreen):
         self.current_screen = "victory"
 
     def load_cell(self, filename):
-        return pygame.transform.scale(pygame.image.load(Paths.CELLS_IMAGES / filename), (self.cell_width, self.cell_height))
+        return pygame.transform.scale(
+            pygame.image.load(Paths.CELLS_IMAGES / filename),
+            (self.cell_width, self.cell_height)
+        )
     
     def draw_cell(self, x, y, img_name):
-        self.screen.blit(self.images[img_name], (x * self.cell_width, y * self.cell_height))
+        self.screen.blit(
+            self.images[img_name],
+            (x * self.cell_width, y * self.cell_height)
+        )

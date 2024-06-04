@@ -7,14 +7,54 @@ from constants import Sizes, Paths, MAIN_MENU_BUTTONS_X
 
 class MenuScreen(BaseScreen):
     def __init__(self, app, screen):
-        super().__init__(app=app, screen=screen, music="menu.mp3", background_image_file="menu.png")
+        super().__init__(
+            app=app,
+            screen=screen,
+            music="menu.mp3",
+            background_image_file="menu.png"
+        )
 
         self.main_buttons = [
-            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=100, width=Sizes.MAIN_MENU_BUTTONS_WIDTH, height=Sizes.MAIN_MENU_BUTTONS_HEIGHT, text="Play", background_image_file=Paths.MAIN_MENU_BUTTON, data="play"),
-            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=200, width=Sizes.MAIN_MENU_BUTTONS_WIDTH, height=Sizes.MAIN_MENU_BUTTONS_HEIGHT, text="Settings", background_image_file=Paths.MAIN_MENU_BUTTON, data="settings"),
-            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=300, width=Sizes.MAIN_MENU_BUTTONS_WIDTH, height=Sizes.MAIN_MENU_BUTTONS_HEIGHT, text="Create", background_image_file=Paths.MAIN_MENU_BUTTON, data="create"),
-            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=400, width=Sizes.MAIN_MENU_BUTTONS_WIDTH, height=Sizes.MAIN_MENU_BUTTONS_HEIGHT, text="Quit", background_image_file=Paths.MAIN_MENU_BUTTON, data="quit"),
-            
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=100,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text="Play",
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data="play"
+            ),
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=200,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text="Settings",
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data="settings"
+            ),
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=300,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text="Create",
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data="create"
+            ),
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=400,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text="Quit",
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data="quit"
+            )
         ]
         self.current_screen = "main"
     

@@ -73,4 +73,11 @@ class BaseGrid:
                     grid[y, x] = "P"
                 if self.is_box(x, y):
                     grid[y, x] = "B"
-        print(*[" ".join(str(cell.decode("utf-8")) for cell in row) for row in grid], sep="\n")
+        print(
+            *[
+                " ".join(
+                    str(cell.decode("utf-8")) for cell in row
+                ) for row in grid
+            ],
+            sep="\n"
+        )

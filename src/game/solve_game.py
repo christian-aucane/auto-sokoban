@@ -5,7 +5,6 @@ from constants import Orientations, Paths
 
 
 class LevelSolver:
-    # TODO : PUBLIC METHODS : solve, apply_next_move
     """
     Solve the game
     
@@ -107,8 +106,12 @@ class LevelSolver:
             list: list of possible moves
         """
         moves = []
-        directions = [(Orientations.UP, self.level.player.up), (Orientations.DOWN, self.level.player.down),
-                      (Orientations.LEFT, self.level.player.left), (Orientations.RIGHT, self.level.player.right)]
+        directions = [
+            (Orientations.UP, self.level.player.up),
+            (Orientations.DOWN, self.level.player.down),
+            (Orientations.LEFT, self.level.player.left),
+            (Orientations.RIGHT, self.level.player.right)
+        ]
         for direction, move in directions:
             if move() != Player.PLAYER_NOT_MOVED:
                 moves.append(direction)
