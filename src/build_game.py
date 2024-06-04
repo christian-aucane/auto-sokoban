@@ -1,6 +1,7 @@
 from game.base_grid import BaseGrid
 from game.entities import Box, Player
 from constants import BOX, LEVELS_DIR, PLAYER
+import time
 
 class Level(BaseGrid):
     # TODO : add docstrings
@@ -10,6 +11,8 @@ class Level(BaseGrid):
         self.reset_count = 0
         self.cancel_count = 0
         self.solve_used = False
+        self.start_time = None  
+        self.end_time = None
             
         self.boxes = []
         self.player = None
@@ -79,8 +82,23 @@ class Level(BaseGrid):
         return False
 
     def add_move(self):
+        if self._moves_count == 0:
+            self.start_time = time.time()  # Start the timer at the first move
         self._moves_count += 1
 
+    def stop_timer(self): 
+        if self.start_time is not None and self.end_time is None:
+            self.end_time = time.time()        
+
+    @property
+    def execution_time(self):
+        if self.start_time is None:
+            return 0
+        elif self.end_time is not None:  # Add this condition
+            return self.end_time - self.start_time
+        else:
+            return time.time() - self.start_time
+        
     def load_solve(self):
         self.solve_used = True
 

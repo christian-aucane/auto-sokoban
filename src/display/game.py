@@ -117,12 +117,21 @@ class GameScreen(BaseScreen):
         self.screen.blit(message_text_surface, message_text_rect)
 
     def draw_victory(self):
+        WHITE = (255, 255, 255)
         font = pygame.font.Font(FONT_PATH, 30)
-        text = f"Good job! Moves : {self.level.moves_count}"
-        message_text_surface = font.render(text, True, BLACK)
-        
-        message_text_rect = message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
-        self.screen.blit(message_text_surface, message_text_rect)
+
+        # Render "Good job!" text at the top of the screen
+        good_job_surface = font.render("Good job!", True, BLACK)
+        good_job_rect = good_job_surface.get_rect(center=(WIDTH // 2, 50))
+        self.screen.blit(good_job_surface, good_job_rect)
+
+        # Render "Moves : {self.level.moves_count}" text below "Good job!" aligned to the left
+        moves_surface = font.render(f"Moves : {self.level.moves_count}", True, BLACK)
+        self.screen.blit(moves_surface, (50, 100)) 
+
+        # Render "Time : {self.level.execution_time}" text below "Moves : ..." aligned to the left
+        time_surface = font.render(f"Time : {round(self.level.execution_time, 2)}", True, BLACK)  # Round the time to 2 decimal places
+        self.screen.blit(time_surface, (50, 150))
 
         # Draw input box for player name
         pygame.draw.rect(self.screen, self.color, self.input_box, 2)
@@ -130,6 +139,24 @@ class GameScreen(BaseScreen):
         # Render player name
         txt_surface = font.render(self.player_name, True, self.color)
         self.screen.blit(txt_surface, (self.input_box.x+5, self.input_box.y+5))
+        
+        # Render "Add player name" text above the input box
+        add_player_name_surface = font.render("Add player name", True, BLACK)
+        add_player_name_rect = add_player_name_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 70))
+        self.screen.blit(add_player_name_surface, add_player_name_rect)
+        
+        # Add "Main Menu" button
+        main_menu_button = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + 100, 200, 50)
+        pygame.draw.rect(self.screen, BLACK, main_menu_button)
+        main_menu_text = font.render("Main Menu", True, WHITE)
+        self.screen.blit(main_menu_text, (WIDTH // 2, HEIGHT // 2 + 100))
+
+        # Add "Restart" button
+        restart_button = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + 200, 200, 50)
+        pygame.draw.rect(self.screen, BLACK, restart_button)
+        restart_text = font.render("Restart", True, WHITE)
+        self.screen.blit(restart_text, (WIDTH // 2, HEIGHT // 2 + 200))
+
         pygame.display.flip()
 
     def update(self):
@@ -137,6 +164,7 @@ class GameScreen(BaseScreen):
             self.draw_main()
         elif self.current_screen == "level":
             if self.level.is_solved:
+                self.level.stop_timer()
                 self.load_victory()
             if self.solve_running:
                 self.solver.apply_next_move()
@@ -206,6 +234,7 @@ class GameScreen(BaseScreen):
             "reset_count": self.level.reset_count,
             "cancel_count": self.level.cancel_count,
             "solve_used": self.level.solve_used,
+            "execution_time": self.level.execution_time 
         }
 
         filename = 'scores.json'
@@ -236,7 +265,7 @@ class GameScreen(BaseScreen):
 
         # Write back to file
         with open(filename, 'w') as f:
-            json.dump(scores, f)
+            json.dump(scores, f, indent=4)
 
     def play_movement_sound_effect(self, movement):
         if movement == Player.PLAYER_MOVED:
