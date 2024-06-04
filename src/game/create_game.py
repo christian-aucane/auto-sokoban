@@ -1,5 +1,5 @@
 from build_game import Level
-from game.solve_game import Solver
+from game.solve_game import LevelSolver
 from .base_grid import BaseGrid
 from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER
 
@@ -91,7 +91,7 @@ class LevelCreator(BaseGrid):
         print(content)
         level = Level(content)
         print(level)
-        solver = Solver(level)
+        solver = LevelSolver(level)
         print(solver)
         if counter["box"] != counter["goal"]\
                 or not counter["player"]\
