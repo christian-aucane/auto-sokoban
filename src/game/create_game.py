@@ -16,6 +16,14 @@ class LevelCreator(BaseGrid):
             grid[i][width-1] = WALL
         super().__init__(grid)
         self._current_tool = EMPTY_CELL
+
+    @classmethod
+    def from_file(cls, txt_path):
+        with open(txt_path, "r") as f:
+            content = f.readlines()
+            obj = cls(len(content[0].strip()), len(content))
+        obj.grid = [[int(cell) for cell in row.strip()] for row in content]
+        return obj
         
     @property
     def current_tool(self):
@@ -94,8 +102,9 @@ class LevelCreator(BaseGrid):
         solver = LevelSolver(level)
         print(solver)
         if counter["box"] != counter["goal"]\
-                or not counter["player"]\
-                    or not counter["box"]:
+            or not counter["player"]\
+                or not counter["box"]:
+            print(counter)
             return False
         if not solver.solve():
             return False
