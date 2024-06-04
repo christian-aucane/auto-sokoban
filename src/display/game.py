@@ -4,7 +4,7 @@ import pygame
 from .base import BaseScreen
 from .widgets import ImageButton
 from build_game import Level, Player
-from game.solve_game import Solver
+from game.solve_game import LevelSolver
 from constants import CELLS_IMAGES_DIR, CUSTOM_LEVELS_DIR, DOWN, FONT_PATH, GRID_HEIGHT, GRID_WIDTH, HEIGHT, LEFT, MAIN_MENU_BUTTON_PATH, MAIN_MENU_BUTTONS_HEIGHT, MAIN_MENU_BUTTONS_WIDTH, MAIN_MENU_BUTTONS_X, MENU_BUTTON_HEIGHT, LEVELS_DIR, MENU_BUTTON_PATH, RIGHT, UP, WIDTH, GREEN, RED, BLACK
 
 
@@ -184,27 +184,27 @@ class GameScreen(BaseScreen):
 
     def load_level(self, level_path):
         self.current_screen = "level"
-        self.level = Level(level_path)
+        self.level = Level.from_file(level_path)
         self.cell_width = GRID_WIDTH // self.level.width
         self.cell_height = GRID_HEIGHT // self.level.height
 
         self.images = {
-            "wall": self.load_img("wall.png"),
-            "empty_cell": self.load_img("empty_cell.png"),
-            "box": self.load_img("box.png"),
-            "goal": self.load_img("goal.png"),
-            "box_on_goal": self.load_img("box_on_goal.png"),
-            "player_up": self.load_img("player_up.png"),
-            "player_down": self.load_img("player_down.png"),
-            "player_left": self.load_img("player_left.png"),
-            "player_right": self.load_img("player_right.png"),
+            "wall": self.load_cell("wall.png"),
+            "empty_cell": self.load_cell("empty_cell.png"),
+            "box": self.load_cell("box.png"),
+            "goal": self.load_cell("goal.png"),
+            "box_on_goal": self.load_cell("box_on_goal.png"),
+            "player_up": self.load_cell("player_up.png"),
+            "player_down": self.load_cell("player_down.png"),
+            "player_left": self.load_cell("player_left.png"),
+            "player_right": self.load_cell("player_right.png"),
         }
 
     def load_solve(self):
         self.level_message = "Solving ..."
         self.update()
         pygame.display.flip()
-        self.solver = Solver(self.level)
+        self.solver = LevelSolver(self.level)
         self.solve_running = self.solver.solve()
         if self.solve_running:
             self.level_message = "Solved !"
@@ -216,7 +216,7 @@ class GameScreen(BaseScreen):
     def load_victory(self):
         self.current_screen = "victory"
 
-    def load_img(self, filename):
+    def load_cell(self, filename):
         return pygame.transform.scale(pygame.image.load(CELLS_IMAGES_DIR / filename), (self.cell_width, self.cell_height))
     
     def draw_cell(self, x, y, img_name):

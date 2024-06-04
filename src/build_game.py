@@ -4,27 +4,29 @@ from constants import BOX, LEVELS_DIR, PLAYER
 
 class Level(BaseGrid):
     # TODO : add docstrings
-    def __init__(self, txt_path):
-        with open(txt_path, "r") as f:
-            self.content = f.readlines()
+    def __init__(self, grid_content):
+        self.content = grid_content
             
         self.boxes = []
         self.player = None
-        grid = self.load(self.content)
-        
+        grid = self.load()
         super().__init__(grid)
 
         self.backup = {"boxes": self.boxes, "player": self.player}
         self.backup_saved = False
         self._moves_count = 0
 
+    @classmethod
+    def from_file(cls, txt_path):
+        with open(txt_path, "r") as f:
+            content = f.readlines()
+        return cls(content)
+
     def is_player(self, x, y):
         return self.player.x == x and self.player.y == y
     
     def is_box( self, x, y):
-        if self.get_box(x, y) is None:
-            return False
-        return True
+        return self.get_box(x, y) is not None
 
     def save_backup(self):
         # TODO : Ajouter des methodes copy aux objets
@@ -33,7 +35,6 @@ class Level(BaseGrid):
         self.backup_saved = True
 
     def load(self, content=None):
-        # TODO : ajouter vérifiction sur la forme de la matrice
         if content is None:
             content = self.content
         grid = []
@@ -59,7 +60,7 @@ class Level(BaseGrid):
     def reset(self):
         self.boxes = []
         self.player = None
-        self.grid = self.load(self.content)
+        self.grid = self.load()
 
     def cancel(self):
         if self.backup_saved:
@@ -105,5 +106,5 @@ class Level(BaseGrid):
     
 
 if __name__ == "__main__":
-    grid = Level(LEVELS_DIR / "grid.txt")
+    grid = Level.from_file(LEVELS_DIR / "grid.txt")
     grid.print()

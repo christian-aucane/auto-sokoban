@@ -4,7 +4,7 @@ from build_game import Level, Player
 from constants import LEVELS_DIR, UP, DOWN, LEFT, RIGHT
 
 
-class Solver:
+class LevelSolver:
     # TODO : PUBLIC METHODS : solve, apply_next_move
     """
     Solve the game
@@ -153,8 +153,8 @@ class Solver:
     
 
 if __name__ == "__main__":
-    level = Level(LEVELS_DIR / "grid.txt")
-    solver = Solver(level)
+    level = Level.from_file(LEVELS_DIR / "grid.txt")
+    solver = LevelSolver(level)
     is_solved = solver.solve()
     print("IS SOLVED", is_solved)
     if not is_solved:
