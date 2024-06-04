@@ -4,7 +4,7 @@ import pygame
 from .base import BaseScreen
 from .widgets import ImageButton
 from build_game import Level, Player
-from game.solve_game import Solver
+from game.solve_game import LevelSolver
 from constants import CELLS_IMAGES_DIR, CUSTOM_LEVELS_DIR, DOWN, FONT_PATH, GRID_HEIGHT, GRID_WIDTH, HEIGHT, LEFT, MAIN_MENU_BUTTON_PATH, MAIN_MENU_BUTTONS_HEIGHT, MAIN_MENU_BUTTONS_WIDTH, MAIN_MENU_BUTTONS_X, MENU_BUTTON_HEIGHT, LEVELS_DIR, MENU_BUTTON_PATH, RIGHT, UP, WIDTH, GREEN, RED, BLACK
 
 
@@ -184,7 +184,7 @@ class GameScreen(BaseScreen):
 
     def load_level(self, level_path):
         self.current_screen = "level"
-        self.level = Level(level_path)
+        self.level = Level.from_file(level_path)
         self.cell_width = GRID_WIDTH // self.level.width
         self.cell_height = GRID_HEIGHT // self.level.height
 
@@ -204,7 +204,7 @@ class GameScreen(BaseScreen):
         self.level_message = "Solving ..."
         self.update()
         pygame.display.flip()
-        self.solver = Solver(self.level)
+        self.solver = LevelSolver(self.level)
         self.solve_running = self.solver.solve()
         if self.solve_running:
             self.level_message = "Solved !"
