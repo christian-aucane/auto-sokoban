@@ -329,7 +329,6 @@ class GameScreen(BaseScreen):
     
     def save_score(self):
         data = {
-            "grid_name": self.level.name,
             "moves_count": self.level.moves_count,
             "reset_count": self.level.reset_count,
             "cancel_count": self.level.cancel_count,
@@ -348,24 +347,23 @@ class GameScreen(BaseScreen):
         # Check if player exists
         if self.player_name in scores:
             # Check if grid exists for player
-            if self.level.name in scores[self.player_name]:
-                # Grid exists, append a number to it
-                i = 1
+            grid_names = [grid["grid_name"] for grid in scores[self.player_name]]
+            i = 1
+            new_grid_name = f"{self.level.name}{i}"
+            while new_grid_name in grid_names:
+                i += 1
                 new_grid_name = f"{self.level.name}{i}"
-                while new_grid_name in scores[self.player_name]:
-                    i += 1
-                    new_grid_name = f"{self.level.name}{i}"
-                scores[self.player_name][new_grid_name] = data
-            else:
-                # Grid does not exist, add it
-                scores[self.player_name][self.level.name] = data
+            data["grid_name"] = new_grid_name
+            scores[self.player_name].append(data)
         else:
             # Player does not exist, add player and grid
-            scores[self.player_name] = {self.level.name: data}
+            data["grid_name"] = f"{self.level.name}1"
+            scores[self.player_name] = [data]
 
         # Write back to file
         with open(filename, 'w') as f:
             json.dump(scores, f, indent=4)
+
 
     def play_movement_sound_effect(self, movement):
         if movement == Player.PLAYER_MOVED:
