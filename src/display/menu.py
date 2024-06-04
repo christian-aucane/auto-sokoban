@@ -9,13 +9,12 @@ class MenuScreen(BaseScreen):
     def __init__(self, app, screen):
         super().__init__(app=app, screen=screen, music="menu.mp3", background_image_file="menu.png")
 
-        # TODO : Centrer les boutons
         self.main_buttons = [
             ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=100, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Play", background_image_file=MAIN_MENU_BUTTON_PATH, data="play"),
             ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=200, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Settings", background_image_file=MAIN_MENU_BUTTON_PATH, data="settings"),
             ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=300, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Create", background_image_file=MAIN_MENU_BUTTON_PATH, data="create"),
-            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=400, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Quit", background_image_file=MAIN_MENU_BUTTON_PATH, data="quit"),
-            
+            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=400, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Player", background_image_file=MAIN_MENU_BUTTON_PATH, data="player"),  # Nouveau bouton
+            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=500, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Quit", background_image_file=MAIN_MENU_BUTTON_PATH, data="quit"),
         ]
         self.current_screen = "main"
     
@@ -35,5 +34,7 @@ class MenuScreen(BaseScreen):
                             print("SETTINGS")
                         elif button.data == "create":
                             self.app.switch_screen("create")
+                        elif button.data == "player":  # Gérer le clic sur le nouveau bouton
+                            self.app.switch_screen("player")
                         elif button.data == "quit":
                             self.app.quit()

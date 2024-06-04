@@ -9,12 +9,16 @@ from constants import WHITE, WIDTH, HEIGHT
 from display.game import GameScreen
 from display.menu import MenuScreen
 from display.create import CreateScreen
+from display.player_screen import PlayerScreen
+from game.player import PlayerManager
 
 
 class SokobanApp:
     def __init__(self):
         pygame.init()
         mixer.init()
+
+        self.player_manager = PlayerManager("players.json")
 
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
@@ -46,7 +50,10 @@ class SokobanApp:
             self.current_screen = GameScreen(self, self.screen)
         elif screen_name == "create":
             self.current_screen = CreateScreen(self, self.screen)
+        elif screen_name == "player":
+            self.current_screen = PlayerScreen(self, self.screen)
         self.current_screen.load()
+
 
     def quit(self):
         self.running = False
