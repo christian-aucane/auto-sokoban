@@ -5,7 +5,6 @@ from constants import BOX, EMPTY_CELL, GOAL, PLAYER, WALL
 
 
 class BaseGrid:
-
     def __init__(self, grid):
         self._grid = np.array(grid)
     
@@ -51,15 +50,13 @@ class BaseGrid:
     
     @property
     def counter(self):
-        # Utiliser des masques booléens et np.sum pour compter les entités
-        counter = {
+        return {
             "empty": np.sum(self._grid == EMPTY_CELL),
             "wall": np.sum(self._grid == WALL),
             "goal": np.sum(self._grid == GOAL),
             "box": np.sum(self._grid == BOX),
             "player": np.sum(self._grid == PLAYER),
         }
-        return counter
 
     def print(self):
         grid = np.chararray((self.height, self.width))
