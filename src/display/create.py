@@ -11,7 +11,6 @@ class CreateScreen(BaseScreen):
     def __init__(self, app, screen):
         super().__init__(app=app, screen=screen, music="create.mp3", background_image_file="create.png")
         CUSTOM_LEVELS_DIR.mkdir(exist_ok=True, parents=True)
-        # TODO : Centrer les boutons
         self.main_buttons = []
         for i, path in enumerate(CUSTOM_LEVELS_DIR.iterdir()):
             x = (WIDTH - 2*MAIN_MENU_BUTTONS_WIDTH) // 2
@@ -109,7 +108,6 @@ class CreateScreen(BaseScreen):
             self.draw_button(button, is_active=is_active)
             counter = self.creator.counter
             if self.is_tool_button(button):
-                # TODO afficher une image et le compte en dessous
                 x = button.x
                 y = button.y + button.height
                 

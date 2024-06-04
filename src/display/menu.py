@@ -9,7 +9,6 @@ class MenuScreen(BaseScreen):
     def __init__(self, app, screen):
         super().__init__(app=app, screen=screen, music="menu.mp3", background_image_file="menu.png")
 
-        # TODO : Centrer les boutons
         self.main_buttons = [
             ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=100, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Play", background_image_file=MAIN_MENU_BUTTON_PATH, data="play"),
             ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=200, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Settings", background_image_file=MAIN_MENU_BUTTON_PATH, data="settings"),
