@@ -128,7 +128,7 @@ class GameScreen(BaseScreen):
         self.color_inactive = pygame.Color('lightskyblue3')
         self.color_active = pygame.Color('dodgerblue2')
         self.color = self.color_inactive
-        self.input_box = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2, 200, 50)
+        self.input_box = pygame.Rect(Sizes.WIDTH // 2 - 100, Sizes.HEIGHT // 2, 200, 50)
         self.player_name = ''
         self.active = False
 
@@ -225,36 +225,36 @@ class GameScreen(BaseScreen):
         
 
         # Render "Moves : {self.level.moves_count}" text below "Good job!" aligned to the left
-        moves_surface = font.render(f"Moves : {self.level.moves_count}", True, BLACK)
+        moves_surface = FONT.render(f"Moves : {self.level.moves_count}", True, Colors.BLACK)
         self.screen.blit(moves_surface, (50, 100)) 
 
         # Render "Time : {self.level.execution_time}" text below "Moves : ..." aligned to the left
-        time_surface = font.render(f"Time : {round(self.level.execution_time, 2)}", True, BLACK)  # Round the time to 2 decimal places
+        time_surface = FONT.render(f"Time : {round(self.level.execution_time, 2)}", True, Colors.BLACK)  # Round the time to 2 decimal places
         self.screen.blit(time_surface, (50, 150))
 
         # Draw input box for player name
         pygame.draw.rect(self.screen, self.color, self.input_box, 2)
 
         # Render player name
-        txt_surface = font.render(self.player_name, True, self.color)
+        txt_surface = FONT.render(self.player_name, True, self.color)
         self.screen.blit(txt_surface, (self.input_box.x+5, self.input_box.y+5))
         
         # Render "Add player name" text above the input box
-        add_player_name_surface = font.render("Add player name", True, BLACK)
-        add_player_name_rect = add_player_name_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 70))
+        add_player_name_surface = FONT.render("Add player name", True, Colors.BLACK)
+        add_player_name_rect = add_player_name_surface.get_rect(center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2 - 70))
         self.screen.blit(add_player_name_surface, add_player_name_rect)
         
         # Add "Main Menu" button
-        main_menu_button = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + 100, 200, 50)
-        pygame.draw.rect(self.screen, BLACK, main_menu_button)
-        main_menu_text = font.render("Main Menu", True, WHITE)
-        self.screen.blit(main_menu_text, (WIDTH // 2, HEIGHT // 2 + 100))
+        main_menu_button = pygame.Rect(Sizes.WIDTH // 2 - 100, Sizes.HEIGHT // 2 + 100, 200, 50)
+        pygame.draw.rect(self.screen, Colors.BLACK, main_menu_button)
+        main_menu_text = FONT.render("Main Menu", True, Colors.WHITE)
+        self.screen.blit(main_menu_text, (Sizes.WIDTH // 2, Sizes.HEIGHT // 2 + 100))
 
         # Add "Restart" button
-        restart_button = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + 200, 200, 50)
-        pygame.draw.rect(self.screen, BLACK, restart_button)
-        restart_text = font.render("Restart", True, WHITE)
-        self.screen.blit(restart_text, (WIDTH // 2, HEIGHT // 2 + 200))
+        restart_button = pygame.Rect(Sizes.WIDTH // 2 - 100, Sizes.HEIGHT // 2 + 200, 200, 50)
+        pygame.draw.rect(self.screen, Colors.BLACK, restart_button)
+        restart_text = FONT.render("Restart", True, Colors.WHITE)
+        self.screen.blit(restart_text, (Sizes.WIDTH // 2, Sizes.HEIGHT // 2 + 200))
 
         pygame.display.flip()
 
