@@ -1,6 +1,6 @@
 import pygame
 
-from constants import BACKGROUND_IMAGES_DIR, BUTTON_HOVER_TEXT_COLOR, BUTTON_TEXT_COLOR, HEIGHT, MUSIC_DIR, SOUND_EFFECTS_DIR, WIDTH
+from constants import BACKGROUND_IMAGES_DIR, BUTTON_ACTIVE_TEXT_COLOR, BUTTON_HOVER_TEXT_COLOR, BUTTON_TEXT_COLOR, HEIGHT, MUSIC_DIR, SOUND_EFFECTS_DIR, WIDTH
 
 
 class BaseScreen:
@@ -28,8 +28,10 @@ class BaseScreen:
         for button in self.main_buttons:
             self.draw_button(button)
 
-    def draw_button(self, button):
-        if button.is_clicked(pygame.mouse.get_pos()):
+    def draw_button(self, button, is_active=False):
+        if is_active:
+            button.set_text_color(BUTTON_ACTIVE_TEXT_COLOR)
+        elif button.is_clicked(pygame.mouse.get_pos()):
             button.set_text_color(BUTTON_HOVER_TEXT_COLOR)
         else:
             button.set_text_color(BUTTON_TEXT_COLOR)

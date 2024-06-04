@@ -88,12 +88,6 @@ class CreateScreen(BaseScreen):
 
     def change_tool(self, tool):
         self.creator.current_tool = tool
-        for button in self.create_buttons:
-            if self.is_tool_button(button):
-                if button.data == tool:
-                    button.set_text_color(BLUE)
-                else:
-                    button.set_text_color(BLACK)
 
     def draw_create(self):
         for y in range(self.creator.height):
@@ -111,7 +105,8 @@ class CreateScreen(BaseScreen):
 
         font = pygame.font.Font(FONT_PATH, 30)
         for button in self.create_buttons:
-            self.draw_button(button)
+            is_active = self.is_tool_button(button) and self.creator.current_tool == button.data
+            self.draw_button(button, is_active=is_active)
             counter = self.creator.counter
             if self.is_tool_button(button):
                 # TODO afficher une image et le compte en dessous
@@ -238,7 +233,6 @@ class CreateScreen(BaseScreen):
                             self.current_screen = "create"
 
     def save_level(self):
-        # TODO : vérifier si il n'existe pas déja
         CUSTOM_LEVELS_DIR.mkdir(exist_ok=True, parents=True)
         path = CUSTOM_LEVELS_DIR / f"{self.level_name}.txt"
         if path.exists() and self.is_new_level:
