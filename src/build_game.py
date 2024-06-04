@@ -4,9 +4,8 @@ from constants import BOX, LEVELS_DIR, PLAYER
 
 class Level(BaseGrid):
     # TODO : add docstrings
-    def __init__(self, txt_path):
-        with open(txt_path, "r") as f:
-            self.content = f.readlines()
+    def __init__(self, grid_content):
+        self.content = grid_content
             
         self.boxes = []
         self.player = None
@@ -17,6 +16,14 @@ class Level(BaseGrid):
         self.backup = {"boxes": self.boxes, "player": self.player}
         self.backup_saved = False
         self._moves_count = 0
+
+    @classmethod
+    def from_file(cls, txt_path):
+        with open(txt_path, "r") as f:
+            content = f.readline()
+        return cls(content)
+
+        # TODO : faire une methode pour initialiser a partir d'un fichier et dans __init__ mettre seulement la grille
 
     def is_player(self, x, y):
         return self.player.x == x and self.player.y == y
@@ -105,5 +112,5 @@ class Level(BaseGrid):
     
 
 if __name__ == "__main__":
-    grid = Level(LEVELS_DIR / "grid.txt")
+    grid = Level.from_file(LEVELS_DIR / "grid.txt")
     grid.print()
