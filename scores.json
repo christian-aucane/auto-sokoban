@@ -1,20 +1,30 @@
 {
-    "Alex": {
-        "grid": {
-            "grid_name": "grid",
-            "moves_count": 30,
+    "Alex": [
+        {
+            "moves_count": 24,
             "reset_count": 0,
             "cancel_count": 0,
             "solve_used": false,
-            "execution_time": 7.649134874343872
+            "execution_time": 4.839159727096558,
+            "grid_name": "grid1"
         },
-        "grid1": {
-            "grid_name": "grid",
-            "moves_count": 34,
+        {
+            "moves_count": 24,
+            "reset_count": 1,
+            "cancel_count": 1,
+            "solve_used": true,
+            "execution_time": 13.3027184009552,
+            "grid_name": "grid2"
+        }
+    ],
+    "Julie": [
+        {
+            "moves_count": 36,
             "reset_count": 0,
             "cancel_count": 0,
-            "solve_used": false,
-            "execution_time": 9.87406063079834
+            "solve_used": true,
+            "execution_time": 16.684484481811523,
+            "grid_name": "grid1"
         }
-    }
+    ]
 }
