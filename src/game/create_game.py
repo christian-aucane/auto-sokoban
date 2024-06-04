@@ -1,3 +1,5 @@
+from build_game import Level
+from game.solve_game import Solver
 from .base_grid import BaseGrid
 from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER
 
@@ -82,3 +84,20 @@ class LevelCreator(BaseGrid):
         with open(filename, 'w') as f:
             for row in self.grid:
                 f.write(''.join(str(cell) for cell in row) + '\n')
+                
+    def is_complete(self):
+        counter = self.counter
+        content = ["".join(map(str, row)) for row in self.grid]
+        print(content)
+        level = Level(content)
+        print(level)
+        solver = Solver(level)
+        print(solver)
+        if counter["box"] != counter["goal"]\
+                or not counter["player"]\
+                    or not counter["box"]:
+            return False
+        if not solver.solve():
+            return False
+        return True
+
