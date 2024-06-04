@@ -1,21 +1,21 @@
 from build_game import Level
-from game.solve_game import LevelSolver
+from .solve_game import LevelSolver
 from .base_grid import BaseGrid
-from constants import EMPTY_CELL, WALL, GOAL, BOX, PLAYER
+from constants import CellsValues
 
 
 class LevelCreator(BaseGrid):
     def __init__(self, width, height):
-        grid = [[EMPTY_CELL for _ in range(
+        grid = [[CellsValues.EMPTY_CELL for _ in range(
             width)] for _ in range(height)]
         for i in range(width):
-            grid[0][i] = WALL
-            grid[height-1][i] = WALL
+            grid[0][i] = CellsValues.WALL
+            grid[height-1][i] = CellsValues.WALL
         for i in range(height):
-            grid[i][0] = WALL
-            grid[i][width-1] = WALL
+            grid[i][0] = CellsValues.WALL
+            grid[i][width-1] = CellsValues.WALL
         super().__init__(grid)
-        self._current_tool = EMPTY_CELL
+        self._current_tool = CellsValues.EMPTY_CELL
 
     @classmethod
     def from_file(cls, txt_path):
@@ -27,24 +27,36 @@ class LevelCreator(BaseGrid):
         
     @property
     def current_tool(self):
-        mapping = {EMPTY_CELL: "empty", WALL: "wall", GOAL: "goal", BOX: "box", PLAYER: "player"}
+        mapping = {
+            CellsValues.EMPTY_CELL: "empty",
+            CellsValues.WALL: "wall",
+            CellsValues.GOAL: "goal",
+            CellsValues.BOX: "box",
+            CellsValues.PLAYER: "player"
+        }
         return mapping[self._current_tool]
     
     @current_tool.setter
     def current_tool(self, value):
-        mapping = {"empty": EMPTY_CELL, "wall": WALL, "goal": GOAL, "box": BOX, "player": PLAYER}
+        mapping = {
+            "empty": CellsValues.EMPTY_CELL,
+            "wall": CellsValues.WALL,
+            "goal": CellsValues.GOAL,
+            "box": CellsValues.BOX,
+            "player": CellsValues.PLAYER
+        }
         self._current_tool = mapping[value]
 
     def put(self, x, y):
-        if self._current_tool == EMPTY_CELL:
+        if self._current_tool == CellsValues.EMPTY_CELL:
             return self.put_empty_cell(x, y)
-        if self._current_tool == WALL:
+        if self._current_tool == CellsValues.WALL:
             return self.put_wall(x, y)
-        if self._current_tool == GOAL:
+        if self._current_tool == CellsValues.GOAL:
             return self.put_goal(x, y)
-        if self._current_tool == BOX:
+        if self._current_tool == CellsValues.BOX:
             return self.put_box(x, y)
-        if self._current_tool == PLAYER:
+        if self._current_tool == CellsValues.PLAYER:
             return self.put_player(x, y)
         return False
 
@@ -54,37 +66,37 @@ class LevelCreator(BaseGrid):
     def put_empty_cell(self, x, y):
         if self.get_cell(x, y) == WALL and self.is_border(x, y):
             return False
-        self.set_cell(x, y, EMPTY_CELL)
+        self.set_cell(x, y, CellsValues.EMPTY_CELL)
         return True
 
     def put_wall(self, x, y):
-        self.set_cell(x, y, WALL)
+        self.set_cell(x, y, CellsValues.WALL)
         return True
 
     def put_goal(self, x, y):
         if self.is_border(x, y):
             return False
-        self.set_cell(x, y, GOAL)
+        self.set_cell(x, y, CellsValues.GOAL)
         return True
 
     def put_box(self, x, y):
         if self.is_border(x, y):
             return False
-        self.set_cell(x, y, BOX)
+        self.set_cell(x, y, CellsValues.BOX)
         return True
     
     def put_player(self, x, y):
         if self.is_border(x, y):
             return False
         self.remove_player()
-        self.set_cell(x, y, PLAYER)
+        self.set_cell(x, y, CellsValues.PLAYER)
         return True
     
     def remove_player(self):
         for y in range(self.height):
             for x in range(self.width):
                 if self.is_player(x, y):
-                    self.set_cell(x, y, EMPTY_CELL)
+                    self.set_cell(x, y, CellsValues.EMPTY_CELL)
                     return True
         return False
     
@@ -96,17 +108,12 @@ class LevelCreator(BaseGrid):
     def is_complete(self):
         counter = self.counter
         content = ["".join(map(str, row)) for row in self.grid]
-        print(content)
         level = Level(content)
-        print(level)
         solver = LevelSolver(level)
-        print(solver)
         if counter["box"] != counter["goal"]\
             or not counter["player"]\
                 or not counter["box"]:
-            print(counter)
             return False
         if not solver.solve():
             return False
         return True
-

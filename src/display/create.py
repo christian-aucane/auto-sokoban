@@ -4,52 +4,145 @@ import pygame
 from .base import BaseScreen
 from .widgets import ImageButton
 from game.create_game import LevelCreator
-from constants import BLUE, CELLS_IMAGES_DIR, FONT_PATH, HEIGHT, MAIN_MENU_BUTTON_PATH, MAIN_MENU_BUTTONS_HEIGHT, MAIN_MENU_BUTTONS_WIDTH, MAIN_MENU_BUTTONS_X, MAX_CUSTOM_LEVELS, MENU_BUTTON_HEIGHT, MENU_BUTTON_PATH, RED, WIDTH, BLACK, GRID_WIDTH, GRID_HEIGHT,  CUSTOM_LEVELS_DIR
+from constants import FONT, Sizes, Colors, Paths, MAIN_MENU_BUTTONS_X, MAX_CUSTOM_LEVELS
 
 
 class CreateScreen(BaseScreen):
     def __init__(self, app, screen):
         super().__init__(app=app, screen=screen, music="create.mp3", background_image_file="create.png")
-        CUSTOM_LEVELS_DIR.mkdir(exist_ok=True, parents=True)
-        # TODO : Centrer les boutons
+        Paths.CUSTOM_LEVELS.mkdir(exist_ok=True, parents=True)
         self.main_buttons = []
-        for i, path in enumerate(CUSTOM_LEVELS_DIR.iterdir()):
-            x = (WIDTH - 2*MAIN_MENU_BUTTONS_WIDTH) // 2
+        for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir()):
+            x = (Sizes.WIDTH - Sizes.MAIN_MENU_BUTTONS_WIDTH - Sizes.MAIN_MENU_BUTTONS_HEIGHT) // 2
+            y = i*2*Sizes.MAIN_MENU_BUTTONS_HEIGHT + Sizes.MAIN_MENU_BUTTONS_HEIGHT
             level_button = ImageButton(screen=screen,
                                        x=x,
-                                       y=i*2*MAIN_MENU_BUTTONS_HEIGHT + MAIN_MENU_BUTTONS_HEIGHT,
-                                       width=MAIN_MENU_BUTTONS_WIDTH,
-                                       height=MAIN_MENU_BUTTONS_HEIGHT,
+                                       y=y,
+                                       width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                                       height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
                                        text=path.stem.title(),
-                                       background_image_file=MAIN_MENU_BUTTON_PATH,
+                                       background_image_file=Paths.MAIN_MENU_BUTTON,
                                        data=path)
             delete_button = ImageButton(screen=screen,
-                                        x=x + MAIN_MENU_BUTTONS_WIDTH,
-                                        y=i*2*MAIN_MENU_BUTTONS_HEIGHT + MAIN_MENU_BUTTONS_HEIGHT,
-                                        width=MAIN_MENU_BUTTONS_WIDTH,
-                                        height=MAIN_MENU_BUTTONS_HEIGHT,
-                                        text="Delete",
-                                        background_image_file=MAIN_MENU_BUTTON_PATH,
+                                        x=x + Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                                        y=y,
+                                        width=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                                        height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                                        text="",
+                                        background_image_file=Paths.DELETE_BUTTON,
                                         data="delete_" + str(path))
             self.main_buttons += [level_button, delete_button]
-        if len(self.main_buttons) < MAX_CUSTOM_LEVELS:
-            y_create_levels_start = self.main_buttons[-1].y + MAIN_MENU_BUTTONS_HEIGHT*2 if self.main_buttons else 2*MAIN_MENU_BUTTONS_HEIGHT
+        if len(self.main_buttons) < 2*MAX_CUSTOM_LEVELS:
+            if self.main_buttons:
+                y_create_levels_start = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTONS_HEIGHT*2
+            else:
+                y_create_levels_start = 2*Sizes.MAIN_MENU_BUTTONS_HEIGHT
             self.main_buttons += [
-                ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_create_levels_start, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="New 10 X 10", background_image_file=MAIN_MENU_BUTTON_PATH, data=(10, 10)),
-                ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_create_levels_start + MAIN_MENU_BUTTONS_HEIGHT*2, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="New 15 X 15", background_image_file=MAIN_MENU_BUTTON_PATH, data=(15, 15)),
-                ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_create_levels_start + MAIN_MENU_BUTTONS_HEIGHT*4, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="New 20 X 20", background_image_file=MAIN_MENU_BUTTON_PATH, data=(20, 20)),
-                ]
-        y_quit_button = self.main_buttons[-1].y + MAIN_MENU_BUTTONS_HEIGHT*2
-        self.main_buttons.append(ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_quit_button, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Main Menu", background_image_file=MAIN_MENU_BUTTON_PATH, data="quit"))
-        self.create_button_width = WIDTH // 7
+                ImageButton(
+                    screen=screen,
+                    x=MAIN_MENU_BUTTONS_X,
+                    y=y_create_levels_start,
+                    width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                    height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                    text="New 10 X 10",
+                    background_image_file=Paths.MAIN_MENU_BUTTON,
+                    data=(10, 10)
+                ),
+                ImageButton(
+                    screen=screen,
+                    x=MAIN_MENU_BUTTONS_X,
+                    y=y_create_levels_start + Sizes.MAIN_MENU_BUTTONS_HEIGHT*2,
+                    width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                    height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                    text="New 15 X 15",
+                    background_image_file=Paths.MAIN_MENU_BUTTON,
+                    data=(15, 15)
+                ),
+                ImageButton(
+                    screen=screen,
+                    x=MAIN_MENU_BUTTONS_X,
+                    y=y_create_levels_start + Sizes.MAIN_MENU_BUTTONS_HEIGHT*4,
+                    width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                    height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                    text="New 20 X 20",
+                    background_image_file=Paths.MAIN_MENU_BUTTON,
+                    data=(20, 20)
+                ),
+            ]
+        y_quit_button = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTONS_HEIGHT*2
+        self.main_buttons.append(ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_quit_button, width=Sizes.MAIN_MENU_BUTTONS_WIDTH, height=Sizes.MAIN_MENU_BUTTONS_HEIGHT, text="Main Menu", background_image_file=Paths.MAIN_MENU_BUTTON, data="quit"))
+        self.create_button_width = Sizes.WIDTH // 7
         self.create_buttons = [
-            ImageButton(screen=screen, x=0, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Empty", background_image_file=MENU_BUTTON_PATH, data="empty"),
-            ImageButton(screen=screen, x=self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Wall", background_image_file=MENU_BUTTON_PATH, data="wall"),
-            ImageButton(screen=screen, x=2 * self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Box", background_image_file=MENU_BUTTON_PATH, data="box"),
-            ImageButton(screen=screen, x=3 * self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Goal", background_image_file=MENU_BUTTON_PATH, data="goal"),
-            ImageButton(screen=screen, x=4 * self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Player", background_image_file=MENU_BUTTON_PATH, data="player"),
-            ImageButton(screen=screen, x=5 * self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Save", background_image_file=MENU_BUTTON_PATH, data="save"),
-            ImageButton(screen=screen, x=6 * self.create_button_width, y=GRID_HEIGHT, width=self.create_button_width, height=MENU_BUTTON_HEIGHT, text="Menu", background_image_file=MENU_BUTTON_PATH, data="quit"),
+            ImageButton(
+                screen=screen,
+                x=0,
+                y=Sizes.GRID_HEIGHT,
+                width=self.create_button_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Empty",
+                background_image_file=Paths.MENU_BUTTON,
+                data="empty"
+            ),
+            ImageButton(
+                screen=screen,
+                x=self.create_button_width,
+                y=Sizes.GRID_HEIGHT,
+                width=self.create_button_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Wall",
+                background_image_file=Paths.MENU_BUTTON,
+                data="wall"
+            ),
+            ImageButton(
+                screen=screen,
+                x=2 * self.create_button_width,
+                y=Sizes.GRID_HEIGHT,
+                width=self.create_button_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Box",
+                background_image_file=Paths.MENU_BUTTON,
+                data="box"
+            ),
+            ImageButton(
+                screen=screen,
+                x=3 * self.create_button_width,
+                y=Sizes.GRID_HEIGHT,
+                width=self.create_button_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Goal",
+                background_image_file=Paths.MENU_BUTTON,
+                data="goal"
+            ),
+            ImageButton(
+                screen=screen,
+                x=4 * self.create_button_width,
+                y=Sizes.GRID_HEIGHT,
+                width=self.create_button_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Player",
+                background_image_file=Paths.MENU_BUTTON,
+                data="player"
+            ),
+            ImageButton(
+                screen=screen,
+                x=5 * self.create_button_width,
+                y=Sizes.GRID_HEIGHT,
+                width=self.create_button_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Save",
+                background_image_file=Paths.MENU_BUTTON,
+                data="save"
+            ),
+            ImageButton(
+                screen=screen,
+                x=6 * self.create_button_width,
+                y=Sizes.GRID_HEIGHT,
+                width=self.create_button_width,
+                height=Sizes.MENU_BUTTON_HEIGHT,
+                text="Menu",
+                background_image_file=Paths.MENU_BUTTON,
+                data="quit"
+            ),
         ]
         self.current_screen = "main"
         self.creator = None
@@ -57,15 +150,33 @@ class CreateScreen(BaseScreen):
         self.cell_height = 0
         self.images = []
         self.create_message = ""
-        self.create_message_color = BLACK
+        self.create_message_color = Colors.BLACK
         self.is_new_level = False
 
         self.level_name = ""
         self.save_message = ""
-        self.save_message_color = BLACK
+        self.save_message_color = Colors.BLACK
         self.save_buttons = [
-            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=HEIGHT // 2 + 100, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Save", background_image_file=MAIN_MENU_BUTTON_PATH, data="save"),
-            ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=HEIGHT // 2 + 200, width=MAIN_MENU_BUTTONS_WIDTH, height=MAIN_MENU_BUTTONS_HEIGHT, text="Cancel", background_image_file=MAIN_MENU_BUTTON_PATH, data="cancel"),
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=Sizes.HEIGHT // 2 + 100,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text="Save",
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data="save"
+            ),
+            ImageButton(
+                screen=screen,
+                x=MAIN_MENU_BUTTONS_X,
+                y=Sizes.HEIGHT // 2 + 200,
+                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                text="Cancel",
+                background_image_file=Paths.MAIN_MENU_BUTTON,
+                data="cancel"
+            ),
         ]
 
     def update(self):
@@ -77,30 +188,27 @@ class CreateScreen(BaseScreen):
             self.draw_save()
 
     def draw_save(self):
-        font = pygame.font.Font(FONT_PATH, 30)
+        self.draw_text(
+            text="Enter your name : ",
+            color=Colors.BLACK,
+            center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2 - 100)
+        )
+        self.draw_text(
+            text=self.level_name,
+            color=Colors.BLACK,
+            center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2)
+        )
+        self.draw_text(
+            text=self.save_message,
+            color=self.save_message_color,
+            center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2 - 200)
+        )
 
-        instruction_text_surface = font.render("Enter your name : ", True, BLACK)
-        instruction_text_rect = instruction_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 100))
-        self.screen.blit(instruction_text_surface, instruction_text_rect)
-
-        level_name_text_surface = font.render(self.level_name, True, BLACK)
-        level_name_text_rect = level_name_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-        self.screen.blit(level_name_text_surface, level_name_text_rect)
-
-        save_message_text_surface = font.render(self.save_message, True, self.save_message_color)
-        save_message_text_rect = save_message_text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 200))
-        self.screen.blit(save_message_text_surface, save_message_text_rect)
         for button in self.save_buttons:
-            button.draw()
+            self.draw_button(button)
 
     def change_tool(self, tool):
         self.creator.current_tool = tool
-        for button in self.create_buttons:
-            if self.is_tool_button(button):
-                if button.data == tool:
-                    button.set_text_color(BLUE)
-                else:
-                    button.set_text_color(BLACK)
 
     def draw_create(self):
         for y in range(self.creator.height):
@@ -116,37 +224,37 @@ class CreateScreen(BaseScreen):
                 elif self.creator.is_player(x, y):
                     self.draw_cell(x, y, "player")
 
-        font = pygame.font.Font(FONT_PATH, 30)
         for button in self.create_buttons:
-            button.draw()
+            is_active = self.creator.current_tool == button.data
+            self.draw_button(button, is_active=is_active)
             counter = self.creator.counter
             if self.is_tool_button(button):
-                # TODO afficher une image et le compte en dessous
                 x = button.x
                 y = button.y + button.height
                 
-                img = pygame.transform.scale(self.images[button.data], (button.height, button.height))
+                img = pygame.transform.scale(
+                    self.images[button.data],
+                    (button.height, button.height)
+                )
                 self.screen.blit(img,(x , y))
                 count = counter[button.data]
 
                 x = x + button.height + 10
                 y = y + button.height // 2
 
-                text_surface = font.render(str(count), True, BLACK)
-                text_rect = text_surface.get_rect(center=(x, y))
-                self.screen.blit(text_surface, text_rect)
-
-        text_surface = font.render(self.create_message, True, self.create_message_color)
+                self.draw_text(text=str(count), color=Colors.BLACK, center=(x, y))
+                
+        text_surface = FONT.render(self.create_message, True, self.create_message_color)
         x = 6 * self.create_button_width
-        y = GRID_HEIGHT + MENU_BUTTON_HEIGHT + text_surface.get_height()
+        y = Sizes.GRID_HEIGHT + Sizes.MENU_BUTTON_HEIGHT + text_surface.get_height()
         text_rect = text_surface.get_rect(center=(x, y))
         self.screen.blit(text_surface, text_rect)
 
     def load_creator(self, creator):
         self.current_screen = "create"
         self.creator = creator
-        self.cell_width = GRID_WIDTH // self.creator.width
-        self.cell_height = GRID_HEIGHT // self.creator.height
+        self.cell_width = Sizes.GRID_WIDTH // self.creator.width
+        self.cell_height = Sizes.GRID_HEIGHT // self.creator.height
         self.change_tool("empty")
 
         self.images = {
@@ -162,16 +270,19 @@ class CreateScreen(BaseScreen):
             width = self.cell_width
         if height is None:
             height = self.cell_height
-        return pygame.transform.scale(pygame.image.load(CELLS_IMAGES_DIR / filename), (width, height))
+        return pygame.transform.scale(
+            pygame.image.load(Paths.CELLS_IMAGES / filename),
+            (width, height)
+        )
 
     def load_save(self):
         if self.is_new_level:
             if not self.creator.is_complete():
                 self.create_message = "Invalid level"
-                self.create_message_color = RED
-            elif len(list(CUSTOM_LEVELS_DIR.iterdir())) >= MAX_CUSTOM_LEVELS:
+                self.create_message_color = Colors.ERROR
+            elif len(list(Paths.CUSTOM_LEVELS.iterdir())) >= MAX_CUSTOM_LEVELS:
                 self.create_message = "Too many levels"
-                self.create_message_color = RED
+                self.create_message_color = Colors.ERROR
             else:
                 self.current_screen = "save"
         else:
@@ -194,7 +305,7 @@ class CreateScreen(BaseScreen):
 
     def handle_grid_click(self, pos):
         x, y = pos
-        if y >= GRID_HEIGHT:
+        if y >= Sizes.GRID_HEIGHT:
             return
         self.creator.put(x // self.cell_width, y // self.cell_height)
 
@@ -210,7 +321,10 @@ class CreateScreen(BaseScreen):
                                 path = Path(button.data.replace("delete_", ""))
                                 path.unlink()
                                 self.main_buttons.remove(button)
-                                self.main_buttons = [button for button in self.main_buttons if  button.data != path]
+                                self.main_buttons = [
+                                    button for button in self.main_buttons
+                                    if button.data != path
+                                ]
                         elif type(button.data) == tuple:
                             creator = LevelCreator(*button.data)
                             self.load_creator(creator)
@@ -226,7 +340,7 @@ class CreateScreen(BaseScreen):
                     if button.is_clicked(event.pos):
                         if self.create_message == "Invalid level":
                             self.create_message = ""
-                            self.create_message_color = BLACK
+                            self.create_message_color = Colors.BLACK
                         self.handle_create_button(button)
                 self.handle_grid_click(event.pos)
 
@@ -247,13 +361,12 @@ class CreateScreen(BaseScreen):
                             self.current_screen = "create"
 
     def save_level(self):
-        # TODO : vérifier si il n'existe pas déja
-        CUSTOM_LEVELS_DIR.mkdir(exist_ok=True, parents=True)
-        path = CUSTOM_LEVELS_DIR / f"{self.level_name}.txt"
+        Paths.CUSTOM_LEVELS.mkdir(exist_ok=True, parents=True)
+        path = Paths.CUSTOM_LEVELS / f"{self.level_name}.txt"
         if path.exists() and self.is_new_level:
             self.save_message = "Level already exists"
-            self.save_message_color = RED
+            self.save_message_color = Colors.ERROR
             return
-        self.creator.save(CUSTOM_LEVELS_DIR / f"{self.level_name}.txt")
+        self.creator.save(Paths.CUSTOM_LEVELS / f"{self.level_name}.txt")
         self.app.switch_screen("menu")
     

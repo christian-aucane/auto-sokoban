@@ -1,61 +1,74 @@
+from enum import Enum, auto
 from pathlib import Path
-# TODO : Utiliser des classes pour séparer les constantes
 
-# Entities
-EMPTY_CELL = 0
-WALL = 1
-GOAL = 2
-BOX = 3
-PLAYER = 4
+import pygame
+from pygame.font import Font
 
-# Player orientation
-UP = 0
-DOWN = 1
-LEFT = 2
-RIGHT = 3
 
-# Pages
-HOME = 0
-LEVEL = 1
-CREATE = 2
+class CellsValues:
+    EMPTY_CELL = 0
+    WALL = 1
+    GOAL = 2
+    BOX = 3
+    PLAYER = 4
 
-# Sizes
-GRID_WIDTH, GRID_HEIGHT = 600, 600
-MENU_HEIGHT = 100
-WIDTH, HEIGHT = GRID_WIDTH, GRID_HEIGHT + MENU_HEIGHT
-MENU_BUTTON_HEIGHT = MENU_HEIGHT // 2
-MAIN_MENU_BUTTONS_WIDTH = 200
-MAIN_MENU_BUTTONS_HEIGHT = 50
 
-# Pos
-MAIN_MENU_BUTTONS_X = WIDTH // 2 - MAIN_MENU_BUTTONS_WIDTH // 2
+class Orientations(Enum):
+    UP = auto()
+    DOWN = auto()
+    LEFT = auto()
+    RIGHT = auto()
 
-# Colors
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-BLACK = (0, 0, 0)
-BLUE = (0, 0, 255)
-YELLOW = (255, 255, 0)
 
-BUTTON_TEXT_COLOR = BLACK
-BUTTON_HOVER_TEXT_COLOR = RED
+class Sizes:
+    GRID_WIDTH, GRID_HEIGHT = 600, 600
+    MENU_HEIGHT = 100
+    WIDTH, HEIGHT = GRID_WIDTH, GRID_HEIGHT + MENU_HEIGHT
+    MENU_BUTTON_HEIGHT = MENU_HEIGHT // 2
+    MAIN_MENU_BUTTONS_WIDTH = 200
+    MAIN_MENU_BUTTONS_HEIGHT = 50
+    FONT = 30
 
-# Paths
-SOURCES_DIR = Path(__file__).parent
-ASSETS_DIR = SOURCES_DIR / "assets"
-IMAGES_DIR = ASSETS_DIR / "images"
-MUSIC_DIR = ASSETS_DIR / "music"
-SOUND_EFFECTS_DIR = ASSETS_DIR / "sound_effects"
-LEVELS_DIR = SOURCES_DIR / "levels"
-CUSTOM_LEVELS_DIR = SOURCES_DIR / "custom_levels"
-FONT_PATH = ASSETS_DIR / "font" / "font.ttf"
-BUTTONS_IMAGES_DIR = IMAGES_DIR / "buttons"
-CELLS_IMAGES_DIR = IMAGES_DIR / "cells"
-BACKGROUND_IMAGES_DIR = IMAGES_DIR / "backgrounds"
 
-MAIN_MENU_BUTTON_PATH = BUTTONS_IMAGES_DIR / "main_menu.png"
-MENU_BUTTON_PATH = BUTTONS_IMAGES_DIR / "menu.png"
+class Colors:
+    WHITE = (255, 255, 255)
+    GREEN = (0, 255, 0)
+    RED = (255, 0, 0)
+    BLACK = (0, 0, 0)
+    BLUE = (0, 0, 255)
+    YELLOW = (255, 255, 0)
+
+    BUTTON_TEXT = BLACK
+    BUTTON_HOVER_TEXT = RED
+    BUTTON_ACTIVE_TEXT = BLUE
+
+    ERROR = RED
+
+
+class Paths:
+    SOURCE = Path(__file__).parent
+    ASSETS = SOURCE / "assets"
+    IMAGES = ASSETS / "images"
+    MUSIC = ASSETS / "music"
+    SOUND_EFFECTS = ASSETS / "sound_effects"
+    LEVELS = SOURCE / "levels"
+    CUSTOM_LEVELS = SOURCE / "custom_levels"
+    FONT = ASSETS / "font" / "font.ttf"
+    BUTTONS_IMAGES = IMAGES / "buttons"
+    CELLS_IMAGES = IMAGES / "cells"
+    BACKGROUND_IMAGES = IMAGES / "backgrounds"
+
+    MAIN_MENU_BUTTON = BUTTONS_IMAGES / "main_menu.png"
+    MENU_BUTTON = BUTTONS_IMAGES / "menu.png"
+    DELETE_BUTTON = BUTTONS_IMAGES / "delete.png"
+
 
 # Max
 MAX_CUSTOM_LEVELS = 3
+
+# Pos
+MAIN_MENU_BUTTONS_X = Sizes.WIDTH // 2 - Sizes.MAIN_MENU_BUTTONS_WIDTH // 2
+
+# Font
+pygame.font.init()
+FONT = Font(Paths.FONT, Sizes.FONT)

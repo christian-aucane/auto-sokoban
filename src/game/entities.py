@@ -1,4 +1,4 @@
-from constants import DOWN, LEFT, RIGHT, UP
+from constants import Orientations
 
 
 class Entity:
@@ -53,7 +53,8 @@ class Entity:
         Returns :
             bool - True if the entity can move down, False otherwise
         """
-        return self.y < self.level.height -1 and not self.level.is_wall(self.x, self.y + 1)
+        return self.y < self.level.height -1\
+            and not self.level.is_wall(self.x, self.y + 1)
 
     @property
     def is_left_available(self):
@@ -73,7 +74,8 @@ class Entity:
         Returns :
             bool - True if the entity can move right, False otherwise
         """
-        return self.x < self.level.width -1 and not self.level.is_wall(self.x + 1, self.y)
+        return self.x < self.level.width -1\
+            and not self.level.is_wall(self.x + 1, self.y)
 
     def up(self):
         """
@@ -133,14 +135,23 @@ class Entity:
         Returns :
             bool - True if the entity moved in the specified direction, False otherwise
         """
-        if direction == UP:
+        if direction == Orientations.UP:
             return self.up()
-        elif direction == DOWN:
+        elif direction == Orientations.DOWN:
             return self.down()
-        elif direction == LEFT:
+        elif direction == Orientations.LEFT:
             return self.left()
-        elif direction == RIGHT:
+        elif direction == Orientations.RIGHT:
             return self.right()
+        
+    def copy(self):
+        """
+        Copy the entity
+
+        Returns :
+            Entity object - The copy of the entity
+        """
+        return self.__class__(**self.__dict__)
 
 class Box(Entity):
     """
@@ -175,7 +186,8 @@ class Box(Entity):
         Returns :
             bool - True if the box can move up, False otherwise
         """
-        return super().is_up_available and self.level.get_box(self.x, self.y - 1) is None
+        return super().is_up_available\
+            and self.level.get_box(self.x, self.y - 1) is None
 
     @property
     def is_down_available(self):
@@ -185,7 +197,8 @@ class Box(Entity):
         Returns :
             bool - True if the box can move down, False otherwise
         """
-        return super().is_down_available and self.level.get_box(self.x, self.y + 1) is None
+        return super().is_down_available\
+            and self.level.get_box(self.x, self.y + 1) is None
 
     @property
     def is_left_available(self):
@@ -195,7 +208,8 @@ class Box(Entity):
         Returns :
             bool - True if the box can move left, False otherwise
         """
-        return super().is_left_available and self.level.get_box(self.x - 1, self.y) is None
+        return super().is_left_available\
+            and self.level.get_box(self.x - 1, self.y) is None
 
     @property
     def is_right_available(self):
@@ -205,7 +219,8 @@ class Box(Entity):
         Returns :
             bool - True if the box can move right, False otherwise
         """
-        return super().is_right_available and self.level.get_box(self.x + 1, self.y) is None
+        return super().is_right_available\
+            and self.level.get_box(self.x + 1, self.y) is None
     
     @property
     def is_on_goal(self):
@@ -216,6 +231,7 @@ class Box(Entity):
             bool - True if the box is on a goal, False otherwise
         """
         return self.level.is_goal(self.x, self.y)
+
 
 class Player(Entity):
     """
@@ -246,11 +262,16 @@ class Player(Entity):
     BOX_MOVED = 2
     BOX_ON_GOAL = 3
 
-    def __init__(self, level, x, y, orientation=UP):
+    def __init__(self, level, x, y, orientation=Orientations.UP):
         super().__init__(level, x, y)
         self.orientation = orientation
 
-    def move(self, direction, is_available, box, move_box_available, super_move):
+    def move(self,
+             direction,
+             is_available,
+             box,
+             move_box_available,
+             super_move):
         if is_available:
             if box is not None:
                 if move_box_available():
@@ -280,7 +301,7 @@ class Player(Entity):
     def up(self):
         box = self.level.get_box(self.x, self.y - 1)
         return self.move(
-            UP, 
+            Orientations.UP, 
             self.is_up_available, 
             box, 
             lambda: box.is_up_available, 
@@ -290,7 +311,7 @@ class Player(Entity):
     def down(self):
         box = self.level.get_box(self.x, self.y + 1)
         return self.move(
-            DOWN, 
+            Orientations.DOWN, 
             self.is_down_available, 
             box, 
             lambda: box.is_down_available, 
@@ -300,7 +321,7 @@ class Player(Entity):
     def left(self):
         box = self.level.get_box(self.x - 1, self.y)
         return self.move(
-            LEFT, 
+            Orientations.LEFT, 
             self.is_left_available, 
             box, 
             lambda: box.is_left_available, 
@@ -310,9 +331,10 @@ class Player(Entity):
     def right(self):
         box = self.level.get_box(self.x + 1, self.y)
         return self.move(
-            RIGHT, 
+            Orientations.RIGHT, 
             self.is_right_available, 
             box, 
             lambda: box.is_right_available, 
             super().right
         )
+    
