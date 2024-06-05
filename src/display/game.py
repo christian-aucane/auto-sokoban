@@ -13,7 +13,7 @@ from constants import Orientations, Sizes, Colors, Paths,\
 
 class GameScreen(BaseScreen):
     def __init__(self, app, screen):
-        sound_effects = {
+        self.sound_effects = {
             "walk": self.load_sound_effect("game/walk.mp3"),
             "wrong_move": self.load_sound_effect("game/wrong_move.mp3"),
             "box_move": self.load_sound_effect("game/box_move.mp3"),
@@ -23,8 +23,8 @@ class GameScreen(BaseScreen):
         super().__init__(
             app=app,
             screen=screen,
-            music="game.mp3",
-            sound_effects=sound_effects,
+            music_name="game",
+            sound_effects=self.sound_effects,
             background_image_file="game.png"
         )
         

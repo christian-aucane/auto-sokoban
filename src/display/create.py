@@ -9,7 +9,7 @@ from constants import FONT, Sizes, Colors, Paths, MAIN_MENU_BUTTONS_X, MAX_CUSTO
 
 class CreateScreen(BaseScreen):
     def __init__(self, app, screen):
-        super().__init__(app=app, screen=screen, music="create.mp3", background_image_file="create.png")
+        super().__init__(app=app, screen=screen, music_name="create", background_image_file="create.png")
         Paths.CUSTOM_LEVELS.mkdir(exist_ok=True, parents=True)
         self.main_buttons = []
         for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir()):

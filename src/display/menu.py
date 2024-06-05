@@ -10,7 +10,7 @@ class MenuScreen(BaseScreen):
         super().__init__(
             app=app,
             screen=screen,
-            music="menu.mp3",
+            music_name="menu",
             background_image_file="menu.png"
         )
 
