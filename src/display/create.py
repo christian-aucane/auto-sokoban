@@ -16,6 +16,7 @@ class CreateScreen(BaseScreen):
         self.click_invalid_save = self.load_sound_effect("game/solve_error.mp3")
         self.save_grid = self.load_sound_effect("game/save_grid.mp3")
         self.remove = self.load_sound_effect("game/remove.mp3")
+        self.creating_empty = self.load_sound_effect("game/creating_empty.mp3")
         self.main_buttons = []
         for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir()):
             x = (Sizes.WIDTH - Sizes.MAIN_MENU_BUTTONS_WIDTH - Sizes.MAIN_MENU_BUTTONS_HEIGHT) // 2
