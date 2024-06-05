@@ -18,7 +18,14 @@ class GameScreen(BaseScreen):
             "wrong_move": self.load_sound_effect("game/wrong_move.mp3"),
             "box_move": self.load_sound_effect("game/box_move.mp3"),
             "box_on_goal": self.load_sound_effect("game/box_on_goal.mp3"),
-            "victory": self.load_sound_effect("game/victory.mp3")
+            "victory": self.load_sound_effect("game/victory.mp3"),
+            "click main menu" : self.load_sound_effect("game/click_main_menu.mp3"),
+            "click play game" : self.load_sound_effect("game/click_play_game.mp3"),
+            "click solve" : self.load_sound_effect("game/click_solve.mp3"),
+            "click cancel" : self.load_sound_effect("game/click_cancel.mp3"),
+            "click reset" : self.load_sound_effect("game/click_reset.mp3"),
+            "solve error" : self.load_sound_effect("game/solve_error.mp3"),
+            "solved" : self.load_sound_effect("game/solved.mp3"),
         }
         super().__init__(
             app=app,
@@ -302,8 +309,10 @@ class GameScreen(BaseScreen):
                 for button in self.main_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "quit":
+                            self.play_sound_effect("click main menu")
                             self.app.switch_screen("menu")
                         else:
+                            self.play_sound_effect("click play game")
                             self.load_level(button.data)
 
         elif self.current_screen == "level":
@@ -324,13 +333,17 @@ class GameScreen(BaseScreen):
                 for button in self.level_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "solve":
+                            self.play_sound_effect("click solve")
                             self.load_solve()
                             self.level.solve_used = True
                         elif button.data == "cancel":
+                            self.play_sound_effect("click cancel")
                             self.level.cancel()
                         elif button.data == "reset":
+                            self.play_sound_effect("click reset")
                             self.level.reset()
                         elif button.data == "quit":
+                            self.play_sound_effect("click main menu")
                             self.app.switch_screen("menu")
         elif self.current_screen == "victory":
             if event.type == pygame.KEYDOWN:
@@ -346,6 +359,7 @@ class GameScreen(BaseScreen):
                 for button in self.victory_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "quit":
+                            self.play_sound_effect("click main menu")
                             self.app.switch_screen("menu")
                         elif button.data == "restart":
                             self.restart()
@@ -387,6 +401,7 @@ class GameScreen(BaseScreen):
 
     def restart(self):
         self.level.reset()
+        self.play_sound_effect("click reset")
         self.current_screen = "level"
 
     def load_level(self, level_path):
@@ -420,9 +435,15 @@ class GameScreen(BaseScreen):
         self.solver = LevelSolver(self.level)
         self.solve_running = self.solver.solve()
         if self.solve_running:
+            channel, sound = self.sound_effects["click solve"]
+            channel.stop()            
+            self.play_sound_effect("solved")
             self.level_message = "Solved !"
             self.level_message_color = Colors.GREEN
         else:
+            channel, sound = self.sound_effects["click solve"]
+            channel.stop()
+            self.play_sound_effect("solve error")
             self.level_message = "Impossible !"
             self.level_message_color = Colors.ERROR
 

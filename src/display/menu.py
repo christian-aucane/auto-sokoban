@@ -13,7 +13,7 @@ class MenuScreen(BaseScreen):
             music_name="menu",
             background_image_file="menu.png"
         )
-
+        self.click_sound = self.load_sound_effect("game/click.mp3")
         self.main_buttons = [
             ImageButton(
                 screen=screen,
@@ -68,11 +68,16 @@ class MenuScreen(BaseScreen):
                 for button in self.main_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "play":
+                            self.click_sound.play()
                             self.app.switch_screen("game")
                         elif button.data == "settings":
+                            self.click_sound.play()
                             # TODO : faire un menu settings
                             print("SETTINGS")
                         elif button.data == "create":
+                            self.click_sound.play()
                             self.app.switch_screen("create")
                         elif button.data == "quit":
+                            self.click_sound.play()
+                            pygame.time.delay(800)
                             self.app.quit()

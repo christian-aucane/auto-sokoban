@@ -11,6 +11,8 @@ class CreateScreen(BaseScreen):
     def __init__(self, app, screen):
         super().__init__(app=app, screen=screen, music_name="create", background_image_file="create.png")
         Paths.CUSTOM_LEVELS.mkdir(exist_ok=True, parents=True)
+        self.click_sound = self.load_sound_effect("game/click.mp3")
+        self.click_main_sound = self.load_sound_effect("game/click_main_menu.mp3")
         self.main_buttons = []
         for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir()):
             x = (Sizes.WIDTH - Sizes.MAIN_MENU_BUTTONS_WIDTH - Sizes.MAIN_MENU_BUTTONS_HEIGHT) // 2
@@ -315,6 +317,7 @@ class CreateScreen(BaseScreen):
                 for button in self.main_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "quit":
+                            self.click_main_sound.play()
                             self.app.switch_screen("menu")
                         elif type(button.data) == str:
                             if button.data.startswith("delete_"):
@@ -326,10 +329,12 @@ class CreateScreen(BaseScreen):
                                     if button.data != path
                                 ]
                         elif type(button.data) == tuple:
+                            self.click_sound.play()
                             creator = LevelCreator(*button.data)
                             self.load_creator(creator)
                             self.is_new_level = True
                         else:
+                            self.click_sound.play()
                             creator = LevelCreator.from_file(button.data)
                             self.level_name = button.data.stem
                             self.load_creator(creator)

@@ -14,7 +14,7 @@ class SokobanApp:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
-        pygame.mixer.set_num_channels(8)
+        pygame.mixer.set_num_channels(15)
 
         self.current_music = None
         self.music_channels = {
