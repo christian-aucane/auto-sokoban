@@ -70,6 +70,6 @@ class SokobanApp:
         sys.exit()
 
 if __name__ == "__main__":
-    grid_path = Path(__file__).resolve().parent / "grid" / "grid.txt"
+    grid_path = Path(__file__).resolve().parent / "Original grid" / "Original grid.txt"
     app = SokobanApp()
     app.run()
