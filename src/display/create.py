@@ -15,6 +15,7 @@ class CreateScreen(BaseScreen):
         self.click_main_sound = self.load_sound_effect("game/click_main_menu.mp3")
         self.click_invalid_save = self.load_sound_effect("game/solve_error.mp3")
         self.save_grid = self.load_sound_effect("game/save_grid.mp3")
+        self.remove = self.load_sound_effect("game/remove.mp3")
         self.main_buttons = []
         for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir()):
             x = (Sizes.WIDTH - Sizes.MAIN_MENU_BUTTONS_WIDTH - Sizes.MAIN_MENU_BUTTONS_HEIGHT) // 2
@@ -326,6 +327,7 @@ class CreateScreen(BaseScreen):
                             self.app.switch_screen("menu")
                         elif type(button.data) == str:
                             if button.data.startswith("delete_"):
+                                self.remove.play()
                                 path = Path(button.data.replace("delete_", ""))
                                 path.unlink()
                                 self.main_buttons.remove(button)
