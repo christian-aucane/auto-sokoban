@@ -189,7 +189,7 @@ class CreateScreen(BaseScreen):
 
     def draw_save(self):
         self.draw_text(
-            text="Enter your name : ",
+            text="Enter grid name : ",
             color=Colors.BLACK,
             center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2 - 100)
         )

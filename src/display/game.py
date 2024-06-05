@@ -159,42 +159,68 @@ class GameScreen(BaseScreen):
                     self.draw_cell(x, y, "wall")
                 elif self.level.is_goal(x, y):
                     self.draw_cell(x, y, "goal")
-        
+
         for box in self.level.boxes:
             if box.is_on_goal:
                 self.draw_cell(box.x, box.y, "box_on_goal")
             else:
                 self.draw_cell(box.x, box.y, "box")
-        
+
         if self.level.player is not None:
-            if self.level.player.orientation == Orientations.UP:
-                self.draw_cell(
-                    self.level.player.x,
-                    self.level.player.y,
-                    "player_up"
-                )
-            elif self.level.player.orientation == Orientations.DOWN:
-                self.draw_cell(
-                    self.level.player.x,
-                    self.level.player.y,
-                    "player_down"
-                )
-            elif self.level.player.orientation == Orientations.LEFT:
-                self.draw_cell(
-                    self.level.player.x,
-                    self.level.player.y,
-                    "player_left"
-                )
-            elif self.level.player.orientation == Orientations.RIGHT:
-                self.draw_cell(
-                    self.level.player.x,
-                    self.level.player.y,
-                    "player_right"
-                )
+            if self.level.is_goal(self.level.player.x, self.level.player.y):
+                if self.level.player.orientation == Orientations.UP:
+                    self.draw_cell(
+                        self.level.player.x,
+                        self.level.player.y,
+                        "player_up_on_goal"
+                    )
+                elif self.level.player.orientation == Orientations.DOWN:
+                    self.draw_cell(
+                        self.level.player.x,
+                        self.level.player.y,
+                        "player_down_on_goal"
+                    )
+                elif self.level.player.orientation == Orientations.LEFT:
+                    self.draw_cell(
+                        self.level.player.x,
+                        self.level.player.y,
+                        "player_left_on_goal"
+                    )
+                elif self.level.player.orientation == Orientations.RIGHT:
+                    self.draw_cell(
+                        self.level.player.x,
+                        self.level.player.y,
+                        "player_right_on_goal"
+                    )
+            else:
+                if self.level.player.orientation == Orientations.UP:
+                    self.draw_cell(
+                        self.level.player.x,
+                        self.level.player.y,
+                        "player_up"
+                    )
+                elif self.level.player.orientation == Orientations.DOWN:
+                    self.draw_cell(
+                        self.level.player.x,
+                        self.level.player.y,
+                        "player_down"
+                    )
+                elif self.level.player.orientation == Orientations.LEFT:
+                    self.draw_cell(
+                        self.level.player.x,
+                        self.level.player.y,
+                        "player_left"
+                    )
+                elif self.level.player.orientation == Orientations.RIGHT:
+                    self.draw_cell(
+                        self.level.player.x,
+                        self.level.player.y,
+                        "player_right"
+                    )
 
         for button in self.level_buttons:
             self.draw_button(button)
-        
+
         moves_text_surface = FONT.render(
             f"Moves: {self.level.moves_count}",
             True,
@@ -229,6 +255,7 @@ class GameScreen(BaseScreen):
         x_message = moves_width + boxes_width + message_width *2
         message_text_rect = message_text_surface.get_rect(center=(x_message, y))
         self.screen.blit(message_text_surface, message_text_rect)
+
 
     def draw_victory(self):
         self.draw_text(
@@ -395,6 +422,10 @@ class GameScreen(BaseScreen):
             "player_down": self.load_cell("player_down.png"),
             "player_left": self.load_cell("player_left.png"),
             "player_right": self.load_cell("player_right.png"),
+            "player_up_on_goal": self.load_cell("player_up_on_goal.png"),
+            "player_down_on_goal": self.load_cell("player_down_on_goal.png"),
+            "player_left_on_goal": self.load_cell("player_left_on_goal.png"),
+            "player_right_on_goal": self.load_cell("player_right_on_goal.png"),
         }
 
     def load_solve(self):
