@@ -70,6 +70,8 @@ class Level(BaseGrid):
         self.player = None
         self.grid = self.load()
         self.reset_count += 1  # Increment the reset count
+        self.start_time = None
+        self.end_time = None    
 
     def cancel(self):
         if self.backup_saved:
@@ -94,7 +96,7 @@ class Level(BaseGrid):
     def execution_time(self):
         if self.start_time is None:
             return 0
-        elif self.end_time is not None:  # Add this condition
+        elif self.end_time is not None:  
             return self.end_time - self.start_time
         else:
             return time.time() - self.start_time
