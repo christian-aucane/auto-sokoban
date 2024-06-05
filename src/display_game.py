@@ -23,7 +23,7 @@ class SokobanApp:
             "menu": pygame.mixer.Sound(Paths.MUSIC / "menu.mp3"),
         }
         for channel in self.music_channels.values():
-            channel.set_volume(0.3)
+            channel.set_volume(0.4)
         self.music_channel = pygame.mixer.Channel(0)        
 
         self.screen = pygame.display.set_mode((Sizes.WIDTH, Sizes.HEIGHT))

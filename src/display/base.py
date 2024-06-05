@@ -56,7 +56,7 @@ class BaseScreen:
         self.screen.blit(text_surface, text_rect)
 
     def play_music(self):
-        self.music.set_volume(0.3)
+        self.music.set_volume(0.2)
         self.music.play(-1)
 
     def stop_music(self):
