@@ -64,7 +64,7 @@ class LevelCreator(BaseGrid):
         return x == 0 or y == 0 or x == self.width - 1 or y == self.height - 1
 
     def put_empty_cell(self, x, y):
-        if self.get_cell(x, y) == WALL and self.is_border(x, y):
+        if self.get_cell(x, y) == CellsValues.WALL and self.is_border(x, y):
             return False
         self.set_cell(x, y, CellsValues.EMPTY_CELL)
         return True
