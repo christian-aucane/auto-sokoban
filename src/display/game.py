@@ -174,56 +174,20 @@ class GameScreen(BaseScreen):
                 self.draw_cell(box.x, box.y, "box")
 
         if self.level.player is not None:
+            orientation = self.level.player.orientation
+            if orientation == Orientations.UP:
+                cell_image = "player_up"
+            elif orientation == Orientations.DOWN:
+                cell_image = "player_down"
+            elif orientation == Orientations.LEFT:
+                cell_image = "player_left"
+            elif orientation == Orientations.RIGHT:
+                cell_image = "player_right"
+
             if self.level.is_goal(self.level.player.x, self.level.player.y):
-                if self.level.player.orientation == Orientations.UP:
-                    self.draw_cell(
-                        self.level.player.x,
-                        self.level.player.y,
-                        "player_up_on_goal"
-                    )
-                elif self.level.player.orientation == Orientations.DOWN:
-                    self.draw_cell(
-                        self.level.player.x,
-                        self.level.player.y,
-                        "player_down_on_goal"
-                    )
-                elif self.level.player.orientation == Orientations.LEFT:
-                    self.draw_cell(
-                        self.level.player.x,
-                        self.level.player.y,
-                        "player_left_on_goal"
-                    )
-                elif self.level.player.orientation == Orientations.RIGHT:
-                    self.draw_cell(
-                        self.level.player.x,
-                        self.level.player.y,
-                        "player_right_on_goal"
-                    )
-            else:
-                if self.level.player.orientation == Orientations.UP:
-                    self.draw_cell(
-                        self.level.player.x,
-                        self.level.player.y,
-                        "player_up"
-                    )
-                elif self.level.player.orientation == Orientations.DOWN:
-                    self.draw_cell(
-                        self.level.player.x,
-                        self.level.player.y,
-                        "player_down"
-                    )
-                elif self.level.player.orientation == Orientations.LEFT:
-                    self.draw_cell(
-                        self.level.player.x,
-                        self.level.player.y,
-                        "player_left"
-                    )
-                elif self.level.player.orientation == Orientations.RIGHT:
-                    self.draw_cell(
-                        self.level.player.x,
-                        self.level.player.y,
-                        "player_right"
-                    )
+                cell_image += "_on_goal"
+
+            self.draw_cell(self.level.player.x, self.level.player.y, cell_image)
 
         for button in self.level_buttons:
             self.draw_button(button)
