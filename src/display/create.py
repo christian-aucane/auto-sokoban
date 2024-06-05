@@ -13,6 +13,8 @@ class CreateScreen(BaseScreen):
         Paths.CUSTOM_LEVELS.mkdir(exist_ok=True, parents=True)
         self.click_sound = self.load_sound_effect("game/click.mp3")
         self.click_main_sound = self.load_sound_effect("game/click_main_menu.mp3")
+        self.click_invalid_save = self.load_sound_effect("game/solve_error.mp3")
+        self.save_grid = self.load_sound_effect("game/save_grid.mp3")
         self.main_buttons = []
         for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir()):
             x = (Sizes.WIDTH - Sizes.MAIN_MENU_BUTTONS_WIDTH - Sizes.MAIN_MENU_BUTTONS_HEIGHT) // 2
@@ -280,9 +282,11 @@ class CreateScreen(BaseScreen):
     def load_save(self):
         if self.is_new_level:
             if not self.creator.is_complete():
+                self.click_invalid_save.play()
                 self.create_message = "Invalid level"
                 self.create_message_color = Colors.ERROR
             elif len(list(Paths.CUSTOM_LEVELS.iterdir())) >= MAX_CUSTOM_LEVELS:
+                self.click_invalid_save.play()
                 self.create_message = "Too many levels"
                 self.create_message_color = Colors.ERROR
             else:
@@ -303,6 +307,7 @@ class CreateScreen(BaseScreen):
         elif button.data == "save":
             self.load_save()
         elif button.data == "quit":
+            self.click_main_sound.play()
             self.app.switch_screen("menu")
 
     def handle_grid_click(self, pos):
@@ -363,9 +368,12 @@ class CreateScreen(BaseScreen):
                         if button.data == "save":
                             self.save_level()
                         elif button.data == "cancel":
+                            self.click_sound.play()
                             self.current_screen = "create"
 
     def save_level(self):
+        self.save_grid.play()
+        pygame.time.delay(800)
         Paths.CUSTOM_LEVELS.mkdir(exist_ok=True, parents=True)
         path = Paths.CUSTOM_LEVELS / f"{self.level_name}.txt"
         if path.exists() and self.is_new_level:
