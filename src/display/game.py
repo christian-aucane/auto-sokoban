@@ -18,6 +18,7 @@ class GameScreen(BaseScreen):
             "wrong_move": self.load_sound_effect("game/wrong_move.mp3"),
             "box_move": self.load_sound_effect("game/box_move.mp3"),
             "box_on_goal": self.load_sound_effect("game/box_on_goal.mp3"),
+            "victory": self.load_sound_effect("game/victory.mp3")
         }
         super().__init__(
             app=app,
@@ -411,6 +412,7 @@ class GameScreen(BaseScreen):
 
     def load_victory(self):
         self.current_screen = "victory"
+        self.play_sound_effect("victory")
 
     def load_cell(self, filename):
         return pygame.transform.scale(
