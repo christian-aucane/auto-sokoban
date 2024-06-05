@@ -1,6 +1,7 @@
 import time
 import json
 
+import random
 import pygame
 
 from .base import BaseScreen
@@ -350,6 +351,7 @@ class GameScreen(BaseScreen):
                         elif button.data == "restart":
                             self.restart()
     
+    
     def save_score(self):
         data = {
             "moves_count": self.level.moves_count,
@@ -368,23 +370,17 @@ class GameScreen(BaseScreen):
 
         # Check if player exists
         if self.player_name in scores:
-            # Check if grid exists for player
-            grid_names = [grid["grid_name"] for grid in scores[self.player_name]]
-            i = 1
-            new_grid_name = f"{self.level.name}{i}"
-            while new_grid_name in grid_names:
-                i += 1
-                new_grid_name = f"{self.level.name}{i}"
-            data["grid_name"] = new_grid_name
+            data["grid_name"] = self.level.name
             scores[self.player_name].append(data)
         else:
             # Player does not exist, add player and grid
-            data["grid_name"] = f"{self.level.name}1"
+            data["grid_name"] = self.level.name
             scores[self.player_name] = [data]
 
         # Write back to file
         with open(score_file, 'w') as f:
             json.dump(scores, f, indent=4)
+
 
 
     def play_movement_sound_effect(self, movement):
