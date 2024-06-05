@@ -1,7 +1,6 @@
 import time
-import json
+import csv
 
-import random
 import pygame
 
 from .base import BaseScreen
@@ -354,32 +353,22 @@ class GameScreen(BaseScreen):
     
     def save_score(self):
         data = {
-            "moves_count": self.level.moves_count,
-            "reset_count": self.level.reset_count,
-            "cancel_count": self.level.cancel_count,
-            "solve_used": self.level.solve_used,
-            "execution_time": self.level.execution_time 
+            "Player Name": self.player_name,
+            "Grid Name": self.level.name,
+            "Moves Count": self.level.moves_count,
+            "Reset Count": self.level.reset_count,
+            "Cancel Count": self.level.cancel_count,
+            "Solve Used": self.level.solve_used,
+            "Execution Time": self.level.execution_time 
         }
         score_file = Paths.SCORES_FILE
-        if score_file.exists():
-            # Read existing file
-            with open(score_file, 'r') as f:
-                scores = json.load(f)
-        else:
-            scores = {}
-
-        # Check if player exists
-        if self.player_name in scores:
-            data["grid_name"] = self.level.name
-            scores[self.player_name].append(data)
-        else:
-            # Player does not exist, add player and grid
-            data["grid_name"] = self.level.name
-            scores[self.player_name] = [data]
-
-        # Write back to file
-        with open(score_file, 'w') as f:
-            json.dump(scores, f, indent=4)
+        file_exists = score_file.exists()
+        
+        with open(score_file, 'a', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=data.keys())
+            if not file_exists:
+                writer.writeheader()
+            writer.writerow(data)
 
 
 

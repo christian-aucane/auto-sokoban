@@ -62,7 +62,7 @@ class Paths:
     MENU_BUTTON = BUTTONS_IMAGES / "menu.png"
     DELETE_BUTTON = BUTTONS_IMAGES / "delete.png"
 
-    SCORES_FILE = SOURCE / "scores.json"
+    SCORES_FILE = SOURCE / "scores.csv"
 
 
 # Max

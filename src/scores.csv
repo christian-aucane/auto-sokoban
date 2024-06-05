@@ -1,0 +1,5 @@
+Player Name,Grid Name,Moves Count,Reset Count,Cancel Count,Solve Used,Execution Time
+Alex,Original grid,24,0,0,False,4.400822162628174
+Alex,GridTest,64,0,0,False,15.003151893615723
+Alex,Original grid,21,1,1,True,4.293828964233398
+Julie,Original grid,28,3,1,False,5.91330361366272
