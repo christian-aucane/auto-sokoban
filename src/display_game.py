@@ -26,11 +26,12 @@ class SokobanApp:
 
         pygame.display.set_caption("Sokoban")
         self.running = True
+        
+        self.score_manager = ScoreManager(score_file_path=Paths.SCORES_FILE)
 
         self.current_screen = MenuScreen(self, self.screen)
         self.current_screen.load()
 
-        self.score_manager = ScoreManager(score_file_path=Paths.SCORES_FILE)
 
     def run(self):
         while self.running:
@@ -61,6 +62,7 @@ class SokobanApp:
         self.sound_manager.stop_music()
         self.running = False
         pygame.quit()
+        pygame.mixer.quit()
         sys.exit()
 
 if __name__ == "__main__":
