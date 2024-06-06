@@ -138,9 +138,9 @@ class GameScreen(BaseScreen):
                 y=Sizes.HEIGHT // 2 + 100,
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
-                text="Main Menu",
+                text="Restart",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
-                data="quit"
+                data="restart"
             ),
             ImageButton(
                 screen=screen,
@@ -148,9 +148,9 @@ class GameScreen(BaseScreen):
                 y=Sizes.HEIGHT // 2 + 200,
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
-                text="Restart",
+                text="Main Menu",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
-                data="restart"
+                data="quit"
             )
         ]
 
