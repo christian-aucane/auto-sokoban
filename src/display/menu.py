@@ -152,6 +152,9 @@ class MenuScreen(BaseScreen):
             pygame.image.load(Paths.BACKGROUND_IMAGES / "settings.png"), (Sizes.WIDTH, Sizes.HEIGHT)
             )
 
+        self.scores_background_image = pygame.transform.scale(
+            pygame.image.load(Paths.BACKGROUND_IMAGES / "scores.png"), (Sizes.WIDTH, Sizes.HEIGHT)
+        )
         cols = self.app.score_manager.get_columns()
         score_buttons_width = Sizes.GRID_WIDTH // (len(cols))
         self.scores_buttons_filters = [
@@ -218,12 +221,11 @@ class MenuScreen(BaseScreen):
         return self.app.score_manager.get_scores(sort_by=self.current_filter, ascending=self.current_ascending)
 
     def draw_scores(self):
-        self.draw_background_image()
+        self.screen.blit(self.scores_background_image, (0, 0))
         self.draw_button(self.score_quit_button)
         for button in self.scores_buttons_filters:
             is_active = button.data == self.current_filter
             self.draw_button(button, is_active=is_active)
-        # TOOD : ajouter fond d'écran
         scores = self.get_scores()
         cell_width = Sizes.GRID_WIDTH // (len(scores.columns))
         cell_height = 30
