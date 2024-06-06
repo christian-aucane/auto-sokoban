@@ -320,7 +320,7 @@ class GameScreen(BaseScreen):
                 for button in self.victory_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "quit":
-                            self.sound_manager.self.sound_manager.play_sound_effect("click_main_menu")
+                            self.sound_manager.play_sound_effect("click_main_menu")
                             self.app.switch_screen("menu")
                         elif button.data == "restart":
                             self.restart()
@@ -354,7 +354,7 @@ class GameScreen(BaseScreen):
 
     def restart(self):
         self.level.reset()
-        self.sound_manager.play_sound_effect("click reset")
+        self.sound_manager.play_sound_effect("click_reset")
         self.current_screen = "level"
 
     def load_level(self, level_path):

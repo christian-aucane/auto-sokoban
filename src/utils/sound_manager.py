@@ -38,6 +38,13 @@ class SoundManager:
             channel.play(sound, loops=0)
         except KeyError:
             raise ValueError(f"Music '{name}' not found!")
+        
+    def stop_sound_effect(self, name):
+        try:
+            _, channel = self._sound_effects_channels[name]
+            channel.stop()
+        except KeyError:
+            raise ValueError(f"Music '{name}' not found!")
 
     @property
     def music_volume(self):
