@@ -259,7 +259,7 @@ class GameScreen(BaseScreen):
             center=(100, 150)
         )
         self.draw_text(
-            text="Add player name",
+            text=" Add player name \n Press Enter to save :",
             color=Colors.BLACK,
             center=(Sizes.WIDTH // 2, Sizes.HEIGHT // 2 - 100)
         )
