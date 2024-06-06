@@ -3,7 +3,7 @@ import pygame
 
 from .base import BaseScreen
 from utils.widgets import ImageButton
-from game.create_game import LevelCreator
+from game.create import LevelCreator
 from constants import FONT, Sizes, Colors, Paths, MAIN_MENU_BUTTONS_X, MAX_CUSTOM_LEVELS, OFFSET
 
 

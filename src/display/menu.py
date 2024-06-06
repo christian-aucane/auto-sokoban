@@ -173,6 +173,18 @@ class MenuScreen(BaseScreen):
         for slider in self.settings_sliders:
             slider.draw()
 
+    def restore_settings(self):
+        print("Restoring settings")
+        initial_music_volume = self.initial_settings_values["music_volume"]
+        initial_sound_effect_volume = self.initial_settings_values["sound_effect_volume"]
+        self.sound_manager.music_volume = initial_music_volume
+        self.sound_manager.sound_effect_volume = initial_sound_effect_volume
+        for slider in self.settings_sliders:
+            if slider.data == "music_volume":
+                slider.value = int(initial_music_volume * 100)
+            if slider.data == "sound_effect_volume":
+                slider.value = int(initial_sound_effect_volume * 100)            
+
     def load_scores(self):
         self.current_screen = "scores"
 
@@ -201,7 +213,6 @@ class MenuScreen(BaseScreen):
                 cell_text_rect = cell_text.get_rect(topleft=(x, y))
                 self.screen.blit(cell_text, cell_text_rect)
         
-
     def update(self):
         if self.current_screen == "main":
             self.draw_main()
@@ -271,18 +282,3 @@ class MenuScreen(BaseScreen):
                         else:
                             self.current_ascending = False
                             self.current_filter = button.data
-                        
-
-    def restore_settings(self):
-        print("Restoring settings")
-        initial_music_volume = self.initial_settings_values["music_volume"]
-        initial_sound_effect_volume = self.initial_settings_values["sound_effect_volume"]
-        self.sound_manager.music_volume = initial_music_volume
-        self.sound_manager.sound_effect_volume = initial_sound_effect_volume
-        for slider in self.settings_sliders:
-            if slider.data == "music_volume":
-                slider.value = int(initial_music_volume * 100)
-            if slider.data == "sound_effect_volume":
-                slider.value = int(initial_sound_effect_volume * 100)
-        # TODO : restaurer aussi les sliders ...
-            

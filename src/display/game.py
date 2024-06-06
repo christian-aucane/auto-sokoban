@@ -6,7 +6,7 @@ import pygame
 from .base import BaseScreen
 from utils.widgets import ImageButton
 from build_game import Level, Player
-from game.solve_game import LevelSolver
+from game.solve import LevelSolver
 from constants import Orientations, Sizes, Colors, Paths,\
     FONT, MAIN_MENU_BUTTONS_X, OFFSET
 
