@@ -49,6 +49,7 @@ class Colors:
     SLIDER_BG = BLACK
     SLIDER = WHITE
     SLIDER_KNOB = RED
+    SLIDER_TEXT = BLACK
 
 
 class Paths:
@@ -81,4 +82,8 @@ MAIN_MENU_SLIDERS_X = Sizes.WIDTH // 2 - Sizes.MAIN_MENU_SLIDER_WIDTH // 2
 # Font
 pygame.font.init()
 FONT = Font(Paths.FONT, Sizes.FONT)
+
+# TODO : modifier la font des boutons
+BUTTON_FONT = Font(Paths.FONT, Sizes.FONT)
+
 OFFSET = 15

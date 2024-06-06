@@ -63,6 +63,7 @@ class Level(BaseGrid):
             grid.append(new_row)
         
         self._moves_count = 0
+        self.backup_saved = False
         return grid
 
     def reset(self):
