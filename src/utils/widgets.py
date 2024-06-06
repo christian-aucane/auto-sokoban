@@ -2,15 +2,7 @@ import pygame
 
 
 class BaseButton:
-    def __init__(self,
-                 screen,
-                 x,
-                 y,
-                 width,
-                 height,
-                 text,
-                 text_color,
-                 font,
+    def __init__(self, screen, x, y, width, height, text, text_color, font,
                  data=None):
         self.screen = screen
         self.rect = pygame.Rect(x, y, width, height)
@@ -41,28 +33,11 @@ class BaseButton:
 
 
 class ImageButton(BaseButton):
-    def __init__(self,
-                 screen,
-                 x,
-                 y,
-                 width,
-                 height,
-                 text,
-                 background_image_path,
-                 text_color,
-                 font,
+    def __init__(self, screen, x, y, width, height, text,
+                 background_image_path, text_color, font,
                  data=None):
-        super().__init__(
-            screen=screen,
-            x=x,
-            y=y,
-            width=width,
-            height=height,
-            text=text,
-            text_color=text_color,
-            font=font,
-            data=data
-        )
+        super().__init__(screen=screen, x=x, y=y, width=width, height=height,
+                         text=text, text_color=text_color, font=font,data=data)
         self.background_image = pygame.transform.scale(
             pygame.image.load(background_image_path),
             (self.width, self.height)
@@ -77,7 +52,9 @@ class ImageButton(BaseButton):
 
 
 class Slider: 
-    def __init__(self, screen, x, y, width, height, min_value, max_value, initial_value, bg_color, slider_color, knob_color, font, text_color,label=None, data=None):
+    def __init__(self, screen, x, y, width, height, min_value, max_value,
+                 initial_value, bg_color, slider_color, knob_color, font,
+                 text_color,label=None, data=None):
         self.screen = screen
         self.image = pygame.Surface((width, height))
         self.rect = self.image.get_rect(topleft=(x, y))
@@ -94,7 +71,6 @@ class Slider:
 
         self.dragging = False
 
-        # Couleurs
         self.bg_color = bg_color
         self.slider_color = slider_color
         self.knob_color = knob_color
