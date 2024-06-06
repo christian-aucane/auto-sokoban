@@ -8,11 +8,11 @@ from constants import Sizes, Paths, MAIN_MENU_BUTTONS_X
 class MenuScreen(BaseScreen):
     def __init__(self, app, screen):
         super().__init__(
+            "menu",
             app=app,
             screen=screen,
-            music_name="menu",
+            sound_manager=app.sound_manager,
             background_image_file="menu.png",
-            sound_effects={"click": self.load_sound_effect("game/click.mp3")},
         )
         self.main_buttons = [
             ImageButton(
@@ -57,6 +57,8 @@ class MenuScreen(BaseScreen):
             )
         ]
         self.current_screen = "main"
+
+        self.sound_manager.load_sound_effect("click", Paths.SOUND_EFFECTS / "click.mp3")
     
     def update(self):
         if self.current_screen == "main":
@@ -67,7 +69,7 @@ class MenuScreen(BaseScreen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.main_buttons:
                     if button.is_clicked(event.pos):
-                        self.play_sound_effect("click")
+                        self.sound_manager.play_sound_effect("click")
                         if button.data == "play":
                             self.app.switch_screen("game")
                         elif button.data == "settings":
