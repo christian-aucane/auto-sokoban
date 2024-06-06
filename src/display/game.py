@@ -389,10 +389,12 @@ class GameScreen(BaseScreen):
         self.solve_running = self.solver.solve()
         self.sound_manager.play_sound_effect("click_solve")    
         if self.solve_running:     
+            self.sound_manager.stop_sound_effect("click_solve")
             self.sound_manager.play_sound_effect("solved")
             self.level_message = "Solved !"
             self.level_message_color = Colors.GREEN
         else:
+            self.sound_manager.stop_sound_effect("click_solve")
             self.sound_manager.play_sound_effect("solve_error")
             self.level_message = "Impossible !"
             self.level_message_color = Colors.ERROR
