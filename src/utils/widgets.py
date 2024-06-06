@@ -92,7 +92,7 @@ class Slider:
 
         self.min_value = min_value
         self.max_value = max_value
-        self.value = initial_value
+        self._value = initial_value
 
         self.knob_pos = (self.value - self.min_value) / (self.max_value - self.min_value) * (width - 20)
 
@@ -102,6 +102,15 @@ class Slider:
         self.bg_color = bg_color
         self.slider_color = slider_color
         self.knob_color = knob_color
+
+    @property
+    def value(self):
+        return self._value
+    
+    @value.setter
+    def value(self, new_value):
+        self._value = min(max(new_value, self.min_value), self.max_value)
+        self.knob_pos = (self.value - self.min_value) / (self.max_value - self.min_value) * (self.rect.width - 20)
 
     def draw(self):
         self.image.fill(self.bg_color)
@@ -120,7 +129,6 @@ class Slider:
         text_surface = self.font.render(str(self.value), True, Colors.BLACK)
         text_rect = text_surface.get_rect(topleft=self.rect.topright)
         self.screen.blit(text_surface, text_rect)
-
 
     def move_knob(self, pos):
         new_knob_pos = pos[0] - self.rect.x - 10
