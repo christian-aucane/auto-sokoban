@@ -1,4 +1,5 @@
 from pygame import mixer
+import itertools
 
 
 class SoundManager:
@@ -10,6 +11,7 @@ class SoundManager:
         self._sound_effects_channels = {}
         self._music_volume = music_volume
         self._sound_effect_volume = sound_effect_volume
+        self._channel_cycle = itertools.cycle(range(1, num_channels))
 
     def load_music(self, name, file_path):
         sound = mixer.Sound(file_path)
@@ -29,7 +31,7 @@ class SoundManager:
     def load_sound_effect(self, name, file_path):
         sound = mixer.Sound(str(file_path))
         sound.set_volume(self._sound_effect_volume)
-        channel = mixer.Channel(0)
+        channel = mixer.Channel(next(self._channel_cycle))  # Get the next channel from the cycle
         self._sound_effects_channels[name] = sound, channel
 
     def play_sound_effect(self, name):
