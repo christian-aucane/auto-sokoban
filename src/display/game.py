@@ -169,7 +169,12 @@ class GameScreen(BaseScreen):
                 font=BUTTON_FONT,
                 background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="restart"
+            )
         ]
+
+        self.background_victory = pygame.transform.scale(
+            pygame.image.load(Paths.BACKGROUND_IMAGES / "victory.png"), (Sizes.WIDTH, Sizes.HEIGHT)
+        )
 
     def draw_level(self):
         for y in range(self.level.height):
@@ -242,7 +247,7 @@ class GameScreen(BaseScreen):
         self.screen.blit(message_text_surface, message_text_rect)
 
     def draw_victory(self):
-        self.draw_background_image()
+        self.screen.blit(self.background_victory, (0, 0))
         self.draw_text(
             text=f"Moves : {self.level.moves_count}",
             color=Colors.BLACK,
@@ -372,6 +377,8 @@ class GameScreen(BaseScreen):
     def restart(self):
         self.level.reset()
         self.sound_manager.play_sound_effect("click_reset")
+        self.level_message = ""
+        self.level_message_color = Colors.BLACK
         self.current_screen = "level"
 
     def load_level(self, level_path):
