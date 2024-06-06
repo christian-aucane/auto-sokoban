@@ -161,6 +161,10 @@ class MenuScreen(BaseScreen):
 
     def load_settings(self):
         self.current_screen = "settings"
+        self.initial_settings_values = {
+            "music_volume": self.sound_manager.music_volume,
+            "sound_effect_volume": self.sound_manager.sound_effect_volume
+        }
 
     def draw_settings(self):
         # TODO : ajouter fond d'écran
@@ -252,6 +256,7 @@ class MenuScreen(BaseScreen):
                             self.sound_manager.music_volume = slider.value / 100
                         if slider.data == "sound_effect_volume":
                             self.sound_manager.sound_effect_volume = slider.value / 100
+
         elif self.current_screen == "scores":
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.score_quit_button.is_clicked(event.pos):
@@ -268,5 +273,15 @@ class MenuScreen(BaseScreen):
                         
 
     def restore_settings(self):
-        self.sound_manager.music_volume = self.initial_settings_values["music_volume"]
-        self.sound_manager.sound_effect_volume = self.initial_settings_values["sound_effect_volume"]
+        print("Restoring settings")
+        initial_music_volume = self.initial_settings_values["music_volume"]
+        initial_sound_effect_volume = self.initial_settings_values["sound_effect_volume"]
+        self.sound_manager.music_volume = initial_music_volume
+        self.sound_manager.sound_effect_volume = initial_sound_effect_volume
+        for slider in self.settings_sliders:
+            if slider.data == "music_volume":
+                slider.value = int(initial_music_volume * 100)
+            if slider.data == "sound_effect_volume":
+                slider.value = int(initial_sound_effect_volume * 100)
+        # TODO : restaurer aussi les sliders ...
+            
