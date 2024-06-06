@@ -11,7 +11,6 @@ class MenuScreen(BaseScreen):
             "menu",
             app=app,
             screen=screen,
-            sound_manager=app.sound_manager,
             background_image_file="menu.png",
         )
         self.main_buttons = [

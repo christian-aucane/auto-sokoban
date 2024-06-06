@@ -4,10 +4,10 @@ from constants import FONT, Sizes, Colors, Paths
 
 
 class BaseScreen:
-    def __init__(self,name, app, screen, sound_manager, background_image_file=""):
+    def __init__(self,name, app, screen, background_image_file=""):
         self.app = app
         self.screen = screen
-        self.sound_manager = sound_manager
+        self.sound_manager = app.sound_manager
         self.background_image = pygame.transform.scale(
             pygame.image.load(Paths.BACKGROUND_IMAGES / background_image_file),
             (Sizes.WIDTH, Sizes.HEIGHT)
@@ -43,7 +43,7 @@ class BaseScreen:
     def load(self):
         self.sound_manager.play_music(self.name)
         ...
-            
+
     def update(self):
         raise NotImplementedError("Subclass must implement abstract method")
     
