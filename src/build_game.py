@@ -135,6 +135,21 @@ class Level(BaseGrid):
         counter["boxes_on_goal"] = self.boxes_on_goal
         return counter
     
+    # Ajoutez cette méthode à la classe Level
+    def get_goals(self):
+        """
+        Get the positions of the goals in the level.
+
+        Returns:
+            list: list of (x, y) positions for the goals
+        """
+        goals = []
+        for y, row in enumerate(self.grid):
+            for x, cell in enumerate(row):
+                if cell == CellsValues.GOAL:  # Assuming 2 represents a goal
+                    goals.append((x, y))
+        return goals
+
     @property
     def stats(self):
         return {
