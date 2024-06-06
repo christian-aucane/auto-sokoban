@@ -232,7 +232,7 @@ class GameScreen(BaseScreen):
             center=(100, 50)
         )
         self.draw_text(
-            text=f"Time : {self.level.execution_time:.2f} sec",
+            text=f"    Time : {self.level.execution_time:.2f} sec",
             color=Colors.BLACK,
             center=(100, 150)
         )
