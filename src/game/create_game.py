@@ -1,8 +1,7 @@
 from build_game import Level
 from .solve_game import LevelSolver
 from .base_grid import BaseGrid
-from constants import CellsValues, Paths
-import pygame
+from constants import CellsValues
 
 
 class LevelCreator(BaseGrid):
