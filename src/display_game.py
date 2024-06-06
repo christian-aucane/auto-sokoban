@@ -45,6 +45,7 @@ class SokobanApp:
     def switch_screen(self, screen_name):
         self.current_screen.quit()
         if screen_name == "menu":
+            pygame.time.delay(600)
             self.current_screen = MenuScreen(self, self.screen)
         elif screen_name == "game":
             self.current_screen = GameScreen(self, self.screen)
