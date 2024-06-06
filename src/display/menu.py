@@ -131,7 +131,8 @@ class MenuScreen(BaseScreen):
         ]
 
         self.settings_background_image = pygame.transform.scale(
-            pygame.image.load(Paths.BACKGROUND_IMAGES / "settings.png"), (Sizes.WIDTH, Sizes.HEIGHT))
+            pygame.image.load(Paths.BACKGROUND_IMAGES / "settings.png"), (Sizes.WIDTH, Sizes.HEIGHT)
+            )
 
         cols = self.app.score_manager.get_columns()
         score_buttons_width = Sizes.GRID_WIDTH // (len(cols))
