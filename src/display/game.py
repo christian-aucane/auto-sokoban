@@ -12,8 +12,7 @@ from constants import Orientations, Sizes, Colors, Paths,\
 
 
 class GameScreen(BaseScreen):
-    def __init__(self, app, screen):
-
+    def __init__(self, app, screen, score_manager):
         super().__init__(
             name="game",
             app=app,
@@ -309,7 +308,7 @@ class GameScreen(BaseScreen):
         elif self.current_screen == "victory":
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
-                    self.save_score()
+                    self.app.score_manager.add_score(self.player_name, self.level)
                     self.player_name = ''
                     self.app.switch_screen("menu")
                 elif event.key == pygame.K_BACKSPACE:
