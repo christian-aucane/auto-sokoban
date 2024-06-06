@@ -4,6 +4,8 @@ from build_game import Level, Player
 from constants import Orientations, Paths
 
 
+# TODO : remove prints
+
 class LevelSolver:
     """
     Solve the game
