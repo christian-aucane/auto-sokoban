@@ -2,14 +2,14 @@ from pathlib import Path
 import pygame
 
 from .base import BaseScreen
-from .widgets import ImageButton
+from utils.widgets import ImageButton
 from game.create_game import LevelCreator
 from constants import FONT, Sizes, Colors, Paths, MAIN_MENU_BUTTONS_X, MAX_CUSTOM_LEVELS
 
 
 class CreateScreen(BaseScreen):
     def __init__(self, app, screen):
-        super().__init__(name="create", app=app, screen=screen, background_image_file="create.png")
+        super().__init__(name="create", app=app, screen=screen, background_image_path=Paths.BACKGROUND_IMAGES / "create.png")
 
         self.sound_manager.load_sound_effect("click", Paths.SOUND_EFFECTS / "click.mp3")
         self.sound_manager.load_sound_effect("click_main", Paths.SOUND_EFFECTS / "click_main_menu.mp3")
@@ -25,37 +25,37 @@ class CreateScreen(BaseScreen):
         Paths.CUSTOM_LEVELS.mkdir(exist_ok=True, parents=True)
         self.main_buttons = []
         for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir()):
-            x = (Sizes.WIDTH - Sizes.MAIN_MENU_BUTTONS_WIDTH - Sizes.MAIN_MENU_BUTTONS_HEIGHT) // 2
-            y = i*2*Sizes.MAIN_MENU_BUTTONS_HEIGHT + Sizes.MAIN_MENU_BUTTONS_HEIGHT
+            x = (Sizes.WIDTH - Sizes.MAIN_MENU_BUTTON_WIDTH - Sizes.MAIN_MENU_BUTTON_HEIGHT) // 2
+            y = i*2*Sizes.MAIN_MENU_BUTTON_HEIGHT + Sizes.MAIN_MENU_BUTTON_HEIGHT
             level_button = ImageButton(screen=screen,
                                        x=x,
                                        y=y,
-                                       width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                                       height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                                       width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                                       height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                                        text=path.stem.title(),
                                        background_image_file=Paths.MAIN_MENU_BUTTON,
                                        data=path)
             delete_button = ImageButton(screen=screen,
-                                        x=x + Sizes.MAIN_MENU_BUTTONS_WIDTH,
+                                        x=x + Sizes.MAIN_MENU_BUTTON_WIDTH,
                                         y=y,
-                                        width=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
-                                        height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                                        width=Sizes.MAIN_MENU_BUTTON_HEIGHT,
+                                        height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                                         text="",
                                         background_image_file=Paths.DELETE_BUTTON,
                                         data="delete_" + str(path))
             self.main_buttons += [level_button, delete_button]
         if len(self.main_buttons) < 2*MAX_CUSTOM_LEVELS:
             if self.main_buttons:
-                y_create_levels_start = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTONS_HEIGHT*2
+                y_create_levels_start = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTON_HEIGHT*2
             else:
-                y_create_levels_start = 2*Sizes.MAIN_MENU_BUTTONS_HEIGHT
+                y_create_levels_start = 2*Sizes.MAIN_MENU_BUTTON_HEIGHT
             self.main_buttons += [
                 ImageButton(
                     screen=screen,
                     x=MAIN_MENU_BUTTONS_X,
                     y=y_create_levels_start,
-                    width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                    height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                    width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                    height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                     text="New 10 X 10",
                     background_image_file=Paths.MAIN_MENU_BUTTON,
                     data=(10, 10)
@@ -63,9 +63,9 @@ class CreateScreen(BaseScreen):
                 ImageButton(
                     screen=screen,
                     x=MAIN_MENU_BUTTONS_X,
-                    y=y_create_levels_start + Sizes.MAIN_MENU_BUTTONS_HEIGHT*2,
-                    width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                    height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                    y=y_create_levels_start + Sizes.MAIN_MENU_BUTTON_HEIGHT*2,
+                    width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                    height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                     text="New 15 X 15",
                     background_image_file=Paths.MAIN_MENU_BUTTON,
                     data=(15, 15)
@@ -73,16 +73,16 @@ class CreateScreen(BaseScreen):
                 ImageButton(
                     screen=screen,
                     x=MAIN_MENU_BUTTONS_X,
-                    y=y_create_levels_start + Sizes.MAIN_MENU_BUTTONS_HEIGHT*4,
-                    width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                    height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                    y=y_create_levels_start + Sizes.MAIN_MENU_BUTTON_HEIGHT*4,
+                    width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                    height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                     text="New 20 X 20",
                     background_image_file=Paths.MAIN_MENU_BUTTON,
                     data=(20, 20)
                 ),
             ]
-        y_quit_button = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTONS_HEIGHT*2
-        self.main_buttons.append(ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_quit_button, width=Sizes.MAIN_MENU_BUTTONS_WIDTH, height=Sizes.MAIN_MENU_BUTTONS_HEIGHT, text="Main Menu", background_image_file=Paths.MAIN_MENU_BUTTON, data="quit"))
+        y_quit_button = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTON_HEIGHT*2
+        self.main_buttons.append(ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_quit_button, width=Sizes.MAIN_MENU_BUTTON_WIDTH, height=Sizes.MAIN_MENU_BUTTON_HEIGHT, text="Main Menu", background_image_file=Paths.MAIN_MENU_BUTTON, data="quit"))
         self.create_button_width = Sizes.WIDTH // 7
         self.create_buttons = [
             ImageButton(
@@ -173,8 +173,8 @@ class CreateScreen(BaseScreen):
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
                 y=Sizes.HEIGHT // 2 + 100,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Save",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data="save"
@@ -183,8 +183,8 @@ class CreateScreen(BaseScreen):
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
                 y=Sizes.HEIGHT // 2 + 200,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Cancel",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data="cancel"
