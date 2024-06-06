@@ -98,7 +98,6 @@ class Slider:
 
         self.dragging = False
 
-        # Couleurs
         self.bg_color = bg_color
         self.slider_color = slider_color
         self.knob_color = knob_color
