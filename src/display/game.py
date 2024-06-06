@@ -8,7 +8,7 @@ from utils.widgets import ImageButton
 from build_game import Level, Player
 from game.solve_game import LevelSolver
 from constants import Orientations, Sizes, Colors, Paths,\
-    FONT, MAIN_MENU_BUTTONS_X
+    FONT, MAIN_MENU_BUTTONS_X, Offset
 
 
 class GameScreen(BaseScreen):
@@ -198,7 +198,7 @@ class GameScreen(BaseScreen):
         moves_width = moves_text_surface.get_width()
         x_moves = moves_width
         y = Sizes.GRID_HEIGHT + Sizes.MENU_BUTTON_HEIGHT + moves_text_surface.get_height()
-        moves_text_rect = moves_text_surface.get_rect(center=(x_moves, y))
+        moves_text_rect = moves_text_surface.get_rect(center=(x_moves-55, y-Offset))
         self.screen.blit(moves_text_surface, moves_text_rect)
 
         counter = self.level.counter
@@ -206,13 +206,13 @@ class GameScreen(BaseScreen):
         boxes_on_goal = counter.get("boxes_on_goal")
         boxes = counter.get("boxes")
         boxes_text_surface = FONT.render(
-            f"Boxes on goal: {boxes_on_goal} / {boxes}",
+            f"Boxes on goal : {boxes_on_goal} / {boxes}",
             True,
             Colors.BLACK
         )
         boxes_width = boxes_text_surface.get_width()
         x_boxes = x_moves + boxes_width
-        boxes_text_rect = boxes_text_surface.get_rect(center=(x_boxes, y))
+        boxes_text_rect = boxes_text_surface.get_rect(center=(x_boxes-120, y-Offset))
         self.screen.blit(boxes_text_surface, boxes_text_rect)
 
         message_text_surface = FONT.render(
@@ -222,7 +222,7 @@ class GameScreen(BaseScreen):
         )
         message_width = message_text_surface.get_width()
         x_message = moves_width + boxes_width + message_width *2
-        message_text_rect = message_text_surface.get_rect(center=(x_message, y))
+        message_text_rect = message_text_surface.get_rect(center=(x_message-120, y-Offset))
         self.screen.blit(message_text_surface, message_text_rect)
 
     def draw_victory(self):
