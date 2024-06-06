@@ -134,6 +134,17 @@ class Level(BaseGrid):
         counter["boxes_on_goal"] = self.boxes_on_goal
         return counter
     
+    @property
+    def stats(self):
+        return {
+            "Grid Name": self.name,
+            "Moves Count": self.moves_count,
+            "Reset Count": self.reset_count,
+            "Cancel Count": self.cancel_count,
+            "Solve Used": self.solve_used,
+            "Execution Time": self.execution_time 
+        }
+    
 
 if __name__ == "__main__":
     from constants import Paths
