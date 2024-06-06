@@ -4,7 +4,7 @@ from constants import FONT, Sizes, Colors
 
 
 class BaseScreen:
-    def __init__(self,name, app, screen, background_image_path=None):
+    def __init__(self, name, app, screen, background_image_path=None):
         self.app = app
         self.screen = screen
         self.sound_manager = app.sound_manager

@@ -8,7 +8,7 @@ from constants import Sizes, Colors, Paths
 from display.game import GameScreen
 from display.menu import MenuScreen
 from display.create import CreateScreen
-from display.settings import SettingsScreen
+from utils.score_manager import ScoreManager
 from utils.sound_manager import SoundManager
 
 
@@ -26,9 +26,12 @@ class SokobanApp:
 
         pygame.display.set_caption("Sokoban")
         self.running = True
+        
+        self.score_manager = ScoreManager(score_file_path=Paths.SCORES_FILE)
 
         self.current_screen = MenuScreen(self, self.screen)
         self.current_screen.load()
+
 
     def run(self):
         while self.running:
@@ -48,18 +51,18 @@ class SokobanApp:
         if screen_name == "menu":
             pygame.time.delay(600)
             self.current_screen = MenuScreen(self, self.screen)
-        elif screen_name == "settings":
-            self.current_screen = SettingsScreen(self, self.screen)
         elif screen_name == "game":
-            self.current_screen = GameScreen(self, self.screen)
+            self.current_screen = GameScreen(self, self.screen, self.score_manager)
         elif screen_name == "create":
             self.current_screen = CreateScreen(self, self.screen)
         self.current_screen.load()
 
     def quit(self):
+        self.score_manager.save_scores()
         self.sound_manager.stop_music()
         self.running = False
         pygame.quit()
+        pygame.mixer.quit()
         sys.exit()
 
 if __name__ == "__main__":
