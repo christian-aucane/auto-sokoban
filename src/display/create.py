@@ -228,6 +228,9 @@ class CreateScreen(BaseScreen):
                 data="cancel"
             ),
         ]
+        self.background_save = pygame.transform.scale(
+            pygame.image.load(Paths.BACKGROUND_IMAGES / "save_create.png"), (Sizes.WIDTH, Sizes.HEIGHT)
+        )
 
     def update(self):
         if self.current_screen == "main":
@@ -238,7 +241,7 @@ class CreateScreen(BaseScreen):
             self.draw_save()
 
     def draw_save(self):
-        self.draw_background_image()
+        self.screen.blit(self.background_save, (0, 0))
         self.draw_text(
             text=" Enter grid name \n Press enter to save : ",
             color=Colors.BLACK,
