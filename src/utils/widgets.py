@@ -103,9 +103,6 @@ class Slider:
         self.slider_color = slider_color
         self.knob_color = knob_color
 
-    def update(self):
-        pass
-
     def draw(self):
         self.image.fill(self.bg_color)
 
@@ -132,9 +129,9 @@ class Slider:
 
     def is_clicked(self, pos):
         if self.rect.collidepoint(pos):
-            self.dragging = True  # Mettez à jour l'état de dragging
+            self.dragging = True
             return True
         return False
 
-    def stop_dragging(self):  # Ajoutez cette méthode
+    def stop_dragging(self):
         self.dragging = False

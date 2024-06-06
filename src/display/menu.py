@@ -241,7 +241,17 @@ class MenuScreen(BaseScreen):
                             self.sound_manager.play_sound_effect("click_main_menu")
                             self.restore_settings()
                         self.current_screen = "main"
-
+            elif event.type == pygame.MOUSEBUTTONUP:  
+                for slider in self.settings_sliders:
+                    slider.stop_dragging()
+            elif event.type == pygame.MOUSEMOTION: 
+                for slider in self.settings_sliders:
+                    if slider.dragging:
+                        slider.move_knob(event.pos)
+                        if slider.data == "music_volume":
+                            self.sound_manager.music_volume = slider.value / 100
+                        if slider.data == "sound_effect_volume":
+                            self.sound_manager.sound_effect_volume = slider.value / 100
         elif self.current_screen == "scores":
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.score_quit_button.is_clicked(event.pos):
@@ -255,6 +265,7 @@ class MenuScreen(BaseScreen):
                         else:
                             self.current_ascending = False
                             self.current_filter = button.data
+                        
 
     def restore_settings(self):
         self.sound_manager.music_volume = self.initial_settings_values["music_volume"]
