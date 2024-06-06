@@ -124,7 +124,7 @@ class MenuScreen(BaseScreen):
                 y=400,
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
-                text="Quit",
+                text="Main Menu",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data="quit",
             ),
@@ -154,7 +154,7 @@ class MenuScreen(BaseScreen):
             y=Sizes.HEIGHT - Sizes.MAIN_MENU_BUTTON_HEIGHT * 2,
             width=Sizes.MAIN_MENU_BUTTON_WIDTH,
             height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
-            text="Quit",
+            text="Main Menu",
             background_image_file=Paths.MAIN_MENU_BUTTON,
             data="quit",
         )
