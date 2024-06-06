@@ -304,7 +304,7 @@ class GameScreen(BaseScreen):
                             self.sound_manager.play_sound_effect("click_reset")
                             self.level.reset()
                         elif button.data == "quit":
-                            self.self.sound_manager.play_sound_effect("click_main_menu")
+                            self.sound_manager.play_sound_effect("click_main_menu")
                             self.app.switch_screen("menu")
         elif self.current_screen == "victory":
             if event.type == pygame.KEYDOWN:
