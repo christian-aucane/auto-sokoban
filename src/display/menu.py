@@ -2,7 +2,7 @@ import pygame
 
 from .base import BaseScreen
 from utils.widgets import ImageButton, Slider
-from constants import BUTTON_FONT, FONT, MAIN_MENU_SLIDERS_X, Colors, Sizes, Paths, MAIN_MENU_BUTTONS_X
+from constants import BUTTON_FONT, FONT, MAIN_MENU_SLIDERS_X, SCORE_FONT, Colors, Sizes, Paths, MAIN_MENU_BUTTONS_X
 
 
 class MenuScreen(BaseScreen):
@@ -233,7 +233,7 @@ class MenuScreen(BaseScreen):
             y = row_idx * cell_height + cell_height
             for col_idx, value in enumerate(row):
                 x = col_idx* cell_width
-                cell_text = FONT.render(str(value), True, Colors.BLACK)
+                cell_text = SCORE_FONT.render(str(value), True, Colors.BLACK)
                 cell_text_rect = cell_text.get_rect(topleft=(x, y))
                 self.screen.blit(cell_text, cell_text_rect)
         

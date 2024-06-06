@@ -30,6 +30,7 @@ class Sizes:
     MAIN_MENU_SLIDER_WIDTH = GRID_WIDTH - 200
     MAIN_MENU_SLIDER_HEIGHT = 20
     FONT = 30
+    SCORE_FONT = 20
 
 
 class Colors:
@@ -85,5 +86,7 @@ FONT = Font(Paths.FONT, Sizes.FONT)
 
 # TODO : modifier la font des boutons
 BUTTON_FONT = Font(Paths.FONT, Sizes.FONT)
+
+SCORE_FONT = Font(Paths.FONT, Sizes.SCORE_FONT)
 
 OFFSET = 15
