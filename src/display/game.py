@@ -4,7 +4,7 @@ import csv
 import pygame
 
 from .base import BaseScreen
-from .widgets import ImageButton
+from utils.widgets import ImageButton
 from build_game import Level, Player
 from game.solve_game import LevelSolver
 from constants import Orientations, Sizes, Colors, Paths,\
@@ -18,7 +18,7 @@ class GameScreen(BaseScreen):
             name="game",
             app=app,
             screen=screen,
-            background_image_file="game.png"
+            background_image_path=Paths.BACKGROUND_IMAGES / "game.png"
         )
         self.sound_manager.load_sound_effect("walk", Paths.SOUND_EFFECTS / "walk.mp3")
         self.sound_manager.load_sound_effect("wrong_move", Paths.SOUND_EFFECTS / "wrong_move.mp3")
@@ -37,37 +37,37 @@ class GameScreen(BaseScreen):
             ImageButton(
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
-                y=Sizes.MAIN_MENU_BUTTONS_HEIGHT + i*2*Sizes.MAIN_MENU_BUTTONS_HEIGHT,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                y=Sizes.MAIN_MENU_BUTTON_HEIGHT + i*2*Sizes.MAIN_MENU_BUTTON_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text=path.stem.title(),
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data=path
             )
             for i, path in enumerate(Paths.LEVELS.iterdir())
         ]
-        y_custom_levels_start = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTONS_HEIGHT * 2
+        y_custom_levels_start = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTON_HEIGHT * 2
         self.main_buttons += [
             ImageButton(
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
-                y=y_custom_levels_start + i*2*Sizes.MAIN_MENU_BUTTONS_HEIGHT,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                y=y_custom_levels_start + i*2*Sizes.MAIN_MENU_BUTTON_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text=path.stem.title(),
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data=path
             )
             for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir())
         ]
-        y_custom_levels_start = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTONS_HEIGHT * 2
+        y_custom_levels_start = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTON_HEIGHT * 2
         self.main_buttons.append(
             ImageButton(
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
                 y=y_custom_levels_start,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Main Menu",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data="quit"
@@ -137,8 +137,8 @@ class GameScreen(BaseScreen):
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
                 y=Sizes.HEIGHT // 2 + 100,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Main Menu",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data="quit"
@@ -147,8 +147,8 @@ class GameScreen(BaseScreen):
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
                 y=Sizes.HEIGHT // 2 + 200,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Restart",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data="restart"

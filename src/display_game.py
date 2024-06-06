@@ -8,6 +8,7 @@ from constants import Sizes, Colors, Paths
 from display.game import GameScreen
 from display.menu import MenuScreen
 from display.create import CreateScreen
+from display.settings import SettingsScreen
 from utils.sound_manager import SoundManager
 
 
@@ -47,6 +48,8 @@ class SokobanApp:
         if screen_name == "menu":
             pygame.time.delay(600)
             self.current_screen = MenuScreen(self, self.screen)
+        elif screen_name == "settings":
+            self.current_screen = SettingsScreen(self, self.screen)
         elif screen_name == "game":
             self.current_screen = GameScreen(self, self.screen)
         elif screen_name == "create":

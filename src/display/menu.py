@@ -1,7 +1,7 @@
 import pygame
 
 from .base import BaseScreen
-from .widgets import ImageButton
+from utils.widgets import ImageButton
 from constants import Sizes, Paths, MAIN_MENU_BUTTONS_X
 
 
@@ -11,15 +11,15 @@ class MenuScreen(BaseScreen):
             "menu",
             app=app,
             screen=screen,
-            background_image_file="menu.png",
+            background_image_path= Paths.BACKGROUND_IMAGES / "menu.png",
         )
         self.main_buttons = [
             ImageButton(
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
                 y=100,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Play",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data="play"
@@ -28,8 +28,8 @@ class MenuScreen(BaseScreen):
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
                 y=200,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Settings",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data="settings"
@@ -38,8 +38,8 @@ class MenuScreen(BaseScreen):
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
                 y=300,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Create",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data="create"
@@ -48,8 +48,8 @@ class MenuScreen(BaseScreen):
                 screen=screen,
                 x=MAIN_MENU_BUTTONS_X,
                 y=400,
-                width=Sizes.MAIN_MENU_BUTTONS_WIDTH,
-                height=Sizes.MAIN_MENU_BUTTONS_HEIGHT,
+                width=Sizes.MAIN_MENU_BUTTON_WIDTH,
+                height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Quit",
                 background_image_file=Paths.MAIN_MENU_BUTTON,
                 data="quit"
@@ -72,8 +72,7 @@ class MenuScreen(BaseScreen):
                         if button.data == "play":
                             self.app.switch_screen("game")
                         elif button.data == "settings":
-                            # TODO : faire un menu settings
-                            print("SETTINGS")
+                            self.app.switch_screen("settings")
                         elif button.data == "create":
                             self.app.switch_screen("create")
                         elif button.data == "quit":
