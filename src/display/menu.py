@@ -2,7 +2,7 @@ import pygame
 
 from .base import BaseScreen
 from utils.widgets import ImageButton, Slider
-from constants import FONT, MAIN_MENU_SLIDERS_X, Colors, Sizes, Paths, MAIN_MENU_BUTTONS_X
+from constants import BUTTON_FONT, FONT, MAIN_MENU_SLIDERS_X, Colors, Sizes, Paths, MAIN_MENU_BUTTONS_X
 
 
 class MenuScreen(BaseScreen):
@@ -21,7 +21,9 @@ class MenuScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Play",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="play"
             ),
             ImageButton(
@@ -31,7 +33,9 @@ class MenuScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Settings",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="settings"
             ),
             ImageButton(
@@ -41,7 +45,9 @@ class MenuScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Scores",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="scores"
             ),
             ImageButton(
@@ -51,7 +57,9 @@ class MenuScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Create",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="create"
             ),
             ImageButton(
@@ -61,7 +69,9 @@ class MenuScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Quit",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="quit"
             )
         ]
@@ -90,6 +100,8 @@ class MenuScreen(BaseScreen):
                 knob_color=Colors.SLIDER_KNOB,
                 label="Music Volume",
                 data="music_volume",
+                font=FONT,
+                text_color=Colors.SLIDER_TEXT
             ),
             Slider(
                 screen=screen,
@@ -105,6 +117,8 @@ class MenuScreen(BaseScreen):
                 knob_color=Colors.SLIDER_KNOB,
                 label="Sound Effects Volume",
                 data="sound_effect_volume",
+                font=FONT,
+                text_color=Colors.SLIDER_TEXT
             )
         ]
         self.settings_buttons = [
@@ -115,7 +129,9 @@ class MenuScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Save",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="save",
             ),
             ImageButton(
@@ -125,7 +141,9 @@ class MenuScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Main Menu",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="quit",
             ),
         ]
@@ -144,7 +162,9 @@ class MenuScreen(BaseScreen):
                 width=score_buttons_width,
                 height=30,
                 text=column,
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data=column
             ) for i, column in enumerate(cols)
         ]
@@ -159,7 +179,9 @@ class MenuScreen(BaseScreen):
             width=Sizes.MAIN_MENU_BUTTON_WIDTH,
             height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
             text="Main Menu",
-            background_image_file=Paths.MAIN_MENU_BUTTON,
+            font=BUTTON_FONT,
+            text_color=Colors.BUTTON_TEXT,
+            background_image_path=Paths.MAIN_MENU_BUTTON,
             data="quit",
         )
 

@@ -4,7 +4,7 @@ import pygame
 from .base import BaseScreen
 from utils.widgets import ImageButton
 from game.create import LevelCreator
-from constants import FONT, Sizes, Colors, Paths, MAIN_MENU_BUTTONS_X, MAX_CUSTOM_LEVELS, OFFSET
+from constants import BUTTON_FONT, FONT, Sizes, Colors, Paths, MAIN_MENU_BUTTONS_X, MAX_CUSTOM_LEVELS, OFFSET
 
 
 class CreateScreen(BaseScreen):
@@ -33,7 +33,9 @@ class CreateScreen(BaseScreen):
                                        width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                                        height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                                        text=path.stem.title(),
-                                       background_image_file=Paths.MAIN_MENU_BUTTON,
+                                       font=BUTTON_FONT,
+                                       text_color=Colors.BUTTON_TEXT,
+                                       background_image_path=Paths.MAIN_MENU_BUTTON,
                                        data=path)
             delete_button = ImageButton(screen=screen,
                                         x=x + Sizes.MAIN_MENU_BUTTON_WIDTH,
@@ -41,7 +43,9 @@ class CreateScreen(BaseScreen):
                                         width=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                                         height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                                         text="",
-                                        background_image_file=Paths.DELETE_BUTTON,
+                                        font=BUTTON_FONT,
+                                        text_color=Colors.BUTTON_TEXT,
+                                        background_image_path=Paths.DELETE_BUTTON,
                                         data="delete_" + str(path))
             self.main_buttons += [level_button, delete_button]
         if len(self.main_buttons) < 2*MAX_CUSTOM_LEVELS:
@@ -57,7 +61,9 @@ class CreateScreen(BaseScreen):
                     width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                     height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                     text="New 10 X 10",
-                    background_image_file=Paths.MAIN_MENU_BUTTON,
+                    text_color=Colors.BUTTON_TEXT,
+                    font=BUTTON_FONT,
+                    background_image_path=Paths.MAIN_MENU_BUTTON,
                     data=(10, 10)
                 ),
                 ImageButton(
@@ -67,7 +73,9 @@ class CreateScreen(BaseScreen):
                     width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                     height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                     text="New 15 X 15",
-                    background_image_file=Paths.MAIN_MENU_BUTTON,
+                    text_color=Colors.BUTTON_TEXT,
+                    font=BUTTON_FONT,
+                    background_image_path=Paths.MAIN_MENU_BUTTON,
                     data=(15, 15)
                 ),
                 ImageButton(
@@ -77,12 +85,24 @@ class CreateScreen(BaseScreen):
                     width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                     height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                     text="New 20 X 20",
-                    background_image_file=Paths.MAIN_MENU_BUTTON,
+                    text_color=Colors.BUTTON_TEXT,
+                    font=BUTTON_FONT,
+                    background_image_path=Paths.MAIN_MENU_BUTTON,
                     data=(20, 20)
                 ),
             ]
         y_quit_button = self.main_buttons[-1].y + Sizes.MAIN_MENU_BUTTON_HEIGHT*2
-        self.main_buttons.append(ImageButton(screen=screen, x=MAIN_MENU_BUTTONS_X, y=y_quit_button, width=Sizes.MAIN_MENU_BUTTON_WIDTH, height=Sizes.MAIN_MENU_BUTTON_HEIGHT, text="Main Menu", background_image_file=Paths.MAIN_MENU_BUTTON, data="quit"))
+        self.main_buttons.append(ImageButton(
+            screen=screen,
+            x=MAIN_MENU_BUTTONS_X, 
+            y=y_quit_button, 
+            width=Sizes.MAIN_MENU_BUTTON_WIDTH, 
+            height=Sizes.MAIN_MENU_BUTTON_HEIGHT, 
+            text="Main Menu", 
+            font=BUTTON_FONT,
+            text_color=Colors.BUTTON_TEXT,
+            background_image_path=Paths.MAIN_MENU_BUTTON, 
+            data="quit"))
         self.create_button_width = Sizes.WIDTH // 7
         self.create_buttons = [
             ImageButton(
@@ -92,7 +112,9 @@ class CreateScreen(BaseScreen):
                 width=self.create_button_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Empty",
-                background_image_file=Paths.MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="empty"
             ),
             ImageButton(
@@ -102,7 +124,9 @@ class CreateScreen(BaseScreen):
                 width=self.create_button_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Wall",
-                background_image_file=Paths.MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="wall"
             ),
             ImageButton(
@@ -112,7 +136,9 @@ class CreateScreen(BaseScreen):
                 width=self.create_button_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Box",
-                background_image_file=Paths.MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="box"
             ),
             ImageButton(
@@ -122,7 +148,9 @@ class CreateScreen(BaseScreen):
                 width=self.create_button_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Goal",
-                background_image_file=Paths.MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="goal"
             ),
             ImageButton(
@@ -132,7 +160,9 @@ class CreateScreen(BaseScreen):
                 width=self.create_button_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Player",
-                background_image_file=Paths.MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="player"
             ),
             ImageButton(
@@ -142,7 +172,9 @@ class CreateScreen(BaseScreen):
                 width=self.create_button_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Save",
-                background_image_file=Paths.MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="save"
             ),
             ImageButton(
@@ -152,7 +184,9 @@ class CreateScreen(BaseScreen):
                 width=self.create_button_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Menu",
-                background_image_file=Paths.MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="quit"
             ),
         ]
@@ -176,7 +210,9 @@ class CreateScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Save",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="save"
             ),
             ImageButton(
@@ -186,7 +222,9 @@ class CreateScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Cancel",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                font=BUTTON_FONT,
+                text_color=Colors.BUTTON_TEXT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="cancel"
             ),
         ]

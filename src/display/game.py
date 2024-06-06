@@ -7,7 +7,7 @@ from .base import BaseScreen
 from utils.widgets import ImageButton
 from build_game import Level, Player
 from game.solve import LevelSolver
-from constants import Orientations, Sizes, Colors, Paths,\
+from constants import BUTTON_FONT, Orientations, Sizes, Colors, Paths,\
     FONT, MAIN_MENU_BUTTONS_X, OFFSET
 
 
@@ -40,7 +40,9 @@ class GameScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text=path.stem.title(),
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                text_color=Colors.BUTTON_TEXT,
+                font=BUTTON_FONT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data=path
             )
             for i, path in enumerate(Paths.LEVELS.iterdir())
@@ -54,7 +56,9 @@ class GameScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text=path.stem.title(),
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                text_color=Colors.BUTTON_TEXT,
+                font=BUTTON_FONT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data=path
             )
             for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir())
@@ -68,7 +72,9 @@ class GameScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Main Menu",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                text_color=Colors.BUTTON_TEXT,
+                font=BUTTON_FONT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="quit"
             )
         )
@@ -84,7 +90,9 @@ class GameScreen(BaseScreen):
                 width=level_buttons_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Solve",
-                background_image_file=Paths.MENU_BUTTON,
+                text_color=Colors.BUTTON_TEXT,
+                font=BUTTON_FONT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="solve"
             ),
             ImageButton(
@@ -94,7 +102,9 @@ class GameScreen(BaseScreen):
                 width=level_buttons_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Cancel",
-                background_image_file=Paths.MENU_BUTTON,
+                text_color=Colors.BUTTON_TEXT,
+                font=BUTTON_FONT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="cancel"
             ),
             ImageButton(
@@ -104,7 +114,9 @@ class GameScreen(BaseScreen):
                 width=level_buttons_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Reset",
-                background_image_file=Paths.MENU_BUTTON,
+                text_color=Colors.BUTTON_TEXT,
+                font=BUTTON_FONT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="reset"
             ),
             ImageButton(
@@ -114,7 +126,9 @@ class GameScreen(BaseScreen):
                 width=level_buttons_width,
                 height=Sizes.MENU_BUTTON_HEIGHT,
                 text="Menu",
-                background_image_file=Paths.MENU_BUTTON,
+                text_color=Colors.BUTTON_TEXT,
+                font=BUTTON_FONT,
+                background_image_path=Paths.MENU_BUTTON,
                 data="quit"
             )
         ]
@@ -139,7 +153,9 @@ class GameScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Main Menu",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                text_color=Colors.BUTTON_TEXT,
+                font=BUTTON_FONT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="quit"
             ),
             ImageButton(
@@ -149,7 +165,9 @@ class GameScreen(BaseScreen):
                 width=Sizes.MAIN_MENU_BUTTON_WIDTH,
                 height=Sizes.MAIN_MENU_BUTTON_HEIGHT,
                 text="Restart",
-                background_image_file=Paths.MAIN_MENU_BUTTON,
+                text_color=Colors.BUTTON_TEXT,
+                font=BUTTON_FONT,
+                background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="restart"
             )
         ]
