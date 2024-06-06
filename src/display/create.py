@@ -9,14 +9,16 @@ from constants import FONT, Sizes, Colors, Paths, MAIN_MENU_BUTTONS_X, MAX_CUSTO
 
 class CreateScreen(BaseScreen):
     def __init__(self, app, screen):
-        super().__init__(app=app, screen=screen, music_name="create", background_image_file="create.png")
+        sound_effects = {
+            "click": self.load_sound_effect("game/click.mp3"),
+            "click_main": self.load_sound_effect("game/click_main_menu.mp3"),
+            "click_invalid_save": self.load_sound_effect("game/solve_error.mp3"),
+            "save_grid": self.load_sound_effect("game/save_grid.mp3"),
+            "remove": self.load_sound_effect("game/remove.mp3"),
+            "creating_empty": self.load_sound_effect("game/creating_empty.mp3")
+        }
+        super().__init__(app=app, screen=screen, music_name="create", background_image_file="create.png", sound_effects=sound_effects)
         Paths.CUSTOM_LEVELS.mkdir(exist_ok=True, parents=True)
-        self.click_sound = self.load_sound_effect("game/click.mp3")
-        self.click_main_sound = self.load_sound_effect("game/click_main_menu.mp3")
-        self.click_invalid_save = self.load_sound_effect("game/solve_error.mp3")
-        self.save_grid = self.load_sound_effect("game/save_grid.mp3")
-        self.remove = self.load_sound_effect("game/remove.mp3")
-        self.creating_empty = self.load_sound_effect("game/creating_empty.mp3")
         self.main_buttons = []
         for i, path in enumerate(Paths.CUSTOM_LEVELS.iterdir()):
             x = (Sizes.WIDTH - Sizes.MAIN_MENU_BUTTONS_WIDTH - Sizes.MAIN_MENU_BUTTONS_HEIGHT) // 2
@@ -284,11 +286,11 @@ class CreateScreen(BaseScreen):
     def load_save(self):
         if self.is_new_level:
             if not self.creator.is_complete():
-                self.click_invalid_save.play()
+                self.play_sound_effect("click_invalid_save")
                 self.create_message = "Invalid level"
                 self.create_message_color = Colors.ERROR
             elif len(list(Paths.CUSTOM_LEVELS.iterdir())) >= MAX_CUSTOM_LEVELS:
-                self.click_invalid_save.play()
+                self.play_sound_effect("click_invalid_save")
                 self.create_message = "Too many levels"
                 self.create_message_color = Colors.ERROR
             else:
@@ -309,7 +311,7 @@ class CreateScreen(BaseScreen):
         elif button.data == "save":
             self.load_save()
         elif button.data == "quit":
-            self.click_main_sound.play()
+            self.play_sound_effect("click_main")
             self.app.switch_screen("menu")
 
     def handle_grid_click(self, pos):
@@ -324,11 +326,11 @@ class CreateScreen(BaseScreen):
                 for button in self.main_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "quit":
-                            self.click_main_sound.play()
+                            self.play_sound_effect("click_main")
                             self.app.switch_screen("menu")
                         elif type(button.data) == str:
                             if button.data.startswith("delete_"):
-                                self.remove.play()
+                                self.play_sound_effect("remove")
                                 path = Path(button.data.replace("delete_", ""))
                                 path.unlink()
                                 self.main_buttons.remove(button)
@@ -337,12 +339,12 @@ class CreateScreen(BaseScreen):
                                     if button.data != path
                                 ]
                         elif type(button.data) == tuple:
-                            self.click_sound.play()
+                            self.play_sound_effect("click")
                             creator = LevelCreator(*button.data)
                             self.load_creator(creator)
                             self.is_new_level = True
                         else:
-                            self.click_sound.play()
+                            self.play_sound_effect("click")
                             creator = LevelCreator.from_file(button.data)
                             self.level_name = button.data.stem
                             self.load_creator(creator)
@@ -368,14 +370,14 @@ class CreateScreen(BaseScreen):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.save_buttons:
                     if button.is_clicked(event.pos):
+                        self.play_sound_effect("click")
                         if button.data == "save":
                             self.save_level()
                         elif button.data == "cancel":
-                            self.click_sound.play()
                             self.current_screen = "create"
 
     def save_level(self):
-        self.save_grid.play()
+        self.play_sound_effect("save_grid")
         pygame.time.delay(800)
         Paths.CUSTOM_LEVELS.mkdir(exist_ok=True, parents=True)
         path = Paths.CUSTOM_LEVELS / f"{self.level_name}.txt"

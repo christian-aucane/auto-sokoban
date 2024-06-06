@@ -4,18 +4,15 @@ from constants import FONT, Sizes, Colors, Paths
 
 
 class BaseScreen:
-    def __init__(self, app, screen, music_name, sound_effects=None, background_image_file=""):
+    def __init__(self, app, screen, music_name, sound_effects={}, background_image_file=""):
         self.app = app
         self.screen = screen
         self.music = self.app.music_channels[music_name]
         if not self.app.music_channel.get_busy():
-            self.app.music_channel.play(self.music, loops=-1) 
-        if sound_effects is None:
-            sound_effects = {}
+            self.app.music_channel.play(self.music, loops=-1)
         self.sound_effects = {}
-        for i, (name, path) in enumerate(sound_effects.items()):
-            channel = pygame.mixer.Channel(i + 1)  
-            sound = pygame.mixer.Sound(path)
+        for i, (name, sound) in enumerate(sound_effects.items(), start=1):
+            channel = pygame.mixer.Channel(i)  
             sound.set_volume(1)
             self.sound_effects[name] = (channel, sound)
         self.background_image = pygame.transform.scale(
@@ -28,7 +25,6 @@ class BaseScreen:
     def load_music(music):
         return pygame.mixer.Sound(Paths.MUSIC / music)
     
-
     @staticmethod
     def load_sound_effect(filename):
         return pygame.mixer.Sound(Paths.SOUND_EFFECTS / filename)
@@ -55,12 +51,8 @@ class BaseScreen:
         text_rect = text_surface.get_rect(**pos)
         self.screen.blit(text_surface, text_rect)
 
-    def play_music(self):
-        self.music.set_volume(0.2)
-        self.music.play(-1)
-
     def stop_music(self):
-        self.music_channel.stop()
+        self.music.stop()
 
     def quit(self):
         pass
