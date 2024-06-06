@@ -96,6 +96,8 @@ class Slider:
 
         self.knob_pos = (self.value - self.min_value) / (self.max_value - self.min_value) * (width - 20)
 
+        self.dragging = False
+
         # Couleurs
         self.bg_color = bg_color
         self.slider_color = slider_color
@@ -124,10 +126,15 @@ class Slider:
 
 
     def move_knob(self, pos):
-        # Calcule la nouvelle position du bouton en fonction de la différence entre la position du clic et la position actuelle du bouton
-        new_knob_pos = pos[0] - self.rect.x - 10  # 10 pour prendre en compte le décalage du rectangle slider à gauche
+        new_knob_pos = pos[0] - self.rect.x - 10
         self.knob_pos = min(max(new_knob_pos, 0), self.rect.width - 20)
         self.value = int(self.min_value + (self.max_value - self.min_value) * self.knob_pos / (self.rect.width - 20))
 
     def is_clicked(self, pos):
-        return self.rect.collidepoint(pos)
+        if self.rect.collidepoint(pos):
+            self.dragging = True  # Mettez à jour l'état de dragging
+            return True
+        return False
+
+    def stop_dragging(self):  # Ajoutez cette méthode
+        self.dragging = False

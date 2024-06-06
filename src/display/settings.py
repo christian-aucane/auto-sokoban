@@ -93,15 +93,17 @@ class SettingsScreen(BaseScreen):
                         self.sound_manager.music_volume = slider.value / 100
                     if slider.data == "sound_effect_volume":
                         self.sound_manager.sound_effect_volume = slider.value / 100
-            for button in self.main_buttons:
-                if button.is_clicked(event.pos):
-                    if button.data == "save":
-                        self.sound_manager.play_sound_effect("save")
-                        self.app.switch_screen("menu")
-                    if button.data == "quit":
-                        self.sound_manager.play_sound_effect("click_main_menu")
-                        self.restore_settings()
-                        self.app.switch_screen("menu")
+        elif event.type == pygame.MOUSEBUTTONUP:  
+            for slider in self.sliders:
+                slider.stop_dragging()
+        elif event.type == pygame.MOUSEMOTION: 
+            for slider in self.sliders:
+                if slider.dragging:
+                    slider.move_knob(event.pos)
+                    if slider.data == "music_volume":
+                        self.sound_manager.music_volume = slider.value / 100
+                    if slider.data == "sound_effect_volume":
+                        self.sound_manager.sound_effect_volume = slider.value / 100
                 
     def restore_settings(self):
         self.sound_manager.music_volume = self.initials_values["music_volume"]
