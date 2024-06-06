@@ -229,12 +229,8 @@ class MenuScreen(BaseScreen):
         scores = self.get_scores()
         cell_width = Sizes.GRID_WIDTH // (len(scores.columns))
         cell_height = 30
-        for i, col in enumerate(scores.columns):
-            header_text = FONT.render(col, True, Colors.BLACK)
-            header_text_rect = header_text.get_rect(topleft=(i * cell_width, Sizes.MAIN_MENU_BUTTON_HEIGHT))
-            self.screen.blit(header_text, header_text_rect)
         for row_idx, row in scores.iterrows():
-            y = (row_idx + 1) * cell_height + Sizes.MAIN_MENU_BUTTON_HEIGHT
+            y = row_idx * cell_height + cell_height
             for col_idx, value in enumerate(row):
                 x = col_idx* cell_width
                 cell_text = FONT.render(str(value), True, Colors.BLACK)
