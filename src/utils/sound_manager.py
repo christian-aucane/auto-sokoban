@@ -19,7 +19,6 @@ class SoundManager:
         self._music_channels[name] = sound
 
     def play_music(self, name, loops=-1):
-        print("PLAYING MUSIC", name)
         try:
             self._music_channel.play(self._music_channels[name], loops=loops)
         except KeyError:
