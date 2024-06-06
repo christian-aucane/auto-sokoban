@@ -328,7 +328,7 @@ class GameScreen(BaseScreen):
     def save_score(self):
 
         stats = self.level.stats
-        stats["Player Name"] = self.player_name
+        stats["Player"] = self.player_name
         score_file = Paths.SCORES_FILE
         file_exists = score_file.exists()
         
