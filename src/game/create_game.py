@@ -18,14 +18,6 @@ class LevelCreator(BaseGrid):
         super().__init__(grid)
         self._current_tool = CellsValues.EMPTY_CELL
 
-        self.sound_effects = {
-            "empty": pygame.mixer.Sound(Paths.SOUND_EFFECTS / "game/creating_empty.mp3"),
-            "wall": pygame.mixer.Sound(Paths.SOUND_EFFECTS / "game/creating_wall.mp3"),
-            "box": pygame.mixer.Sound(Paths.SOUND_EFFECTS / "game/creating_box.mp3"),
-            "goal": pygame.mixer.Sound(Paths.SOUND_EFFECTS / "game/creating_goal.mp3"),
-            "player": pygame.mixer.Sound(Paths.SOUND_EFFECTS / "game/creating_player.mp3")
-        }
-
     @classmethod
     def from_file(cls, txt_path):
         with open(txt_path, "r") as f:
@@ -56,7 +48,6 @@ class LevelCreator(BaseGrid):
         }
         self._current_tool = mapping[value]
 
-
     def put(self, x, y):
         if self._current_tool == CellsValues.EMPTY_CELL:
             return self.put_empty_cell(x, y)
@@ -76,33 +67,28 @@ class LevelCreator(BaseGrid):
     def put_empty_cell(self, x, y):
         if self.get_cell(x, y) == CellsValues.WALL and self.is_border(x, y):
             return False
-        self.sound_effects["empty"].play()
         self.set_cell(x, y, CellsValues.EMPTY_CELL)
         return True
 
     def put_wall(self, x, y):
         self.set_cell(x, y, CellsValues.WALL)
-        self.sound_effects["wall"].play()
         return True
 
     def put_goal(self, x, y):
         if self.is_border(x, y):
             return False
-        self.sound_effects["goal"].play()
         self.set_cell(x, y, CellsValues.GOAL)
         return True
 
     def put_box(self, x, y):
         if self.is_border(x, y):
             return False
-        self.sound_effects["box"].play()
         self.set_cell(x, y, CellsValues.BOX)
         return True
     
     def put_player(self, x, y):
         if self.is_border(x, y):
             return False
-        self.sound_effects["player"].play()
         self.remove_player()
         self.set_cell(x, y, CellsValues.PLAYER)
         return True
