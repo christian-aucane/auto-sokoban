@@ -19,9 +19,9 @@ class GameScreen(BaseScreen):
             "box_move": self.load_sound_effect("game/box_move.mp3"),
             "box_on_goal": self.load_sound_effect("game/box_on_goal.mp3"),
             "victory": self.load_sound_effect("game/victory.mp3"),
-            "click main menu" : self.load_sound_effect("game/click_main_menu.mp3"),
-            "click play game" : self.load_sound_effect("game/click_play_game.mp3"),
-            "click solve" : self.load_sound_effect("game/click_solve.mp3"),
+            "click_main_menu" : self.load_sound_effect("game/click_main_menu.mp3"),
+            "click_play_game" : self.load_sound_effect("game/click_play_game.mp3"),
+            "click_solve" : self.load_sound_effect("game/click_solve.mp3"),
             "click cancel" : self.load_sound_effect("game/click_cancel.mp3"),
             "click reset" : self.load_sound_effect("game/click_reset.mp3"),
             "solve error" : self.load_sound_effect("game/solve_error.mp3"),
@@ -227,7 +227,6 @@ class GameScreen(BaseScreen):
         message_text_rect = message_text_surface.get_rect(center=(x_message, y))
         self.screen.blit(message_text_surface, message_text_rect)
 
-
     def draw_victory(self):
         self.draw_text(
             text=f"Moves : {self.level.moves_count}",
@@ -273,10 +272,10 @@ class GameScreen(BaseScreen):
                 for button in self.main_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "quit":
-                            self.play_sound_effect("click main menu")
+                            self.play_sound_effect("click_main_menu")
                             self.app.switch_screen("menu")
                         else:
-                            self.play_sound_effect("click play game")
+                            self.play_sound_effect("click_play_game")
                             self.load_level(button.data)
 
         elif self.current_screen == "level":
@@ -297,7 +296,7 @@ class GameScreen(BaseScreen):
                 for button in self.level_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "solve":
-                            self.play_sound_effect("click solve")
+                            self.play_sound_effect("click_solve")
                             self.load_solve()
                             self.level.solve_used = True
                         elif button.data == "cancel":
@@ -307,7 +306,7 @@ class GameScreen(BaseScreen):
                             self.play_sound_effect("click reset")
                             self.level.reset()
                         elif button.data == "quit":
-                            self.play_sound_effect("click main menu")
+                            self.play_sound_effect("click_main_menu")
                             self.app.switch_screen("menu")
         elif self.current_screen == "victory":
             if event.type == pygame.KEYDOWN:
@@ -323,32 +322,24 @@ class GameScreen(BaseScreen):
                 for button in self.victory_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "quit":
-                            self.play_sound_effect("click main menu")
+                            self.play_sound_effect("click_main_menu")
                             self.app.switch_screen("menu")
                         elif button.data == "restart":
                             self.restart()
     
     
     def save_score(self):
-        data = {
-            "Player Name": self.player_name,
-            "Grid Name": self.level.name,
-            "Moves Count": self.level.moves_count,
-            "Reset Count": self.level.reset_count,
-            "Cancel Count": self.level.cancel_count,
-            "Solve Used": self.level.solve_used,
-            "Execution Time": self.level.execution_time 
-        }
+
+        stats = self.level.stats
+        stats["Player Name"] = self.player_name
         score_file = Paths.SCORES_FILE
         file_exists = score_file.exists()
         
         with open(score_file, 'a', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=data.keys())
+            writer = csv.DictWriter(f, fieldnames=stats.keys())
             if not file_exists:
                 writer.writeheader()
-            writer.writerow(data)
-
-
+            writer.writerow(stats)
 
     def play_movement_sound_effect(self, movement):
         if movement == Player.PLAYER_MOVED:
@@ -399,13 +390,13 @@ class GameScreen(BaseScreen):
         self.solver = LevelSolver(self.level)
         self.solve_running = self.solver.solve()
         if self.solve_running:
-            channel, sound = self.sound_effects["click solve"]
+            channel, sound = self.sound_effects["click_solve"]
             channel.stop()            
             self.play_sound_effect("solved")
             self.level_message = "Solved !"
             self.level_message_color = Colors.GREEN
         else:
-            channel, sound = self.sound_effects["click solve"]
+            channel, sound = self.sound_effects["click_solve"]
             channel.stop()
             self.play_sound_effect("solve error")
             self.level_message = "Impossible !"
