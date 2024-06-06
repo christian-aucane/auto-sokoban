@@ -24,7 +24,7 @@ class SokobanApp:
         }
         for channel in self.music_channels.values():
             channel.set_volume(0.4)
-        self.music_channel = pygame.mixer.Channel(0)        
+        self.music_channel = pygame.mixer.Channel(0)
 
         self.screen = pygame.display.set_mode((Sizes.WIDTH, Sizes.HEIGHT))
         self.clock = pygame.time.Clock()
