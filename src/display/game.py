@@ -220,9 +220,9 @@ class GameScreen(BaseScreen):
             True,
             self.level_message_color
         )
-        message_width = message_text_surface.get_width()
-        x_message = moves_width + boxes_width + message_width *2
-        message_text_rect = message_text_surface.get_rect(center=(x_message-150, y-Offset))
+        fixed_x = 440
+        fixed_y = 655
+        message_text_rect = message_text_surface.get_rect(topleft=(fixed_x, fixed_y))
         self.screen.blit(message_text_surface, message_text_rect)
 
     def draw_victory(self):
