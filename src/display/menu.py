@@ -167,7 +167,7 @@ class MenuScreen(BaseScreen):
         }
 
     def draw_settings(self):
-        # TODO : ajouter fond d'écran
+        self.draw_background_image()
         for button in self.settings_buttons:
             button.draw()
         for slider in self.settings_sliders:
@@ -180,6 +180,7 @@ class MenuScreen(BaseScreen):
         return self.app.score_manager.get_scores(sort_by=self.current_filter, ascending=self.current_ascending)
 
     def draw_scores(self):
+        self.draw_background_image()
         self.draw_button(self.score_quit_button)
         for button in self.scores_buttons_filters:
             is_active = button.data == self.current_filter

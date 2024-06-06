@@ -225,13 +225,14 @@ class GameScreen(BaseScreen):
         self.screen.blit(message_text_surface, message_text_rect)
 
     def draw_victory(self):
+        self.draw_background_image()
         self.draw_text(
             text=f"Moves : {self.level.moves_count}",
             color=Colors.BLACK,
             center=(100, 50)
         )
         self.draw_text(
-            text=f"Time : {self.level.execution_time:2f}",
+            text=f"Time : {self.level.execution_time:.2f} sec",
             color=Colors.BLACK,
             center=(100, 150)
         )

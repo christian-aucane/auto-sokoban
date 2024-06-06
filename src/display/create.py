@@ -200,6 +200,7 @@ class CreateScreen(BaseScreen):
             self.draw_save()
 
     def draw_save(self):
+        self.draw_background_image()
         self.draw_text(
             text="Enter grid name : ",
             color=Colors.BLACK,
