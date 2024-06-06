@@ -279,7 +279,6 @@ class CreateScreen(BaseScreen):
         }
 
     def load_img(self, filename, width=None, height=None):
-        # TODO : refactor this in BaseScreen
         if width is None:
             width = self.cell_width
         if height is None:
