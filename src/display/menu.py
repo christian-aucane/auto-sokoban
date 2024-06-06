@@ -130,6 +130,8 @@ class MenuScreen(BaseScreen):
             ),
         ]
 
+        self.settings_background_image = pygame.image.load(Paths.BACKGROUND_IMAGES / "settings.png")
+
         cols = self.app.score_manager.get_columns()
         score_buttons_width = Sizes.GRID_WIDTH // (len(cols))
         self.scores_buttons_filters = [
@@ -167,7 +169,7 @@ class MenuScreen(BaseScreen):
         }
 
     def draw_settings(self):
-        self.draw_background_image()
+        self.screen.blit(self.settings_background_image, (0, 0))
         for button in self.settings_buttons:
             button.draw()
         for slider in self.settings_sliders:
