@@ -23,10 +23,10 @@ class ScoreManager:
     def save_scores(self):
         self.score_df.to_csv(self.score_file_path, index=False)
 
-    def get_scores(self, sort_by="Moves", ascending=False, max_scores=15):
+    def get_scores(self, start_index=0, sort_by="Moves", ascending=False, max_scores=15):
         return self.score_df.sort_values(by=sort_by,
                                          ascending=ascending,
-                                         ignore_index=True).head(max_scores)
+                                         ignore_index=True).iloc[start_index:start_index+max_scores].reset_index(drop=True)
     
     def get_columns(self):
         return self.COLUMNS
