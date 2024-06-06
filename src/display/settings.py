@@ -8,7 +8,7 @@ from utils.widgets import ImageButton, Slider
 
 class SettingsScreen(BaseScreen):
     def __init__(self, app, screen):
-        super().__init__(name="settings", app=app, screen=screen)
+        super().__init__(name="settings", app=app, screen=screen, background_image_path=Paths.BACKGROUND_IMAGES / "settings.png")
         self.initials_values = {
             "music_volume": self.sound_manager.music_volume,
             "sound_effect_volume": self.sound_manager.sound_effect_volume
