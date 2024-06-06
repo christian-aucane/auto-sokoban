@@ -1,7 +1,5 @@
 import pygame
 
-from constants import FONT, Colors, Paths
-
 
 class BaseButton:
     def __init__(self,
@@ -11,15 +9,14 @@ class BaseButton:
                  width,
                  height,
                  text,
-                 data=None,
-                 text_color=Colors.BUTTON_TEXT,
-                 font_path=Paths.FONT,
-                 font_size=30):
+                 text_color,
+                 font,
+                 data=None):
         self.screen = screen
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
         self.data = data
-        self.font = pygame.font.Font(font_path, font_size)
+        self.font = font
         self.text_color = text_color
         self.width = width
         self.height = height
@@ -51,25 +48,23 @@ class ImageButton(BaseButton):
                  width,
                  height,
                  text,
-                 background_image_file,
-                 data=None,
-                 text_color=Colors.BLACK,
-                 font_path=Paths.FONT,
-                 font_size=30):
+                 background_image_path,
+                 text_color,
+                 font,
+                 data=None):
         super().__init__(
-            screen,
-            x,
-            y,
-            width,
-            height,
-            text,
-            data,
-            text_color,
-            font_path,
-            font_size
+            screen=screen,
+            x=x,
+            y=y,
+            width=width,
+            height=height,
+            text=text,
+            text_color=text_color,
+            font=font,
+            data=data
         )
         self.background_image = pygame.transform.scale(
-            pygame.image.load(Paths.BUTTONS_IMAGES /background_image_file),
+            pygame.image.load(background_image_path),
             (self.width, self.height)
         )
 
@@ -82,13 +77,14 @@ class ImageButton(BaseButton):
 
 
 class Slider: 
-    def __init__(self, screen, x, y, width, height, min_value, max_value, initial_value, bg_color, slider_color, knob_color, font=FONT, label=None, data=None):
+    def __init__(self, screen, x, y, width, height, min_value, max_value, initial_value, bg_color, slider_color, knob_color, font, text_color,label=None, data=None):
         self.screen = screen
         self.image = pygame.Surface((width, height))
         self.rect = self.image.get_rect(topleft=(x, y))
         self.label = label
         self.data = data
         self.font = font
+        self.text_color = text_color
 
         self.min_value = min_value
         self.max_value = max_value
@@ -98,6 +94,7 @@ class Slider:
 
         self.dragging = False
 
+        # Couleurs
         self.bg_color = bg_color
         self.slider_color = slider_color
         self.knob_color = knob_color
@@ -115,7 +112,7 @@ class Slider:
         self.image.fill(self.bg_color)
 
         if self.label is not None:
-            label_text_surface = self.font.render(self.label, True, Colors.BLACK)
+            label_text_surface = self.font.render(self.label, True, self.text_color)
             label_text_rect = label_text_surface.get_rect(bottomleft=self.rect.topleft)
             self.screen.blit(label_text_surface, label_text_rect)
 
@@ -125,7 +122,7 @@ class Slider:
 
         self.screen.blit(self.image, self.rect.topleft)
 
-        text_surface = self.font.render(str(self.value), True, Colors.BLACK)
+        text_surface = self.font.render(str(self.value), True, self.text_color)
         text_rect = text_surface.get_rect(topleft=self.rect.topright)
         self.screen.blit(text_surface, text_rect)
 
