@@ -169,7 +169,6 @@ class GameScreen(BaseScreen):
                 font=BUTTON_FONT,
                 background_image_path=Paths.MAIN_MENU_BUTTON,
                 data="restart"
-            )
         ]
 
     def draw_level(self):
@@ -250,7 +249,7 @@ class GameScreen(BaseScreen):
             center=(100, 50)
         )
         self.draw_text(
-            text=f"Time : {self.level.execution_time:.2f} sec",
+            text=f"    Time : {self.level.execution_time:.2f} sec",
             color=Colors.BLACK,
             center=(100, 150)
         )
