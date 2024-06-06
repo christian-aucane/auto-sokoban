@@ -13,28 +13,26 @@ from constants import Orientations, Sizes, Colors, Paths,\
 
 class GameScreen(BaseScreen):
     def __init__(self, app, screen):
-        self.sound_effects = {
-            "walk": self.load_sound_effect("game/walk.mp3"),
-            "wrong_move": self.load_sound_effect("game/wrong_move.mp3"),
-            "box_move": self.load_sound_effect("game/box_move.mp3"),
-            "box_on_goal": self.load_sound_effect("game/box_on_goal.mp3"),
-            "victory": self.load_sound_effect("game/victory.mp3"),
-            "click_main_menu" : self.load_sound_effect("game/click_main_menu.mp3"),
-            "click_play_game" : self.load_sound_effect("game/click_play_game.mp3"),
-            "click_solve" : self.load_sound_effect("game/click_solve.mp3"),
-            "click cancel" : self.load_sound_effect("game/click_cancel.mp3"),
-            "click reset" : self.load_sound_effect("game/click_reset.mp3"),
-            "solve error" : self.load_sound_effect("game/solve_error.mp3"),
-            "solved" : self.load_sound_effect("game/solved.mp3"),
-        }
+
         super().__init__(
+            name="game",
             app=app,
             screen=screen,
-            music_name="game",
-            sound_effects=self.sound_effects,
             background_image_file="game.png"
         )
-        
+        self.sound_manager.load_sound_effect("walk", Paths.SOUND_EFFECTS / "walk.mp3")
+        self.sound_manager.load_sound_effect("wrong_move", Paths.SOUND_EFFECTS / "wrong_move.mp3")
+        self.sound_manager.load_sound_effect("box_move", Paths.SOUND_EFFECTS / "box_move.mp3")
+        self.sound_manager.load_sound_effect("box_on_goal", Paths.SOUND_EFFECTS / "box_on_goal.mp3")
+        self.sound_manager.load_sound_effect("victory", Paths.SOUND_EFFECTS / "victory.mp3")
+        self.sound_manager.load_sound_effect("click_main_menu", Paths.SOUND_EFFECTS / "click_main_menu.mp3")
+        self.sound_manager.load_sound_effect("click_play_game", Paths.SOUND_EFFECTS / "click_play_game.mp3")
+        self.sound_manager.load_sound_effect("click_solve", Paths.SOUND_EFFECTS / "click_solve.mp3")
+        self.sound_manager.load_sound_effect("click_cancel", Paths.SOUND_EFFECTS / "click_cancel.mp3")
+        self.sound_manager.load_sound_effect("click_reset", Paths.SOUND_EFFECTS / "click_reset.mp3")
+        self.sound_manager.load_sound_effect("solve_error", Paths.SOUND_EFFECTS / "solve_error.mp3")
+        self.sound_manager.load_sound_effect("solved", Paths.SOUND_EFFECTS / "solved.mp3")
+
         self.main_buttons = [
             ImageButton(
                 screen=screen,
@@ -272,10 +270,10 @@ class GameScreen(BaseScreen):
                 for button in self.main_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "quit":
-                            self.play_sound_effect("click_main_menu")
+                            self.sound_manager.play_sound_effect("click_main_menu")
                             self.app.switch_screen("menu")
                         else:
-                            self.play_sound_effect("click_play_game")
+                            self.sound_manager.play_sound_effect("click_play_game")
                             self.load_level(button.data)
 
         elif self.current_screen == "level":
@@ -296,17 +294,17 @@ class GameScreen(BaseScreen):
                 for button in self.level_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "solve":
-                            self.play_sound_effect("click_solve")
+                            self.sound_manager.play_sound_effect("click_solve")
                             self.load_solve()
                             self.level.solve_used = True
                         elif button.data == "cancel":
-                            self.play_sound_effect("click cancel")
+                            self.sound_manager.play_sound_effect("click_cancel")
                             self.level.cancel()
                         elif button.data == "reset":
-                            self.play_sound_effect("click reset")
+                            self.sound_manager.play_sound_effect("click_reset")
                             self.level.reset()
                         elif button.data == "quit":
-                            self.play_sound_effect("click_main_menu")
+                            self.self.sound_manager.play_sound_effect("click_main_menu")
                             self.app.switch_screen("menu")
         elif self.current_screen == "victory":
             if event.type == pygame.KEYDOWN:
@@ -322,7 +320,7 @@ class GameScreen(BaseScreen):
                 for button in self.victory_buttons:
                     if button.is_clicked(event.pos):
                         if button.data == "quit":
-                            self.play_sound_effect("click_main_menu")
+                            self.sound_manager.self.sound_manager.play_sound_effect("click_main_menu")
                             self.app.switch_screen("menu")
                         elif button.data == "restart":
                             self.restart()
@@ -343,20 +341,20 @@ class GameScreen(BaseScreen):
 
     def play_movement_sound_effect(self, movement):
         if movement == Player.PLAYER_MOVED:
-            self.play_sound_effect("walk")
+            self.sound_manager.play_sound_effect("walk")
         elif movement == Player.BOX_MOVED:
-            self.play_sound_effect("walk")
-            self.play_sound_effect("box_move")
+            self.sound_manager.play_sound_effect("walk")
+            self.sound_manager.play_sound_effect("box_move")
         elif movement == Player.BOX_ON_GOAL:
-            self.play_sound_effect("walk")
-            self.play_sound_effect("box_move")
-            self.play_sound_effect("box_on_goal")
+            self.sound_manager.play_sound_effect("walk")
+            self.sound_manager.play_sound_effect("box_move")
+            self.sound_manager.play_sound_effect("box_on_goal")
         elif movement == Player.PLAYER_NOT_MOVED:
-            self.play_sound_effect("wrong_move")
+            self.sound_manager.play_sound_effect("wrong_move")
 
     def restart(self):
         self.level.reset()
-        self.play_sound_effect("click reset")
+        self.sound_manager.play_sound_effect("click reset")
         self.current_screen = "level"
 
     def load_level(self, level_path):
@@ -389,22 +387,19 @@ class GameScreen(BaseScreen):
         pygame.display.flip()
         self.solver = LevelSolver(self.level)
         self.solve_running = self.solver.solve()
-        if self.solve_running:
-            channel, sound = self.sound_effects["click_solve"]
-            channel.stop()            
-            self.play_sound_effect("solved")
+        self.sound_manager.stop_sound_effect("click_solve")    
+        if self.solve_running:     
+            self.sound_manager.stop_sound_effect("solved")
             self.level_message = "Solved !"
             self.level_message_color = Colors.GREEN
         else:
-            channel, sound = self.sound_effects["click_solve"]
-            channel.stop()
-            self.play_sound_effect("solve error")
+            self.sound_manager.stop_sound_effect("solve_error")
             self.level_message = "Impossible !"
             self.level_message_color = Colors.ERROR
 
     def load_victory(self):
         self.current_screen = "victory"
-        self.play_sound_effect("victory")
+        self.sound_manager.play_sound_effect("victory")
 
     def load_cell(self, filename):
         return pygame.transform.scale(
