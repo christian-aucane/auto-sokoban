@@ -8,7 +8,7 @@ from utils.widgets import ImageButton
 from build_game import Level, Player
 from game.solve_game import LevelSolver
 from constants import Orientations, Sizes, Colors, Paths,\
-    FONT, MAIN_MENU_BUTTONS_X, Offset
+    FONT, MAIN_MENU_BUTTONS_X, OFFSET
 
 
 class GameScreen(BaseScreen):
@@ -197,7 +197,7 @@ class GameScreen(BaseScreen):
         moves_width = moves_text_surface.get_width()
         x_moves = moves_width
         y = Sizes.GRID_HEIGHT + Sizes.MENU_BUTTON_HEIGHT + moves_text_surface.get_height()
-        moves_text_rect = moves_text_surface.get_rect(center=(x_moves-55, y-Offset))
+        moves_text_rect = moves_text_surface.get_rect(center=(x_moves-55, y-OFFSET))
         self.screen.blit(moves_text_surface, moves_text_rect)
 
         counter = self.level.counter
@@ -211,7 +211,7 @@ class GameScreen(BaseScreen):
         )
         boxes_width = boxes_text_surface.get_width()
         x_boxes = x_moves + boxes_width
-        boxes_text_rect = boxes_text_surface.get_rect(center=(x_boxes-120, y-Offset))
+        boxes_text_rect = boxes_text_surface.get_rect(center=(x_boxes-120, y-OFFSET))
         self.screen.blit(boxes_text_surface, boxes_text_rect)
 
         message_text_surface = FONT.render(

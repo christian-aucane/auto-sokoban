@@ -4,7 +4,7 @@ import pygame
 from .base import BaseScreen
 from utils.widgets import ImageButton
 from game.create_game import LevelCreator
-from constants import FONT, Sizes, Colors, Paths, MAIN_MENU_BUTTONS_X, MAX_CUSTOM_LEVELS, Offset
+from constants import FONT, Sizes, Colors, Paths, MAIN_MENU_BUTTONS_X, MAX_CUSTOM_LEVELS, OFFSET
 
 
 class CreateScreen(BaseScreen):
@@ -259,7 +259,7 @@ class CreateScreen(BaseScreen):
         text_surface = FONT.render(self.create_message, True, self.create_message_color)
         x = 6 * self.create_button_width
         y = Sizes.GRID_HEIGHT + Sizes.MENU_BUTTON_HEIGHT + text_surface.get_height()
-        text_rect = text_surface.get_rect(center=(x-10, y-Offset))
+        text_rect = text_surface.get_rect(center=(x-10, y-OFFSET))
         self.screen.blit(text_surface, text_rect)
 
     def load_creator(self, creator):

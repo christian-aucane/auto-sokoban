@@ -237,11 +237,10 @@ class MenuScreen(BaseScreen):
                     if button.is_clicked(event.pos):
                         if button.data == "save":
                             self.sound_manager.play_sound_effect("save")
-                            self.app.switch_screen("menu")
                         if button.data == "quit":
                             self.sound_manager.play_sound_effect("click_main_menu")
                             self.restore_settings()
-                            self.app.switch_screen("menu")
+                        self.current_screen = "main"
 
         elif self.current_screen == "scores":
             if event.type == pygame.MOUSEBUTTONDOWN:

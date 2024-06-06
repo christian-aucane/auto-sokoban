@@ -81,4 +81,4 @@ MAIN_MENU_SLIDERS_X = Sizes.WIDTH // 2 - Sizes.MAIN_MENU_SLIDER_WIDTH // 2
 # Font
 pygame.font.init()
 FONT = Font(Paths.FONT, Sizes.FONT)
-Offset = 15
+OFFSET = 15
