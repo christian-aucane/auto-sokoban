@@ -2,7 +2,7 @@ import pygame
 
 from .base import BaseScreen
 from utils.widgets import ImageButton, Slider
-from constants import BUTTON_FONT, FONT, MAIN_MENU_SLIDERS_X, SCORE_FONT, Colors, Sizes, Paths, MAIN_MENU_BUTTONS_X
+from constants import BUTTON_FONT, FONT, MAIN_MENU_SLIDERS_X, MAX_SCORES_DISPLAYED, SCORE_FONT, Colors, Sizes, Paths, MAIN_MENU_BUTTONS_X
 
 
 class MenuScreen(BaseScreen):
@@ -187,6 +187,7 @@ class MenuScreen(BaseScreen):
             background_image_path=Paths.MAIN_MENU_BUTTON,
             data="quit",
         )
+        self.score_start_index = 0
 
     def load_settings(self):
         self.current_screen = "settings"
@@ -218,7 +219,7 @@ class MenuScreen(BaseScreen):
         self.current_screen = "scores"
 
     def get_scores(self):
-        return self.app.score_manager.get_scores(sort_by=self.current_filter, ascending=self.current_ascending)
+        return self.app.score_manager.get_scores(start_index=self.score_start_index, sort_by=self.current_filter, ascending=self.current_ascending)
 
     def draw_scores(self):
         self.screen.blit(self.scores_background_image, (0, 0))
@@ -306,3 +307,9 @@ class MenuScreen(BaseScreen):
                         else:
                             self.current_ascending = False
                             self.current_filter = button.data
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.score_start_index = max(0, self.score_start_index)
+                elif event.key == pygame.K_DOWN:
+                    self.score_start_index = min(len(self.get_scores()) -3, self.score_start_index + 1)
+                print(self.score_start_index)
