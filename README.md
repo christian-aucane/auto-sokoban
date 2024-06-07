@@ -10,6 +10,8 @@ A Sokoban game with auto resolution
   - [Context](#context)
     - [Introduction](#introduction)
     - [Tasks](#tasks)
+      - [Part 1 : Develop Sokoban game](#part-1--develop-sokoban-game)
+      - [Part 2 : Automatic Sokoban solve](#part-2--automatic-sokoban-solve)
     - [Packages used](#packages-used)
   - [Product](#product)
     - [Desctiption](#desctiption)
@@ -34,7 +36,25 @@ A Sokoban game with auto resolution
 ### Introduction
 - TODO : 
 ### Tasks
-- TODO : détailler la consigne
+#### Part 1 : Develop Sokoban game
+Build the game grid matrix and the graphic interface
+- A button to cancel last move
+- A button to reset the game
+- Different levels of difficulty (more boxes, more walls, ...)
+- A rating system saved in a database (resolution time or number of moves
+moves to complete)
+- Some music
+- Sounds effects
+- A button to quit game
+  
+<img src="imgs/sokoban_example.png">
+
+#### Part 2 : Automatic Sokoban solve
+Create an algrithm to solve automaticly grid
+- Add a button to solve automaticly
+- Display the game resolution step by step
+
+
 
 ### Packages used
 - TODO : ajouter des images
