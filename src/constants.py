@@ -61,7 +61,9 @@ class Paths:
     SOUND_EFFECTS = ASSETS / "sound_effects"
     LEVELS = SOURCE / "levels"
     CUSTOM_LEVELS = SOURCE / "custom_levels"
-    FONT = ASSETS / "font" / "font.ttf"
+    FONT = ASSETS / "fonts" / "font.ttf"
+    BUTTON_FONT = ASSETS / "fonts" / "button_font.ttf"
+    SCORE_FONT = ASSETS / "fonts" / "score_font.ttf"
     BUTTONS_IMAGES = IMAGES / "buttons"
     CELLS_IMAGES = IMAGES / "cells"
     BACKGROUND_IMAGES = IMAGES / "backgrounds"
@@ -85,9 +87,9 @@ pygame.font.init()
 FONT = Font(Paths.FONT, Sizes.FONT)
 
 # TODO : modifier la font des boutons
-BUTTON_FONT = Font(Paths.FONT, Sizes.FONT)
+BUTTON_FONT = Font(Paths.BUTTON_FONT, Sizes.FONT)
 
-SCORE_FONT = Font(Paths.FONT, Sizes.SCORE_FONT)
+SCORE_FONT = Font(Paths.SCORE_FONT, Sizes.SCORE_FONT)
 
 OFFSET = 15
 
