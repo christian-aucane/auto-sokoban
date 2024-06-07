@@ -1,0 +1,69 @@
+
+- **.gitignore**
+- imgs/ : Images for illustrate README
+- **README.md** : README file
+- **requirements.txt** : For store dependencies
+- scripts/ : Bash scripts
+  - **install.sh** : Install project
+  - **run.sh** : Run project
+- src/ : Sources
+  - assets/ : Assets for the graphic interface
+    - fonts/ : The fonts
+    - images/ : The images
+      - backgrounds/ : Backgrounds images
+      - buttons/ : Buttons images
+      - cells/ : Cells images
+    - music/ : Game and menus musics
+    - sound_effects/ : Game and menus sounds effects
+  - **build_game.py**
+    - Class **Level** : Contains the level (Inherite of BaseGrid)
+  - **constants.py** : Project constants
+    - Class **CellsValues** : Namespace for cells values
+    - Class **Orientations** : Namespace for orientations
+    - Class **Sizes** : Namespace for the differents sizes
+    - Class **Colors** : Namespace for the colors
+    - Class **Paths** : Namespaces for the files paths
+  
+  - custom_levels/ : Folder created when user create custom levels
+  - display/ : Game displaying package
+    - **__init__.py** : Tells Python that this is a package
+    - **base.py** : Base class module
+      - Class **BaseScreen** : Base class for pygame screen
+    - **create.py** : Level creation module
+      - Class **CreateScreen** : Creation screen (Select size, create level, and save)
+    - **game.py** : Game playing module
+      - Class **GameScreen** : Game screen (Select level, play game and save score)
+    - **menu.py** : Menu module
+      - Class **MenuScreen** : Menu screen (Main menu, settings, rating)
+  - **display_game.py** : Pygame graphic interface main module
+    - Class **SokobanApp** : Main app
+      - Methods
+        - __init__(self)
+        - run(self)
+        - switch_screen(self, screen_name)
+        - quit(self)
+  - game/ : Game logic package
+    - **__init__.py** : Tells Python that this is a package
+    - **base_grid.py** : Base class module
+      - Class **BaseGrid** : Base class of grid
+      - Class **BaseEntity** : Base class of entity
+    - **create.py** : Creation logic 
+      - Class **LevelCreator** : Level creator (Inherite of BaseGrid)
+    - **entities.py** : Game entities
+      - Class **Box** : Box (Inherite of BaseEntity)
+      - Class **Player** : Player (Inherite of BaseEntity)
+    - **solve.py** : Solving module
+      - Class **LevelSolver** : Leve solver
+  - levels/ : Defaults levels
+  - **main.py** : Main module to run project
+  - **scores.csv** : CSV containing registred scores
+  - utils/ : Utils package
+    - **__init__.py** : Tells Python that this is a package
+    - **score_manager.py** : Score managing module
+      - Class **ScoreManager** : Score manager
+    - **sound_manager.py** : Sound managing module
+      - Class **SoundManager** : Music and sounds effects manager
+    - **widgets.py** : Module containing customs widgets
+      - Class **BaseButton** : Base class for buttons
+      - Class **ImageButton** : Button with a background image
+      - Class **Slider** : Slider user can drag and drop to select a value

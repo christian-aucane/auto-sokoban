@@ -1,4 +1,4 @@
-from game.base_grid import BaseGrid
+from game.base import BaseGrid
 from game.entities import Box, Player
 from constants import CellsValues
 
