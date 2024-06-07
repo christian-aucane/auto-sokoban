@@ -1,6 +1,6 @@
 from build_game import Level
 from .solve import LevelSolver
-from .base_grid import BaseGrid
+from .base import BaseGrid
 from constants import CellsValues
 
 
