@@ -84,18 +84,30 @@ source scripts/run.sh
 
 
 ## Project Files
-
+See `PROJECT_STRUCTURE.md` to see the project structure
 
 ## Product
 
 ### Desctiption
-- TODO : Décrire l'app
+
+
+
 ### Features
-- TODO : ajouter des scrennshoots
 #### PLay game
+
+<img src="imgs/screenshoots/game.png">
+
 #### Solve game
+
+<img src="imgs/screenshoots/solve.png">
+
 #### Create Level
+
+<img src="imgs/screenshoots/create.png">
+
 #### Settings
+
+<img src="imgs/screenshoots/settings.png">
 
 
 ## Team
